@@ -1,0 +1,36 @@
+{
+   "app": {
+      "language": "Varsayılan Dil",
+
+      "confirmTitle": "İşlemi Onaylayın",
+      "promptTitle": "Değer Girin",
+      "noData": "Veri Bulunamadı",
+      "noDate": "Tarih Yok",
+
+
+      "ok": "Tamam",
+      "yes": "Evet",
+      "no": "Hayır",
+      "close": "Kapat",
+      "cancel": "Vazgeç",
+      "accept": "Onayla",
+      "showAll": "Tümünü Görüntüle",
+      "selectAll": "Tümünü Seç",
+      "select": "Seçim Yapın",
+      "search": "Ara",
+
+
+      "date": "Tarih",
+      "today": "Bugün",
+      "tomorrow": "Yarın",
+      "yesterday": "Dün"
+
+   },
+
+   "account": {
+      "profile": "Profil",
+      "login": "Giriş Yap",
+      "logout": "Çıkış",
+      "register": "Kayıt Ol"
+   }
+}

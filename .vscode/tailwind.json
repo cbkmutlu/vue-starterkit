@@ -1,0 +1,74 @@
+{
+   "atDirectives": [
+      {
+         "name": "@tailwind",
+         "description": "@tailwind",
+         "references": [
+            {
+               "name": "Tailwind Documentation",
+               "url": "https://tailwindcss.com/docs/functions-and-directives#directives"
+            }
+         ]
+      },
+      {
+         "name": "@apply",
+         "description": "@apply",
+         "references": [
+            {
+               "name": "Tailwind Documentation",
+               "url": "https://tailwindcss.com/docs/functions-and-directives#apply-directive"
+            }
+         ]
+      },
+      {
+         "name": "@variant",
+         "description": "@variant",
+         "references": [
+            {
+               "name": "Tailwind Documentation",
+               "url": "https://tailwindcss.com/docs/functions-and-directives#variant-directive"
+            }
+         ]
+      },
+      {
+         "name": "@custom-variant",
+         "description": "@custom-variant",
+         "references": [
+            {
+               "name": "Tailwind Documentation",
+               "url": "https://tailwindcss.com/docs/functions-and-directives#custom-variant-directive"
+            }
+         ]
+      },
+      {
+         "name": "@theme",
+         "description": "@theme",
+         "references": [
+            {
+               "name": "Tailwind Documentation",
+               "url": "https://tailwindcss.com/docs/functions-and-directives#theme-directive"
+            }
+         ]
+      },
+      {
+         "name": "@utility",
+         "description": "@utility",
+         "references": [
+            {
+               "name": "Tailwind Documentation",
+               "url": "https://tailwindcss.com/docs/functions-and-directives#utility-directive"
+            }
+         ]
+      },
+      {
+         "name": "@config",
+         "description": "@config",
+         "references": [
+            {
+               "name": "Tailwind Documentation",
+               "url": "https://tailwindcss.com/docs/functions-and-directives#config-directive"
+            }
+         ]
+      }
+   ]
+}

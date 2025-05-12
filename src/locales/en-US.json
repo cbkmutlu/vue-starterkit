@@ -1,0 +1,12 @@
+{
+   "default": {
+      "language": "Default Language"
+   },
+
+   "account": {
+      "profile": "Profile",
+      "login": "Login",
+      "logout": "Logout",
+      "register": "Register"
+   }
+}
