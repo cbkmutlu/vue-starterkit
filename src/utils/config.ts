@@ -35,7 +35,8 @@ export const appConfig = {
    },
    tanstack: {
       cache: 30, //minutes
-      stale: 3 //minutes
+      stale: 3, //minutes
+      refetch: true //refetch on window focus
    },
    key: {
       locale: "app.lang",

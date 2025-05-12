@@ -31,12 +31,12 @@ appAxios.interceptors.request.use(
       }
 
       // localStorage
-      const langId = 1;
-      if (config.params) {
-         config.params.lang_id = langId;
-      } else {
-         config.params = { lang_id: langId };
-      }
+      // const langId = 1;
+      // if (config.params) {
+      //    config.params.lang_id = langId;
+      // } else {
+      //    config.params = { lang_id: langId };
+      // }
       return config;
    },
    (error: AxiosError) => Promise.reject(error)
