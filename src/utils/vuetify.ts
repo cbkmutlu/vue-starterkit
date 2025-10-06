@@ -122,7 +122,8 @@ export const vuetify = createVuetify({
          density: "compact"
       },
       VDialog: {
-         scrim: "rgb(var(--v-theme-on-surface-bright))",
+         // scrim: "rgb(var(--v-theme-on-surface-bright))",
+         scrim: true,
          persistent: true,
          noClickAnimation: true,
 
@@ -131,11 +132,6 @@ export const vuetify = createVuetify({
          },
          VToolbar: {
             density: "compact"
-         },
-         VCardActions: {
-            // VBtn: {
-            //    density: "default"
-            // }
          }
       },
       VIcon: {
@@ -167,7 +163,8 @@ export const vuetify = createVuetify({
          rows: 3
       },
       VMenu: {
-         scrim: "rgb(var(--v-theme-on-surface-bright))"
+         // scrim: "rgb(var(--v-theme-on-surface-bright))"
+         scrim: true
       },
       VSelect: {
          clearable: true,

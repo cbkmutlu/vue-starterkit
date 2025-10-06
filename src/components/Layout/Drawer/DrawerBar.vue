@@ -20,7 +20,9 @@
          <template
             v-for="item in appMenu"
             v-bind:key="item">
-            <v-divider v-if="item.type === 'divider'" class="mb-1" />
+            <v-divider
+               v-if="item.type === 'divider'"
+               class="mb-1" />
 
             <v-list-item
                v-else-if="item.type !== 'subheader'"
@@ -91,12 +93,11 @@
       </v-list>
    </v-navigation-drawer>
 
-   <v-fade-transition leave-absolute>
-      <div
-         v-if="expand"
-         class="fixed inset-0 z-[1007] bg-black/20"
+      <v-overlay
+         v-model="expand"
+         class="!z-[1007]"
+         no-click-animation
          @click="expand = false" />
-   </v-fade-transition>
 </template>
 
 <script lang="ts" setup>
