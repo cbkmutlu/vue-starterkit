@@ -1,0 +1,34 @@
+{
+   "compilerOptions": {
+      "types": ["node", "vuetify"],
+      "target": "ESNext",
+      "useDefineForClassFields": true,
+      "module": "ESNext",
+      "lib": ["ESNext", "DOM", "DOM.Iterable"],
+      "skipLibCheck": true,
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "baseUrl": ".",
+      "paths": {
+         "@/*": ["src/*"]
+      },
+
+      "moduleResolution": "Bundler",
+      "allowImportingTsExtensions": true,
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "noEmit": true,
+      "jsx": "preserve",
+
+      "strict": true,
+      "noImplicitAny": true,
+      "strictNullChecks": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "noFallthroughCasesInSwitch": true,
+      "importHelpers": true,
+      "allowJs": true
+   },
+   "include": ["src/**/*.vue", "src/**/*.js", "src/**/*.ts", "vite.config.ts", "vite-env.d.ts", "vite-imports.d.ts"],
+   "exclude": ["node_modules", "dist"]
+}

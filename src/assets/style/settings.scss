@@ -1,0 +1,68 @@
+// No custom CSS rules are defined here
+// https://vuetifyjs.com/en/features/sass-variables/#component-specific-variables
+// https://vuetifyjs.com/en/features/sass-variables/#duplicated-css
+@forward "vuetify/settings" with (
+   $layers: true,
+   $utilities: false,
+   $color-pack: false,
+   $table-column-padding: 0 12px,
+   $table-line-height: 1.2,
+   $table-density: (
+      "default": 0,
+      "comfortable": -2,
+      "compact": -4
+   ),
+   $field-font-size: 14px,
+   $field-label-floating-scale: 0.9285714285714286,
+   $label-font-size: 1em,
+   // $list-item-nav-title-line-height: 1.5,
+   $list-item-subtitle-opacity: var(--v-list-item-subtitle-opacity, var(--v-high-emphasis-opacity)),
+   $list-indent-size: 12px,
+
+   $card-transition-property: (
+      box-shadow,
+      opacity
+   ),
+   $table-transition-property: (
+      box-shadow,
+      opacity,
+      height
+   ),
+   $button-transition-property: (
+      box-shadow,
+      opacity
+   ),
+   $date-picker-month-day-size: 30px,
+   $date-picker-month-btn-height: 18px,
+   $date-picker-month-font-size: 0.75rem,
+   $date-picker-month-padding: 0 8px 8px,
+   $switch-inset-track-height: 24px,
+   $switch-inset-thumb-height: 20px,
+   $switch-inset-thumb-width: 20px,
+   $field-control-padding-start: 12px,
+   $field-control-padding-end: 12px,
+   $field-control-affixed-padding: 6px,
+   $field-letter-spacing: 0.0178571429em,
+   $input-density: (
+      "default": 0,
+      "comfortable": -3,
+      "compact": -5
+   ),
+   $date-picker-controls-height: var(--v-date-picker-controls-height, 44px),
+   $grid-breakpoints: (
+      "xs": 0,
+      "sm": 640px,
+      "md": 896px,
+      "lg": 1280px,
+      "xl": 1792px,
+      "xxl": 2432px
+   ),
+   $body-font-family: (
+      "Inter",
+      "Roboto",
+      "Segoe UI",
+      "Calibri",
+      "Verdana",
+      "sans-serif"
+   )
+);

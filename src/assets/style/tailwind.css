@@ -1,0 +1,90 @@
+/*
+https://tailwindcss.com/docs/upgrade-guide#using-a-javascript-config-file
+https://tailwindcss.com/docs/upgrade-guide#disabling-core-plugins
+https://tailwindcss.com/docs/preflight#overview
+theme, preflight, utilities
+@import "tailwindcss";
+
+plugin
+https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities
+*/
+
+@layer vuetify, tailwind, overrides;
+@import "tailwindcss/theme.css" layer(tailwind.theme);
+@import "tailwindcss/utilities.css" layer(tailwind.utilities);
+@config "./tailwind.js";
+
+@theme {
+   --animation-duration-0: 0s;
+   --animation-duration-75: 75ms;
+   --animation-duration-100: 100ms;
+   --animation-duration-150: 150ms;
+   --animation-duration-200: 200ms;
+   --animation-duration-300: 300ms;
+   --animation-duration-500: 500ms;
+   --animation-duration-700: 700ms;
+   --animation-duration-1000: 1000ms;
+
+   --animation-delay-0: 0s;
+   --animation-delay-75: 75ms;
+   --animation-delay-100: 100ms;
+   --animation-delay-150: 150ms;
+   --animation-delay-200: 200ms;
+   --animation-delay-300: 300ms;
+   --animation-delay-500: 500ms;
+   --animation-delay-700: 700ms;
+   --animation-delay-1000: 1000ms;
+
+   --color-surface: rgb(var(--v-theme-on-surface-bright));
+}
+
+@utility animation-duration-* {
+   animation-duration: --value([*]);
+   animation-duration: --value(--animation-duration-*);
+}
+
+@utility animation-delay-* {
+   animation-delay: --value([*]);
+   animation-delay: --value(--animation-delay-*);
+}
+
+@utility flex-center {
+   @apply flex items-center justify-center;
+}
+
+@utility border-thin {
+   border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+@utility max-grow-* {
+   .v-field__input {
+      min-height: min(var(--v-input-control-height, 56px), --value([*]));
+      min-height: min(var(--v-input-control-height, 56px), --spacing(--value(integer)));
+   }
+}
+
+@utility list-spacer-* {
+   & ~ .v-list-item__spacer {
+      width: --value([*]);
+      width: --spacing(--value(integer));
+   }
+}
+
+/* [&_.v-navigation-drawer\_\_content]:flex [&_.v-navigation-drawer\_\_content]:flex-col */
+@custom-variant drawer-content (& .v-navigation-drawer__content);
+
+@custom-variant field-appended (& .v-field--appended);
+
+@custom-variant button-default (& .v-btn--size-default);
+
+@custom-variant button-month (& .v-date-picker-controls__month-btn);
+
+@custom-variant year-content (& .v-date-picker-years__content);
+
+@custom-variant card-content (& .v-card-item__content);
+
+/* list-spacer:w-3 */
+/* @custom-variant list-spacer (& ~ .v-list-item__spacer); */
+
+@custom-variant light (&:where(.v-theme--light *));
+@custom-variant dark (&:not(.v-theme--light *));

@@ -1,0 +1,202 @@
+@use "./variables.scss" as *;
+@use "sass:map";
+
+// @include unify(a button) {...} => a.class, button.class {...}
+@mixin unify($selector) {
+   $result: ();
+
+   @each $item in $selector {
+      $result: append($result, (#{selector-unify(&, $item)}), $separator: comma);
+   }
+
+   @at-root {
+      #{$result} {
+         @content();
+      }
+   }
+}
+
+@mixin transition-default() {
+   &-enter-active {
+      transition-duration: 0.3s !important;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+   }
+
+   &-leave-active {
+      transition-duration: 0.3s !important;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+   }
+
+   &-move {
+      transition-duration: 0.5s !important;
+      transition-property: transform !important;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+   }
+}
+
+// @include border-radius(4px);
+@mixin border-radius($radius) {
+   border-radius: $radius;
+}
+
+@mixin border-radius-top($radius) {
+   border-top-left-radius: $radius;
+   border-top-right-radius: $radius;
+}
+
+@mixin border-radius-right($radius) {
+   border-top-right-radius: $radius;
+   border-bottom-right-radius: $radius;
+}
+
+@mixin border-radius-bottom($radius) {
+   border-bottom-right-radius: $radius;
+   border-bottom-left-radius: $radius;
+}
+
+@mixin border-radius-left($radius) {
+   border-bottom-left-radius: $radius;
+   border-top-left-radius: $radius;
+}
+
+// @include elevation(1);
+@mixin elevation($level, $color: black, $opacity: 1, $important: false) {
+   $umbraValue: map.get($umbra-shadow, $level);
+   $penumbraValue: map.get($penumbra-shadow, $level);
+   $ambientValue: map.get($ambient-shadow, $level);
+
+   $umbraColor: rgba($color, $umbra-opacity * $opacity);
+   $penumbraColor: rgba($color, $penumbra-opacity * $opacity);
+   $ambientColor: rgba($color, $ambient-opacity * $opacity);
+
+   box-shadow:
+      #{$umbraValue} #{$umbraColor},
+      #{$penumbraValue} #{$penumbraColor},
+      #{$ambientValue} #{$ambientColor} if($important, !important, null);
+}
+
+// @include screen(max, small) {...}
+// @include screen(min, xlarge) {...}
+@mixin screen($value, $screen) {
+   @if ($screen == "sm") or ($screen == "phone-screen") {
+      @media (#{$value}-width: $screen-sm) {
+         @content;
+      }
+   } @else if ($screen == "md") or ($screen == "tablet-screen") {
+      @media (#{$value}-width: $screen-md) {
+         @content;
+      }
+   } @else if ($screen == "lg") or ($screen == "desktop-screen") {
+      @media (#{$value}-width: $screen-lg) {
+         @content;
+      }
+   } @else {
+      @error "Undefined value #{$screen}";
+   }
+}
+
+// @include truncate();
+@mixin truncate() {
+   text-overflow: ellipsis;
+   overflow: hidden;
+   white-space: nowrap;
+}
+
+// @include clear();
+@mixin clear() {
+   &:before,
+   &:after {
+      content: "";
+      display: table;
+   }
+
+   &:after {
+      clear: both;
+   }
+}
+
+// @include placeholder {...}
+@mixin placeholder {
+   &::placeholder {
+      @content();
+   }
+}
+
+// @include grid(col, 24);
+@mixin flex-grid($name: col, $through: 12) {
+   @for $i from 1 through $through {
+      .grid .#{$name}#{$i} {
+         max-width: 100% * calc($i / $through);
+         flex-basis: 100% * calc($i / $through);
+      }
+   }
+}
+
+// @include offset(col, 24);
+@mixin flex-offset($name: col, $through: 11) {
+   @for $i from 1 through $through {
+      .grid .#{$name}#{$i} {
+         margin-left: 100% * calc($i / $through);
+      }
+   }
+}
+
+// @include hidden();
+@mixin hidden() {
+   pointer-events: none;
+   appearance: none;
+   position: absolute;
+   overflow: hidden;
+   clip: rect(0 0 0 0);
+   width: 1px;
+   height: 1px;
+   border: 0;
+   z-index: -1;
+   opacity: 0;
+   margin: -1px;
+   padding: 0;
+   white-space: nowrap;
+   transform: scale(0);
+}
+
+// @include retina('image.jpg');
+@mixin retina($image) {
+   $url: unquote($image);
+   background-image: url("#{$url}");
+
+   @media only screen and (-webkit-min-device-pixel-ratio: 1.3),
+      only screen and (min--moz-device-pixel-ratio: 1.3),
+      only screen and (-o-min-device-pixel-ratio: 2.6/2),
+      only screen and (min-device-pixel-ratio: 1.3),
+      only screen and (min-resolution: 124.8dpi),
+      only screen and (min-resolution: 1.3dppx) {
+      background-image: url("@2x-#{$url}");
+   }
+}
+
+// @include scrollbar();
+@mixin scrollbar($size: 8px, $background: #f0f0f0, $scroll: #cdcdcd) {
+   ::-webkit-scrollbar {
+      width: $size;
+      height: $size;
+      background-color: $background;
+   }
+
+   ::-webkit-scrollbar-thumb {
+      background-color: $scroll;
+   }
+
+   ::-webkit-scrollbar-corner {
+      background-color: transparent;
+   }
+
+   ::-webkit-scrollbar-button {
+      background-color: transparent;
+      display: none;
+   }
+
+   ::-webkit-scrollbar-track {
+      background-color: transparent;
+      display: none;
+   }
+}

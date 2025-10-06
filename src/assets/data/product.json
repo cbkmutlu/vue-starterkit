@@ -1,0 +1,53 @@
+{
+   "data": [
+      {
+         "id": 1,
+         "code": "PR1",
+         "title": "Classic T-Shirt",
+         "price": 29.99,
+         "currency": "TRY",
+         "content": "Comfortable cotton t-shirt in various colors",
+         "category_list": [
+            {
+               "id": 1,
+               "title": "Clothing"
+            },
+            {
+               "id": 4,
+               "title": "T-Shirts"
+            }
+         ],
+         "stock": 100
+      },
+      {
+         "id": 2,
+         "code": "PR2",
+         "title": "Wireless Headphones",
+         "price": 149.99,
+         "currency": "TRY",
+         "content": "High-quality wireless headphones with noise cancellation",
+         "category_list": [
+            {
+               "id": 2,
+               "title": "Electronics"
+            }
+         ],
+         "stock": 50
+      },
+      {
+         "id": 3,
+         "code": "PR3",
+         "title": "Leather Wallet",
+         "price": 49.99,
+         "currency": "EUR",
+         "content": "Genuine leather wallet with multiple card slots",
+         "category_list": [
+            {
+               "id": 3,
+               "title": "Accessories"
+            }
+         ],
+         "stock": 75
+      }
+   ]
+}

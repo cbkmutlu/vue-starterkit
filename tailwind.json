@@ -1,0 +1,4 @@
+{
+   "content": ["index.html", "./src/**/*.vue"],
+   "blocklist": ["bg-transparent"]
+}
