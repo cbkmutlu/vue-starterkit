@@ -64,7 +64,8 @@ const snackbarStore = useSnackbarStore();
 
 // initials
 const categoryInitial = {
-   is_active: 1
+   is_active: 1,
+   sort_order: 0
 } as ICategory;
 
 // states

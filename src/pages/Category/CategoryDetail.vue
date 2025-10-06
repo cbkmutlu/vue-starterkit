@@ -88,7 +88,7 @@
                <v-col md="8">
                   <ImageList
                      v-bind:delete="deleteImageHandler"
-                     v-bind:items="[category.image]" />
+                     v-bind:items="[category.image_path]" />
                   <ImageUpload v-model="imageUpload" />
                </v-col>
             </v-row>
@@ -192,13 +192,13 @@ const formHandler = async () => {
 
    try {
       if (imageUpload.value.length) {
-         if (category.value.image) {
+         if (category.value.image_path) {
             await deleteImageMutate();
             snackbarStore.add({ text: t("app.imageDeleted") });
          }
 
          const upload = await uploadImageMutate();
-         payload.image_upload = upload.data[0];
+         payload.image_path = upload.data[0];
          imageUpload.value = [];
       }
 

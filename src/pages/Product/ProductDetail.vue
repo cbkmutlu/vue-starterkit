@@ -135,6 +135,7 @@ const confirmStore = useConfirmStore();
 
 // states
 const product = ref({
+   is_active: 1,
    sort_order: 0,
    category_list: [] as any
 } as IProduct);
@@ -209,6 +210,7 @@ const formHandler = async () => {
       title: product.value.title,
       content: product.value.content,
       price: product.value.price,
+      is_active: product.value.is_active,
       sort_order: product.value.sort_order,
       product_category: product.value.category_list.map((item) => item.id)
    };
@@ -216,7 +218,7 @@ const formHandler = async () => {
    try {
       if (imageUpload.value.length) {
          const upload = await uploadImageMutate();
-         payload.image_upload = upload.data;
+         payload.image_path = upload.data;
          imageUpload.value = [];
       }
 
