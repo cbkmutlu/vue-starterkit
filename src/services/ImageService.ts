@@ -14,7 +14,8 @@ export const useUploadImage = () => {
    return useMutation({
       mutationKey: ["image", "uploadImage"],
       mutationFn: async (data: IUpload): Promise<TResponse<string[]>> => {
-         const formData = createFormData(data.files, { path: data.path });
+         const formData = createFormData({ files: data.files, path: data.path });
+         // const formData = createFormData(data);
 
          return (await appAxios.postForm("/image/create", formData)).data;
       }

@@ -3,9 +3,9 @@ export interface ICategory extends IDefaultFields {
    code: string;
    title: string;
    content?: string;
-   image: string;
    is_active: number;
    sort_order: number;
+   image_path: string;
 }
 
 export interface ICategoryStore {
@@ -15,14 +15,14 @@ export interface ICategoryStore {
    content?: string;
    is_active?: number;
    sort_order?: number;
-   image_upload?: string;
+   image_path?: string;
 }
 
 export const useGetCategoryAll = (payload?: TQuery<ICategory[]>) => {
    const options: UseQueryOptions<ICategory[]> = {
       queryKey: ["category", "categoryAll"],
       queryFn: async ({ signal }) => {
-         // return (await appAxios.get("/category/")).data;
+         // return (await appAxios.get("/category/", { signal })).data;
 
          // mock start
          await sleepDelay();
@@ -38,7 +38,7 @@ export const useGetCategoryAll = (payload?: TQuery<ICategory[]>) => {
 export const useGetCategoryById = (payload?: TQuery<ICategory>) => {
    const options: UseQueryOptions<ICategory> = {
       queryKey: ["category", "categoryById", payload?.params?.id, payload?.params?.language],
-      queryFn: async ({ signal }: { signal: AbortSignal }) => {
+      queryFn: async ({ signal }) => {
          // return (await appAxios.get(`/category/${toValue(payload?.params?.id)}`, { signal, params: { lang_id: toValue(payload?.params?.language) } })).data;
 
          // mock start
@@ -99,7 +99,7 @@ export const useDeleteCategory = () => {
    return useMutation({
       mutationKey: ["category", "deleteCategory"],
       mutationFn: async (payload?: { id: number }): Promise<TResponse<boolean>> => {
-         // return (await appAxios.delete(`/category/${payload?.params?.id}`)).data;
+         // return (await appAxios.delete(`/category/${payload?.id}`)).data;
 
          // mock start
          await sleepDelay();

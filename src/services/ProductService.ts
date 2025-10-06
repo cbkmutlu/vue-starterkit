@@ -5,6 +5,7 @@ export interface IProduct extends IDefaultFields {
    content?: string;
    price: number;
    currency: string;
+   is_active: number;
    sort_order: number;
    category_list: { id: number; title: string }[];
    image_list: { id: number; product_id: number; image_path: string }[];
@@ -17,9 +18,10 @@ export interface IProductStore {
    content?: string;
    price: number;
    currency?: string;
+   is_active?: number;
    sort_order?: number;
    product_category?: number[];
-   image_upload?: string[];
+   image_path?: string[];
 }
 
 export const useGetProductAll = (payload?: TQuery<IProduct[]>) => {
@@ -42,8 +44,8 @@ export const useGetProductAll = (payload?: TQuery<IProduct[]>) => {
 export const useGetProductById = (payload?: TQuery<IProduct>) => {
    const options: UseQueryOptions<IProduct> = {
       queryKey: ["product", "productById", payload?.params?.id, payload?.params?.language],
-      queryFn: async ({ signal }: { signal: AbortSignal }) => {
-         // return (await appAxios.get(`/product/${toValue(payload?.id)}`, { signal, params: { lang_id: toValue(payload?.params?.language) } })).data;
+      queryFn: async ({ signal }) => {
+         // return (await appAxios.get(`/product/${toValue(payload?.params?.id)}`, { signal, params: { lang_id: toValue(payload?.params?.language) } })).data;
 
          // mock start
          await sleepDelay();
@@ -101,7 +103,7 @@ export const useDeleteProduct = () => {
    return useMutation({
       mutationKey: ["product", "deleteProduct"],
       mutationFn: async (payload?: { id: number }): Promise<TResponse<boolean>> => {
-         // return (await appAxios.delete(`/product/${id}`)).data;
+         // return (await appAxios.delete(`/product/${payload?.id}`)).data;
 
          // mock start
          await sleepDelay();
