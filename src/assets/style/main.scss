@@ -93,9 +93,9 @@
       height: 1em;
    }
 
-   .v-picker.v-sheet {
-      border-radius: 0;
-   }
+   // .v-picker.v-sheet {
+   //    border-radius: 0;
+   // }
 
    // vProgressCircular
    .v-progress-circular--indeterminate svg {
@@ -146,20 +146,20 @@
    }
 
    // vOverlay
-   .v-overlay {
-      &:not(.v-theme--light) {
-         .v-overlay__scrim {
-            opacity: 0.5;
-         }
-      }
-   }
+   // .v-overlay {
+   //    &:not(.v-theme--light) {
+   //       .v-overlay__scrim {
+   //          opacity: 0.5;
+   //       }
+   //    }
+   // }
 
    // vMenu
-   .v-menu {
-      > .v-overlay__content {
-         overflow: visible;
-      }
-   }
+   // .v-menu {
+   //    > .v-overlay__content {
+   //       overflow: visible;
+   //    }
+   // }
 
    .v-input--density-compact {
       .v-field--variant-filled {
