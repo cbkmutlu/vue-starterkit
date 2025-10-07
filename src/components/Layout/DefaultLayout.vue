@@ -2,23 +2,23 @@
    <div
       class="h-full"
       id="wrapper">
-      <v-app v-bind:class="theme.current.value.dark ? 'bg-dark' : 'bg-light'">
+      <v-app v-bind:class="theme.current.value.dark ? 'bg-dark' : 'bg-light'" class="h-full">
          <DrawerBar />
          <DrawerMenu />
          <Header />
 
-         <v-main class="h-full">
+         <v-main class="h-full overflow-y-scroll scroll-smooth">
             <ComponentLoader />
 
-            <div
+            <!-- <div
                class="v-main__scroller h-full overflow-y-scroll scroll-smooth"
-               id="main">
+               id="main"> -->
                <router-view v-slot="{ Component }">
                   <v-fade-transition leave-absolute>
                      <component v-bind:is="Component" />
                   </v-fade-transition>
                </router-view>
-            </div>
+            <!-- </div> -->
          </v-main>
 
          <ConfirmDialog />
@@ -27,8 +27,7 @@
 
       <v-snackbar-queue
          v-model="snackbarStore.queue"
-         v-bind:closable="true"
-         class="p-0" />
+         closable />
    </div>
 </template>
 

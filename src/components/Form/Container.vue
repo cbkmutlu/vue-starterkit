@@ -1,18 +1,24 @@
 <template>
-   <v-container
-      v-bind="{ ...$attrs }"
-      class="overflow-visible">
+   <v-container>
       <ContentLoader
          v-if="props.overlay"
          v-model="props.loading" />
 
       <v-fade-transition hide-on-leave>
-         <div v-if="props.loading && props.skeleton">
+         <div
+            v-if="props.loading && props.skeleton"
+            class="container__content">
             <v-skeleton-loader v-bind:boilerplate="getMotionReduction()" />
          </div>
 
-         <div v-else-if="props.error">Aradığınız sayfa bulunamadı</div>
-         <div v-else>
+         <div
+            v-else-if="props.error"
+            class="container__content">
+            Aradığınız sayfa bulunamadı
+         </div>
+         <div
+            v-else
+            class="container__content">
             <v-form
                v-if="props.form"
                ref="formRef"
