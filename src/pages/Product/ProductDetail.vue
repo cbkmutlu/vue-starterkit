@@ -48,6 +48,13 @@
                </v-col>
 
                <v-col md="4">
+                  <v-list-subheader>{{ t("app.date") }}</v-list-subheader>
+               </v-col>
+               <v-col md="8">
+                  <DatePicker />
+               </v-col>
+
+               <v-col md="4">
                   <v-list-subheader>{{ t("app.description") }}</v-list-subheader>
                </v-col>
                <v-col md="8">
@@ -115,13 +122,12 @@ import ActionButton from "@/components/Button/ActionButton.vue";
 import TranslateButton from "@/components/Button/TranslateButton.vue";
 import PageCard from "@/components/Card/PageCard.vue";
 import Container from "@/components/Form/Container.vue";
+import DatePicker from "@/components/Form/DatePicker.vue";
 import ImageList from "@/components/Form/ImageList.vue";
 import ImageUpload from "@/components/Form/ImageUpload.vue";
 import NumberInput from "@/components/Form/NumberInput.vue";
 import SelectInput from "@/components/Form/SelectInput.vue";
 import LanguageTab from "@/components/Tab/LanguageTab.vue";
-import { appRules } from "@/utils/rules";
-import { IListImage } from "@/utils/types";
 import { useGetCategoryAll } from "@/services/CategoryService";
 import { useDeleteImage, useUploadImage } from "@/services/ImageService";
 import { IProduct, IProductStore, useCreateProduct, useGetProductById, useUpdateProduct } from "@/services/ProductService";
