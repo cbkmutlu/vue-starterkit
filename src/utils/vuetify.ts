@@ -81,6 +81,7 @@ export const vuetify = createVuetify({
    },
    date: {
       formats: {
+         // example
          customWekdayNarrow: { weekday: "narrow" }
       }
    },

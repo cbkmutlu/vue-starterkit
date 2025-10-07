@@ -25,8 +25,9 @@
                icon
                @click="toggleTheme()">
                <ToggleIcon
-                  v-bind:icon="['$sun', '$moon']"
-                  v-bind:toggle="getTheme() === 'dark'" />
+                  v-bind:icon="['$sun', '$moon', '$color']"
+                  v-bind:list="['light', 'dark', 'system']"
+                  v-bind:toggle="theme" />
             </v-btn>
             <HeaderLocaleMenu />
             <HeaderMoreMenu />
@@ -43,6 +44,10 @@ import HeaderMoreMenu from "@/components/Layout/Header/HeaderMoreMenu.vue";
 
 const route = useRoute();
 const { t } = useI18n();
+
+const theme = computed(() => {
+   return vuetify.theme.isSystem.value ? "system" : vuetify.theme.current.value.dark ? "dark" : "light";
+});
 
 const title = computed(() => {
    return route.matched

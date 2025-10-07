@@ -32,16 +32,24 @@ export const setTheme = (theme: "light" | "dark"): void => {
 /**
  * Kullanıcının tercih ettiği temayı değiştirir ve `localStorage[appConfig.key.theme]` anahtarına kaydeder.
  * @example
- * toggleTheme() => Mevcut tema dark ise light, light ise dark olarak değişir.
+ * toggleTheme() => Mevcut tema light ise dark, dark ise system, system ise light olarak değişir.
  */
 export const toggleTheme = (): void => {
-   const theme = vuetify.theme.current.value.dark ? "light" : "dark";
-   setTheme(theme);
+   const current = getTheme();
+   let next: any;
+   if (current === "light") {
+      next = "dark";
+   } else if (current === "dark") {
+      next = "system";
+   } else {
+      next = "light";
+   }
+   setTheme(next);
 };
 
 /**
  * Kullanıcının tercih ettiği temayı `localStorage[appConfig.key.theme]` anahtarından alır.
- * Değer `light` veya `dark` değilse varsayılan olarak `light` döndürür.
+ * Değer `light` veya `dark` değilse varsayılan olarak `system` döndürür.
  */
 export const getTheme = (): string => {
    const theme = localStorage.getItem(appConfig.key.theme);
@@ -50,7 +58,7 @@ export const getTheme = (): string => {
       return theme;
    }
 
-   return "light";
+   return "system";
 };
 
 /**
