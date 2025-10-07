@@ -24,10 +24,9 @@ export const useGetCategoryAll = (payload?: TQuery<ICategory[]>) => {
       queryFn: async ({ signal }) => {
          // return (await appAxios.get("/category/", { signal })).data;
 
-         // mock start
+         // simulate data
          await sleepDelay();
-         return (await appAxios.get("http://localhost:5133/src/assets/data/category.json", { signal })).data;
-         // mock end
+         return (await appAxios.get("data/category.json", { signal })).data;
       },
       enabled: payload?.enabled
    };
@@ -41,14 +40,13 @@ export const useGetCategoryById = (payload?: TQuery<ICategory>) => {
       queryFn: async ({ signal }) => {
          // return (await appAxios.get(`/category/${toValue(payload?.params?.id)}`, { signal, params: { lang_id: toValue(payload?.params?.language) } })).data;
 
-         // mock start
+         // simulate data
          await sleepDelay();
-         const result = (await appAxios.get("http://localhost:5133/src/assets/data/category.json", { signal })).data;
+         const result = (await appAxios.get("data/category.json", { signal })).data;
          return {
             ...result,
             data: result.data.find((item: ICategory) => item.id === Number(toValue(payload?.params?.id)))
          };
-         // mock end
       },
       enabled: payload?.enabled
    };
@@ -63,10 +61,9 @@ export const useUpdateCategory = () => {
       mutationFn: async (data: ICategoryStore): Promise<TResponse<ICategory>> => {
          // return (await appAxios.put("/category/", data)).data;
 
-         // mock start
+         // simulate start
          await sleepDelay();
          return { success: true, message: data.id?.toString(), data: data as ICategory, error: false, meta: null, status: 200 };
-         // mock end
       },
       onSuccess: () => {
          queryClient.invalidateQueries({ queryKey: ["category"] });
@@ -82,10 +79,9 @@ export const useCreateCategory = () => {
       mutationFn: async (data: ICategoryStore): Promise<TResponse<ICategory>> => {
          // return (await appAxios.post("/category/", data)).data;
 
-         // mock start
+         // simulate start
          await sleepDelay();
          return { success: true, message: data.id?.toString(), data: data as ICategory, error: false, meta: null, status: 200 };
-         // mock end
       },
       onSuccess: () => {
          queryClient.invalidateQueries({ queryKey: ["category"] });
@@ -101,10 +97,9 @@ export const useDeleteCategory = () => {
       mutationFn: async (payload?: { id: number }): Promise<TResponse<boolean>> => {
          // return (await appAxios.delete(`/category/${payload?.id}`)).data;
 
-         // mock start
+         // simulate start
          await sleepDelay();
          return { success: true, message: payload?.id.toString(), data: true, error: false, meta: null, status: 200 };
-         // mock end
       },
       onSuccess: () => {
          queryClient.invalidateQueries({ queryKey: ["category"] });
