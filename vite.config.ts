@@ -130,13 +130,18 @@ export default defineConfig(function ({ mode }) {
          }
       },
       build: {
-         cssCodeSplit: true,
+         cssCodeSplit: false,
          minify: "esbuild",
-         chunkSizeWarningLimit: 1024 * 1024,
+         chunkSizeWarningLimit: 1024,
          rollupOptions: {
             output: {
+               chunkFileNames: "assets/[name]-[hash].js",
                manualChunks: {
-                  vue: ["vue", "vue-router", "pinia", "axios"]
+                  "http": ["axios", "@tanstack/vue-query"],
+                  "icons": ["@mdi/js", "@tabler/icons-vue", "@phosphor-icons/vue", "country-flag-icons"],
+                  "utils": ["vue-router", "vue-i18n", "pinia", "pinia-plugin-persistedstate", "maska"],
+                  "vuetify": ["vuetify"],
+                  "vue": ["vue"]
                }
             }
          }
