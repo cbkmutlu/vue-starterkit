@@ -13,6 +13,7 @@
             v-bind:model-value="display"
             v-bind:readonly="props.readonly"
             v-bind:title="props.title"
+            class="[&_.v-field\_\_input]:caret-transparent"
             @click:clear="menu = !!props.openOnClear"
             @update:model-value="model = null!" />
       </template>
