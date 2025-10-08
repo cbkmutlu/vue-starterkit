@@ -25,7 +25,7 @@
             <template v-slot:item.price="{ item }">{{ formatNumber(item.price) }} {{ currencySymbol(item.currency) }}</template>
 
             <template v-slot:item.category_list="{ item }">
-               {{ item.category_list.map((category: any) => category.title).join(", ") }}
+               {{ item.category_list && item.category_list.map((category: any) => category.title).join(", ") }}
             </template>
 
             <template v-slot:item.actions="{ item }">
@@ -80,7 +80,7 @@ const deleteHandler = async (item: IProduct) => {
          snackbarStore.add({ text: t("app.recordDeleted") });
       }
    } catch (error) {
-      snackbarStore.error(error);
+      snackbarStore.error(error || t("app.recordFailed"));
    } finally {
       confirmStore.close();
    }

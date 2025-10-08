@@ -24,7 +24,7 @@ const copyHandler = async () => {
       await navigator.clipboard.writeText(model.value);
       snackbarStore.add({ text: t("app.recordSuccess") });
    } catch (error) {
-      snackbarStore.error(error);
+      snackbarStore.error(error || t("app.recordFailed"));
    } finally {
       isLoading.value = false;
    }

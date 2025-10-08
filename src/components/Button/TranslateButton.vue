@@ -13,6 +13,11 @@
 <script lang="ts" setup>
 import type { TBtn } from "@/utils/vuetify";
 
+// hooks
+const { t } = useI18n();
+const snackbarStore = useSnackbarStore();
+
+// states
 const model = defineModel({ type: String, default: "" });
 const { translate, isLoading } = useGoogleTranslate();
 
@@ -23,6 +28,11 @@ const props = withDefaults(defineProps<TBtn & { color?: string; from?: string; t
 });
 
 const translateHandler = async () => {
-   model.value = await translate(model.value, props.from, props.to);
+   try {
+      model.value = await translate(model.value, props.from, props.to);
+      snackbarStore.add({ text: t("app.recordSuccess") });
+   } catch (error) {
+      snackbarStore.error(error || t("app.recordFailed"));
+   }
 };
 </script>

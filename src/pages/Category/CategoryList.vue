@@ -92,7 +92,7 @@ const deleteHandler = async (item: ICategory) => {
          snackbarStore.add({ text: t("app.recordDeleted") });
       }
    } catch (error) {
-      snackbarStore.error(error);
+      snackbarStore.error(error || t("app.recordFailed"));
    } finally {
       confirmStore.close();
    }

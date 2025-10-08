@@ -110,7 +110,7 @@ const open = async (item?: ICategory) => {
          }
       }
    } catch (error) {
-      snackbarStore.error(error);
+      snackbarStore.error(error || t("app.recordFailed"));
    } finally {
       recordDialog.value?.close();
    }

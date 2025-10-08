@@ -204,7 +204,7 @@ const deleteImageHandler = async (image: any) => {
          snackbarStore.add({ text: t("app.imageDeleted") });
       }
    } catch (error) {
-      snackbarStore.error(error);
+      snackbarStore.error(error || t("app.recordFailed"));
    } finally {
       confirmStore.close();
    }
@@ -240,7 +240,7 @@ const formHandler = async () => {
          });
       }
    } catch (error) {
-      snackbarStore.error(error);
+      snackbarStore.error(error || t("app.recordFailed"));
    }
 };
 </script>
