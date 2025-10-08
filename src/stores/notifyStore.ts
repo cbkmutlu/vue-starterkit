@@ -1,5 +1,3 @@
-const { t } = i18n.global;
-
 let defaultTimeout: any[] = [];
 export const useNotifyStore = defineStore("notifyStore", {
    state: () => ({
@@ -13,7 +11,7 @@ export const useNotifyStore = defineStore("notifyStore", {
 
          this.notify.push({
             id: id,
-            title: payload.title || t("app.notify"),
+            title: payload.title,
             message: payload.message || null,
             date: payload.date || null,
             type: payload.type || ENotify.Success,

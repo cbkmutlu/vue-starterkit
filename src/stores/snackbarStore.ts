@@ -1,6 +1,5 @@
 export const useSnackbarStore = defineStore("snackbarStore", () => {
    const queue = ref([] as TSnackbar[]);
-   const { t } = i18n.global;
 
    const actions = {
       /**
@@ -14,10 +13,10 @@ export const useSnackbarStore = defineStore("snackbarStore", () => {
       },
       /**
        * Hata mesajı ekler.
-       * @param text text.message || text.error || t("app.recordFailed")
+       * @param text text.message || text.error
        */
       error(text: any, timeout = 2000) {
-         queue.value.push({ text: text.message || text.error || t("app.recordFailed"), color: "error", timeout });
+         queue.value.push({ text: text.message || text.error, color: "error", timeout });
       }
    };
 
