@@ -13,7 +13,7 @@
          v-bind:value="2">
          {{ t("app.english") }}
       </v-tab>
-      <v-menu transition="fade-transition">
+      <v-menu transition="dialog-transition">
          <template v-slot:activator="{ props: menuProps }">
             <v-btn
                v-bind="menuProps"

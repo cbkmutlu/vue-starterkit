@@ -4,8 +4,7 @@
       v-bind:close-on-content-click="false"
       v-bind:offset="props.hideDetails ? [0, 0] : [-22, 0]"
       class="[&_.v-overlay\_\_content]:!min-w-min"
-      eager
-      transition="fade-transition">
+      transition="dialog-transition">
       <template v-slot:activator="{ props: activatorProps }">
          <v-text-field
             v-bind="{ ...activatorProps, ...$attrs }"

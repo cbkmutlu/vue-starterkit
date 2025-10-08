@@ -2,7 +2,6 @@
    <v-dialog
       v-model="promptStore.dialog.show"
       v-bind:max-width="promptStore.dialog.width"
-      transition="fade-transition"
       @after-leave="promptStore.reset()"
       @keydown.esc="promptStore.close()">
       <v-form

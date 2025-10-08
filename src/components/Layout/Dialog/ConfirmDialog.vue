@@ -2,7 +2,6 @@
    <v-dialog
       v-model="confirmStore.dialog.show"
       v-bind:max-width="confirmStore.dialog.width"
-      transition="fade-transition"
       @after-leave="confirmStore.reset()"
       @keydown.esc="confirmStore.close()">
       <v-card v-bind:loading="confirmStore.dialog.loading">

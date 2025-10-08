@@ -5,10 +5,10 @@
       v-bind:item-title="props.itemTitle"
       v-bind:items="items"
       v-bind:loading="props.loading"
-      v-bind:menu-props="{ width: 300, maxHeight: 320 }"
+      v-bind:menu-props="{ maxHeight: 320 }"
       v-bind:multiple="props.multiple"
       v-bind:open-on-clear="props.openOnClear"
-      transition="fade-transition"
+      transition="dialog-transition"
       @click:clear="clearFilter()"
       @update:menu="$event && clearFilter()">
       <template v-slot:prepend-item>

@@ -1,5 +1,5 @@
 <template>
-   <v-menu offset="3, 0" transition="fade-transition">
+   <v-menu offset="3, 0" transition="dialog-transition">
       <template v-slot:activator="{ props }">
          <v-btn
             v-bind="props"
