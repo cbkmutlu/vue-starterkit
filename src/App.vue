@@ -7,6 +7,19 @@
          v-bind:is="$route.meta.layout" />
    </v-fade-transition>
 
+   <v-snackbar-queue
+      v-model="snackbarStore.queue"
+      closable>
+      <template v-slot:actions="{ props }">
+         <v-btn
+            icon="$close"
+            ripple
+            density="compact"
+            variant="text"
+            @click="props.onClick()" />
+      </template>
+   </v-snackbar-queue>
+
    <VueQueryDevtools />
 </template>
 
@@ -15,6 +28,7 @@ import LayoutLoader from "@/components/Layout/Loader/LayoutLoader.vue";
 import { VueQueryDevtools } from "@tanstack/vue-query-devtools";
 
 const appStore = useAppStore();
+const snackbarStore = useSnackbarStore();
 const loading = computed(() => appStore.layoutLoading || appStore.menuLoading || appStore.localeLoading);
 
 onMounted(() => {
