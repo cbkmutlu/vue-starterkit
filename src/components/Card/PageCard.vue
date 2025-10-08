@@ -9,8 +9,18 @@
 
    <v-card
       v-bind="{ ...$attrs }"
-      v-bind:loading="props.loading"
       class="mb-4 overflow-visible">
+      <template v-slot:loader>
+         <v-fade-transition leave-absolute>
+            <v-progress-linear
+               v-if="props.loading"
+               class="rounded-t-full"
+               color="primary"
+               height="2"
+               indeterminate />
+         </v-fade-transition>
+      </template>
+
       <v-toolbar
          class="overflow-hidden rounded-t-sm"
          color="transparent">
