@@ -38,12 +38,12 @@
       --bg-dark: url("@/assets/image/dark.png");
    }
 
+   // main scroller
    html,
    body,
    #app {
       overflow: hidden;
       height: 100%;
-      @include transition-default();
    }
 
    .bg-light {
@@ -145,21 +145,12 @@
       }
    }
 
-   // vOverlay
-   // .v-overlay {
-   //    &:not(.v-theme--light) {
-   //       .v-overlay__scrim {
-   //          opacity: 0.5;
-   //       }
-   //    }
-   // }
-
    // vMenu
-   // .v-menu {
-   //    > .v-overlay__content {
-   //       overflow: visible;
-   //    }
-   // }
+   .v-menu {
+      > .v-select__content {
+         overflow: visible;
+      }
+   }
 
    .v-input--density-compact {
       .v-field--variant-filled {
