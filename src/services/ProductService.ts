@@ -33,6 +33,10 @@ export const useGetProductAll = (payload?: TQuery<IProduct[]>) => {
          // simulate data
          await sleepDelay();
          return (await appAxios.get("data/product.json", { signal })).data;
+
+         // let result = (await appAxios.get("https://dummyjson.com/products", { signal })).data;
+         // result.data = result.products;
+         // return result;
       },
       enabled: payload?.enabled
    };
