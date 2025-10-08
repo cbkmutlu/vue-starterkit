@@ -14,16 +14,19 @@ type TListBase = {
    type?: "subheader";
    props?: Partial<ComponentProps<typeof VListItem>>;
 };
+/* @ts-ignore */
 type TListWithChildren = TListBase & {
    props: Partial<ComponentProps<typeof VListItem>> & {
       value: string;
    };
    children: TList[];
 };
+/* @ts-ignore */
 type TListWithoutChildren = TListBase & {
    props?: Partial<ComponentProps<typeof VListItem>>;
    children?: undefined;
 };
+/* @ts-ignore */
 type TListDivider = {
    type: "divider";
    title?: undefined;
@@ -97,8 +100,8 @@ export const vuetify = createVuetify({
    icons: {
       defaultSet: "tabler",
       aliases: {
-         // ...aliases,
          ...tablerAliases
+         // ...aliases
          // ...phoAliases
       },
       sets: {
@@ -171,7 +174,6 @@ export const vuetify = createVuetify({
          clearable: true,
          density: "compact",
          variant: "outlined",
-         eager: true,
          // menuProps: { scrim: "rgb(var(--v-theme-on-surface-bright))" }
 
          VList: {
@@ -181,8 +183,7 @@ export const vuetify = createVuetify({
       VAutocomplete: {
          clearable: true,
          density: "compact",
-         variant: "outlined",
-         eager: true
+         variant: "outlined"
       },
       VSheet: {
          border: true,
