@@ -137,11 +137,11 @@ export default defineConfig(function ({ mode }) {
             output: {
                chunkFileNames: "assets/[name]-[hash].js",
                manualChunks: {
-                  "http": ["axios", "@tanstack/vue-query"],
-                  "icons": ["@mdi/js", "@tabler/icons-vue", "@phosphor-icons/vue", "country-flag-icons"],
-                  "utils": ["vue-router", "vue-i18n", "pinia", "pinia-plugin-persistedstate", "maska"],
-                  "vuetify": ["vuetify"],
-                  "vue": ["vue"]
+                  http: ["axios", "@tanstack/vue-query"],
+                  icons: ["@mdi/js", "@tabler/icons-vue", "@phosphor-icons/vue", "country-flag-icons"],
+                  utils: ["vue-router", "vue-i18n", "pinia", "pinia-plugin-persistedstate", "maska"],
+                  vuetify: ["vuetify"],
+                  vue: ["vue"]
                }
             }
          }
