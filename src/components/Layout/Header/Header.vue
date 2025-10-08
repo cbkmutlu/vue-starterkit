@@ -33,6 +33,8 @@
             <HeaderMoreMenu />
          </div>
       </template>
+
+      <ComponentLoader />
    </v-app-bar>
 </template>
 
@@ -41,6 +43,7 @@ import ToggleIcon from "@/components/Form/ToggleIcon.vue";
 import HeaderBreadcrumb from "@/components/Layout/Header/HeaderBreadcrumb.vue";
 import HeaderLocaleMenu from "@/components/Layout/Header/HeaderLocaleMenu.vue";
 import HeaderMoreMenu from "@/components/Layout/Header/HeaderMoreMenu.vue";
+import ComponentLoader from "@/components/Layout/Loader/ComponentLoader.vue";
 
 const route = useRoute();
 const { t } = useI18n();
