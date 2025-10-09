@@ -1,8 +1,9 @@
 import { vMaska } from "maska/vue";
+import type { App } from "vue";
 import { DirectiveBinding, createVNode, render } from "vue";
 import { VTooltip } from "vuetify/components";
 
-export const registerDirectives = (app: App) => {
+export const registerDirective = (app: App) => {
    let tooltips: { el: HTMLElement }[] = [];
 
    app.directive("uppercase", {

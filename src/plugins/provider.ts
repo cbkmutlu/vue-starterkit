@@ -1,4 +1,6 @@
-export const registerProviders = (app: App) => {
+import type { App } from "vue";
+
+export const registerProvider = (app: App) => {
    app.provide(
       "globalProvider",
       setProvider({
