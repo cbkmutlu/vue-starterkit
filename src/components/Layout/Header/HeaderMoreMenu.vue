@@ -24,9 +24,11 @@
 </template>
 
 <script lang="ts" setup>
+// hooks
 const { t } = useI18n();
 const authStore = useAuthStore();
 
+// states
 const logoutHandler = () => {
    authStore.userLogout();
 };

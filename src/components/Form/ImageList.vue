@@ -25,6 +25,7 @@
 </template>
 
 <script lang="ts" setup>
+// states
 const props = defineProps({
    items: {
       type: [Array<string | { id: number; image_path: string }>, null],

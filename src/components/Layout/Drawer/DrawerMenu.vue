@@ -22,8 +22,11 @@
 <script lang="ts" setup>
 import ListGroup from "@/components/List/ListGroup.vue";
 import ListItem from "@/components/List/ListItem.vue";
-
 import { useAppStore } from "@/stores/appStore";
+
+// hooks
 const appStore = useAppStore();
+
+// states
 const menu = computed(() => appStore.menu[appStore.module]);
 </script>

@@ -63,15 +63,14 @@
 <script lang="ts" setup>
 import ContentLoader from "@/components/Layout/Loader/ContentLoader.vue";
 
-const emit = defineEmits(["after-leave"]);
-
 // hooks
 const { t } = useI18n();
 
 // states
 const model = ref({ ...TDialog });
+const emit = defineEmits(["after-leave"]);
 
-// methods
+// handlers
 const reset = () => {
    model.value = { ...TDialog };
    emit("after-leave");

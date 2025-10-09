@@ -19,9 +19,11 @@
 </template>
 
 <script lang="ts" setup>
+// hooks
 const { t } = useI18n();
 const route = useRoute();
 
+// states
 const items = computed(() => {
    return route.matched
       .filter((item) => {

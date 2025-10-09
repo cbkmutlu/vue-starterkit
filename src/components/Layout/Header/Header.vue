@@ -23,7 +23,7 @@
             <v-btn icon="$notification" />
             <v-btn
                icon
-               @click="toggleTheme()">
+               @click="toggleTheme(vuetify.theme)">
                <ToggleIcon
                   v-bind:icon="['$sun', '$moon', '$color']"
                   v-bind:list="['light', 'dark', 'system']"
@@ -44,10 +44,13 @@ import HeaderBreadcrumb from "@/components/Layout/Header/HeaderBreadcrumb.vue";
 import HeaderLocaleMenu from "@/components/Layout/Header/HeaderLocaleMenu.vue";
 import HeaderMoreMenu from "@/components/Layout/Header/HeaderMoreMenu.vue";
 import ComponentLoader from "@/components/Layout/Loader/ComponentLoader.vue";
+import { vuetify } from "@/plugins/vuetify";
 
+// hooks
 const route = useRoute();
 const { t } = useI18n();
 
+// states
 const theme = computed(() => {
    return vuetify.theme.isSystem.value ? "system" : vuetify.theme.current.value.dark ? "dark" : "light";
 });

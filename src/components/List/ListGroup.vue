@@ -22,8 +22,9 @@
 
 <script lang="ts" setup>
 import ListItem from "@/components/List/ListItem.vue";
-import type { TList } from "@/utils/vuetify";
+import type { TList } from "@/utils/types";
 
+// states
 const props = defineProps({
    item: {
       type: Object as () => TList,

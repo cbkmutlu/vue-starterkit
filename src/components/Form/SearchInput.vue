@@ -8,16 +8,19 @@
          hide-details
          min-width="250"
          @click:clear="search = ''"
-         @input="inputFilter($event)" />
+         @input="inputHandler($event)" />
    </div>
 </template>
 
 <script lang="ts" setup>
+// hooks
 const { t } = useI18n();
 
+// states
 const search = defineModel("search", { type: String, default: "" });
 
-const inputFilter = debounceTimer(async ($event) => {
+// handlers
+const inputHandler = debounceTimer(async ($event) => {
    search.value = $event.target.value;
 });
 </script>

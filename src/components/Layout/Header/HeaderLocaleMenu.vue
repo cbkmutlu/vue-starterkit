@@ -1,5 +1,7 @@
 <template>
-   <v-menu offset="3, 0" transition="dialog-transition">
+   <v-menu
+      offset="3, 0"
+      transition="dialog-transition">
       <template v-slot:activator="{ props }">
          <v-btn
             v-bind="props"
@@ -26,21 +28,17 @@
 </template>
 
 <script lang="ts" setup>
-const { setLocale, isLoading } = useLocale();
+import { i18n } from '@/plugins/i18n';
 
+// states
+const isLoading = ref(false);
+
+// handlers
 const translateHandler = async (locale: string) => {
-   await setLocale(locale);
+   isLoading.value = true;
+   await loadLocale(locale).then((messages) => {
+      setLocale(i18n, locale, messages);
+   });
+   isLoading.value = false;
 };
-
-// const isLoading = ref(false);
-// const translateHandler = async (locale: string) => {
-//    isLoading.value = true;
-//    await loadLocale(locale)
-//       .then(() => {
-//          setLocale(locale);
-//       })
-//       .finally(() => {
-//          isLoading.value = false;
-//       });
-// };
 </script>

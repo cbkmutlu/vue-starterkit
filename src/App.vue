@@ -30,10 +30,4 @@ import { VueQueryDevtools } from "@tanstack/vue-query-devtools";
 const appStore = useAppStore();
 const snackbarStore = useSnackbarStore();
 const loading = computed(() => appStore.layoutLoading || appStore.menuLoading || appStore.localeLoading);
-
-onMounted(() => {
-   if (vuetify.defaults.value?.global?.ripple === false) {
-      document.documentElement.classList.add("v-ripple--false");
-   }
-});
 </script>

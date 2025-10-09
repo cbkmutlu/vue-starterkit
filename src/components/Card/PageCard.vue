@@ -40,12 +40,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { TCard } from "@/utils/vuetify";
-
+import type { TCard } from "@/utils/types";
 type TProps = {
    loading?: boolean;
 };
 
+// states
 const props = withDefaults(defineProps<TCard & TProps>(), {
    loading: false
 });

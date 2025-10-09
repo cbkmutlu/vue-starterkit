@@ -61,6 +61,7 @@ type TProps = {
    subtitle?: string | number;
 };
 
+// states
 const props = withDefaults(defineProps<TProps>(), {
    data: () => [],
    delete: () => {},

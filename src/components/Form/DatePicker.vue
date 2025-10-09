@@ -89,8 +89,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { TDateField } from "@/utils/vuetify";
-
+import type { TDateField } from "@/utils/types";
 type TProps = {
    title?: boolean | string;
    readonly?: boolean;
@@ -108,6 +107,12 @@ type TProps = {
    format?: string;
 };
 
+// hooks
+const { t } = useI18n();
+const date = useDate();
+
+// states
+const model = defineModel({ type: [Object, String, null], default: null });
 const props = withDefaults(defineProps<Omit<TDateField, "title"> & TProps>(), {
    readonly: true,
    actions: true,
@@ -119,13 +124,6 @@ const props = withDefaults(defineProps<Omit<TDateField, "title"> & TProps>(), {
    endOfDay: true, // end of day 23:59:59:999
    format: "fullDate"
 });
-
-defineOptions({ inheritAttrs: false });
-
-const { t } = useI18n();
-const date = useDate();
-
-const model = defineModel({ type: [Object, String, null], default: null });
 const menu = ref(false);
 const display = computed(() => {
    if (!model.value || !date.isValid(model.value)) {
@@ -134,6 +132,7 @@ const display = computed(() => {
    return date.format(model.value, props.format);
 });
 
+// handlers
 const dateHandler = (value: Date, day?: number) => {
    if (typeof day === "number") {
       // ALTER
@@ -154,4 +153,6 @@ const dateHandler = (value: Date, day?: number) => {
 
    menu.value = !props.closeOnPickerClick;
 };
+
+defineOptions({ inheritAttrs: false });
 </script>

@@ -17,7 +17,7 @@
             density="compact"
             icon="$expand"
             variant="text"
-            @click="decrease"
+            @click="decreaseHandler"
             @mousedown.stop />
          <v-divider vertical />
          <v-btn
@@ -27,7 +27,7 @@
             density="compact"
             icon="$collapse"
             variant="text"
-            @click="increase"
+            @click="increaseHandler"
             @mousedown.stop />
       </template>
 
@@ -44,7 +44,7 @@
             density="compact"
             icon="$minus"
             variant="text"
-            @click="decrease"
+            @click="decreaseHandler"
             @mousedown.stop />
          <v-divider vertical />
       </template>
@@ -59,7 +59,7 @@
             density="compact"
             icon="$plus"
             variant="text"
-            @click="increase"
+            @click="increaseHandler"
             @mousedown.stop />
       </template>
 
@@ -72,8 +72,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { TField } from "@/utils/vuetify";
-
+import type { TField } from "@/utils/types";
 type TProps = {
    controlVariant?: "default" | "split" | "hidden";
    step?: number;
@@ -85,6 +84,11 @@ type TProps = {
    negative?: boolean;
 };
 
+// hooks
+const i18n = useI18n();
+
+// states
+const emits = defineEmits(["update:modelValue"]);
 const props = withDefaults(defineProps<TField & TProps>(), {
    controlVariant: "hidden",
    step: 1,
@@ -95,17 +99,7 @@ const props = withDefaults(defineProps<TField & TProps>(), {
    modelValue: 0,
    negative: false
 });
-
 const locale = ref(getLocale());
-
-watch(
-   () => i18n.global.locale.value,
-   (value) => {
-      locale.value = value;
-      maskedValue.value = formatNumber(Number(props.modelValue));
-   }
-);
-
 const options = computed(() => ({
    number: {
       locale: locale.value,
@@ -114,11 +108,10 @@ const options = computed(() => ({
    },
    eager: true
 }));
-
-const emits = defineEmits(["update:modelValue"]);
 const maskedValue = ref(formatNumber(Number(props.modelValue)));
 
-const increase = (event: MouseEvent) => {
+// handlers
+const increaseHandler = (event: MouseEvent) => {
    const value = parseNumber(maskedValue.value);
    let step = props.step;
    if (event.shiftKey) {
@@ -129,7 +122,7 @@ const increase = (event: MouseEvent) => {
    emits("update:modelValue", parseNumber(maskedValue.value));
 };
 
-const decrease = (event: MouseEvent) => {
+const decreaseHandler = (event: MouseEvent) => {
    const value = parseNumber(maskedValue.value);
    let step = props.step;
    if (event.shiftKey) {
@@ -145,9 +138,8 @@ const focusHandler = (event: FocusEvent) => {
    const cursorPos = input.selectionStart || maskedValue.value.length;
 
    if (cursorPos === maskedValue.value.length) {
-      const { decimal } = separateNumber(locale.value);
+      const { decimal } = decimalSeparator(locale.value);
       maskedValue.value = maskedValue.value.replace(new RegExp(`(${decimal}\\d*?)0+$`), "$1");
-      // maskedValue.value = maskedValue.value.replace(/(\,\d*?)0+$/, "$1").replace(/,\s*$/, ",");
    }
 };
 
@@ -155,4 +147,12 @@ const blurHandler = () => {
    maskedValue.value = formatNumber(Math.min(Math.max(parseNumber(maskedValue.value), props.min), props.max));
    maskedValue.value = suffixNumber(maskedValue.value, props.fraction);
 };
+
+watch(
+   () => i18n.locale.value,
+   (value) => {
+      locale.value = value;
+      maskedValue.value = formatNumber(Number(props.modelValue));
+   }
+);
 </script>

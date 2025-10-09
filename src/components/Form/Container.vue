@@ -33,10 +33,7 @@
 
 <script lang="ts" setup>
 import ContentLoader from "@/components/Layout/Loader/ContentLoader.vue";
-import type { TContainer } from "@/utils/vuetify";
-
-const formRef = ref<any>();
-
+import type { TContainer } from "@/utils/types";
 type TProps = {
    loading?: boolean;
    error?: boolean;
@@ -45,13 +42,16 @@ type TProps = {
    form?: (e?: Event) => void | Promise<void>;
 };
 
+// states
 const props = withDefaults(defineProps<TContainer & TProps>(), {
    loading: false,
    error: false,
    skeleton: true,
    overlay: false
 });
+const formRef = ref<any>();
 
+// handlers
 const submitHandler = async (e?: Event) => {
    if (!props.form) return;
 

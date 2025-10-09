@@ -9,8 +9,8 @@
       v-bind:multiple="props.multiple"
       v-bind:open-on-clear="props.openOnClear"
       transition="dialog-transition"
-      @click:clear="clearFilter()"
-      @update:menu="$event && clearFilter()">
+      @click:clear="clearHandler()"
+      @update:menu="$event && clearHandler()">
       <template v-slot:prepend-item>
          <v-list-item
             v-if="props.search"
@@ -20,8 +20,8 @@
                <v-text-field
                   v-model="search"
                   hide-details
-                  @click:clear="clearFilter()"
-                  @input="inputFilter($event)"
+                  @click:clear="clearHandler()"
+                  @input="inputHandler($event)"
                   @keydown="keydownHandler($event)"
                   @keydown.space.stop
                   @mousedown.stop>
@@ -135,8 +135,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { TMultiSelect } from "@/utils/vuetify";
-
+import type { TMultiSelect } from "@/utils/types";
 type TProps = {
    items?: any[];
    count?: number;
@@ -151,8 +150,13 @@ type TProps = {
    noDataText?: string;
 };
 
-/* @ts-ignore */
-const props = withDefaults(defineProps<TMultiSelect & TProps>(), {
+// hooks
+const { t } = useI18n();
+
+// states
+const model = defineModel({ type: [Array, Object, Number, null], default: null });
+const search = defineModel("search", { type: String, default: "" });
+const props = withDefaults(defineProps</* @ts-ignore */TMultiSelect & TProps>(), {
    count: 2,
    search: true,
    searchDeep: false,
@@ -161,11 +165,6 @@ const props = withDefaults(defineProps<TMultiSelect & TProps>(), {
    loading: false,
    itemTitle: "title"
 });
-
-const { t } = useI18n();
-
-const model = defineModel({ type: [Array, Object, Number, null], default: null });
-const search = defineModel("search", { type: String, default: "" });
 const debounce = ref("");
 const items = computed(() => {
    return props.items?.filter((item: any) => {
@@ -183,23 +182,24 @@ const items = computed(() => {
 const allSelected = computed(() => model.value && model.value.length === items.value?.length);
 const someSelected = computed(() => model.value && model.value.length > 0);
 
+// handlers
 const selectAll = (value: boolean) => {
    model.value = value ? items.value?.slice() : [];
 };
 
-const clearFilter = () => {
+const clearHandler = () => {
    debounce.value = "";
    search.value = "";
 };
 
-const inputFilter = debounceTimer(async ($event) => {
+const inputHandler = debounceTimer(async ($event) => {
    debounce.value = $event.target.value;
 });
 
 const keydownHandler = (event: KeyboardEvent) => {
    if (event.key === "Escape") {
       if (search.value) {
-         clearFilter();
+         clearHandler();
          event.stopPropagation();
       }
    } else if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {

@@ -19,9 +19,11 @@
 </template>
 
 <script lang="ts" setup>
-const model = defineModel({ type: [Array, Object] });
+// hooks
 const { t } = useI18n();
 
+// states
+const model = defineModel({ type: [Array, Object] });
 const props = defineProps({
    multiple: {
       type: Boolean,

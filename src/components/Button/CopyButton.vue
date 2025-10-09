@@ -18,6 +18,7 @@ const snackbarStore = useSnackbarStore();
 const model = defineModel({ type: String, default: "" });
 const isLoading = ref(false);
 
+// handlers
 const copyHandler = async () => {
    isLoading.value = true;
    try {

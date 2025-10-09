@@ -1,12 +1,13 @@
 <template>
    <v-fade-transition leave-absolute>
       <v-icon
-         v-bind:icon="currentIcon"
+         v-bind:icon="icon"
          v-bind:size="props.size" />
    </v-fade-transition>
 </template>
 
 <script lang="ts" setup>
+// states
 const props = defineProps({
    icon: {
       type: Array as () => string[],
@@ -24,8 +25,7 @@ const props = defineProps({
       default: "small"
    }
 });
-
-const currentIcon = computed(() => {
+const icon = computed(() => {
    if (props.list) {
       return props.icon[props.list.indexOf(props.toggle as string)];
    }

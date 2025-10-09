@@ -11,7 +11,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { TBtn } from "@/utils/vuetify";
+import type { TBtn } from "@/utils/types";
+type TProps = {
+   color?: string;
+   from?: string;
+   to?: string;
+};
 
 // hooks
 const { t } = useI18n();
@@ -19,14 +24,14 @@ const snackbarStore = useSnackbarStore();
 
 // states
 const model = defineModel({ type: String, default: "" });
-const { translate, isLoading } = useGoogleTranslate();
-
-const props = withDefaults(defineProps<TBtn & { color?: string; from?: string; to?: string }>(), {
+const props = withDefaults(defineProps<TBtn & TProps>(), {
    color: "primary",
    from: "auto",
    to: "en"
 });
+const { translate, isLoading } = useGoogleTranslate();
 
+// handlers
 const translateHandler = async () => {
    try {
       model.value = await translate(model.value, props.from, props.to);

@@ -67,7 +67,6 @@
 </template>
 
 <script setup>
-// defineProps(["columns", "isSorted", "getSortIcon", "toggleSort", "someSelected", "allSelected", "selectAll", "disableSort"]);
 defineProps({
    columns: {
       type: Array,

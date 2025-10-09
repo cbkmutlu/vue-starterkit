@@ -93,20 +93,25 @@
       </v-list>
    </v-navigation-drawer>
 
-      <v-overlay
-         v-model="expand"
-         class="!z-[1007]"
-         no-click-animation
-         @click="expand = false" />
+   <v-overlay
+      v-model="expand"
+      class="!z-[1007]"
+      no-click-animation
+      @click="expand = false" />
 </template>
 
 <script lang="ts" setup>
 import ToggleIcon from "@/components/Form/ToggleIcon.vue";
+import appMenu from "@/utils/menu";
 
+// hooks
 const appStore = useAppStore();
-const expand = ref(false);
 const { t } = useI18n();
 
+// states
+const expand = ref(false);
+
+// handlers
 const moduleHandler = (value: string) => {
    appStore.setModule(value);
    expand.value = false;

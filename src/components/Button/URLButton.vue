@@ -10,6 +10,7 @@
 </template>
 
 <script lang="ts" setup>
+// states
 const model = defineModel({ type: String, default: "" });
 const props = defineProps({
    source: {
@@ -18,6 +19,7 @@ const props = defineProps({
 });
 const isLoading = ref(false);
 
+// handlers
 const urlHandler = () => {
    isLoading.value = true;
    const value = props.source ?? model.value;

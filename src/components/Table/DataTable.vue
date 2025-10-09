@@ -163,17 +163,15 @@
 
 <script generic="T" lang="ts" setup>
 import TableHeader from "@/components/Table/TableHeader.vue";
-import type { TDataTable } from "@/utils/vuetify";
+import type { TDataTable } from "@/utils/types";
 import { SelectableItem } from "vuetify/lib/components/VDataTable/composables/select.mjs";
 import { DataTableItem, InternalDataTableHeader } from "vuetify/lib/components/VDataTable/types.mjs";
-
 type BodySlotScope<T> = {
    internalItems: readonly DataTableItem<T>[];
    isSelected: (item: SelectableItem) => boolean;
    toggleSelect: (item: SelectableItem, index?: number, event?: MouseEvent) => void;
    columns: InternalDataTableHeader[] & { date?: string }[];
 };
-
 type TProps<T> = {
    items?: T[];
    stickyHeader?: boolean;
@@ -190,6 +188,10 @@ type TProps<T> = {
    accentOnExpand?: boolean;
 };
 
+// hooks
+const date = useDate();
+
+// states
 const props = withDefaults(defineProps<TDataTable & TProps<T>>(), {
    stickyHeader: true,
    stickyFooter: true,
@@ -199,7 +201,6 @@ const props = withDefaults(defineProps<TDataTable & TProps<T>>(), {
    accentOnExpand: true,
    skeleton: "table-row-divider, list-item-three-line, list-item-two-line, list-item-two-line"
 });
-
 const items = computed(() => {
    const filter = lowerCase(props.filter);
    const keys = props.headers?.map((h) => h.key);
@@ -220,15 +221,16 @@ const items = computed(() => {
          return searchString(item.headers, filter);
       });
 });
-
 const emit = defineEmits<{
    (event: "row:click", item: T, index: number): void;
    (event: "row:expand", item: T, index: number): void;
 }>();
-
-const date = useDate();
-
 const expandedItems: any = ref([]);
+const optionsLoading = ref(false);
+const currentOptions: any = ref({});
+const rowClick = !!getCurrentInstance()?.vnode.props?.["onRow:click"];
+
+// handlers
 const isExpanded = (item: any) => expandedItems.value.includes(item);
 const toggleExpand = (item: any, multiple: boolean = props.multiExpand) => {
    if (multiple) {
@@ -243,8 +245,6 @@ const toggleExpand = (item: any, multiple: boolean = props.multiExpand) => {
    emit("row:expand", item.value, item.index);
 };
 
-const optionsLoading = ref(false);
-const currentOptions: any = ref({});
 const optionsUpdateHandler = async (options: any) => {
    if (options.itemsPerPage !== currentOptions.value.itemsPerPage) {
       optionsLoading.value = true;
@@ -255,7 +255,6 @@ const optionsUpdateHandler = async (options: any) => {
    currentOptions.value = options;
 };
 
-const rowClick = !!getCurrentInstance()?.vnode.props?.["onRow:click"];
 const rowClickHandler = (item: DataTableItem) => {
    if (props.expandOnClick) {
       toggleExpand(item);

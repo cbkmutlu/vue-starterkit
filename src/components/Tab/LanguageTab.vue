@@ -44,7 +44,10 @@
 </template>
 
 <script lang="ts" setup>
+// hooks
 const { t } = useI18n();
+
+// states
 const model = defineModel({ type: Number, default: 1 });
 const props = defineProps({
    loading: {

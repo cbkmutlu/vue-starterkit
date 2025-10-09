@@ -38,9 +38,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { TList } from "@/utils/vuetify";
+import type { TList } from "@/utils/types";
 
+// hooks
 const { t } = useI18n();
+
+// states
 const props = defineProps({
    item: {
       type: Object as () => TList,
