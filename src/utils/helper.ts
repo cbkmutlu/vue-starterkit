@@ -1,3 +1,6 @@
+import type { I18n } from "vue-i18n";
+import type { ThemeInstance } from "vuetify";
+
 /**
  * Verilen dosya yolunu `VITE_MEDIA` ile birleştirir.
  * @example
@@ -5,9 +8,20 @@
  */
 export const getMedia = (path: string | undefined): string => {
    if (typeof path !== "string") {
-      console.error("[getMedia] path is not string");
+      errorLog("[getMedia] path is not string");
    }
    return import.meta.env.VITE_MEDIA + "/" + path;
+};
+
+/**
+ * Geliştirme ortamında hata mesajı gösterir.
+ * @example
+ * errorLog("Hello World") => "Hello World"
+ */
+export const errorLog = (message: any, ...optionalParams: any[]) => {
+   if (process.env.NODE_ENV === "development") {
+      console.error(message, ...optionalParams);
+   }
 };
 
 /**
@@ -24,9 +38,9 @@ export const getMotionReduction = () => {
  * @example
  * setTheme("dark") => Tema dark olarak değişir.
  */
-export const setTheme = (theme: "light" | "dark"): void => {
-   vuetify.theme.change(theme);
-   localStorage.setItem(appConfig.key.theme, theme);
+export const setTheme = (theme: ThemeInstance, value: "light" | "dark" | "system"): void => {
+   theme.change(value);
+   localStorage.setItem(appConfig.key.theme, value);
 };
 
 /**
@@ -34,7 +48,7 @@ export const setTheme = (theme: "light" | "dark"): void => {
  * @example
  * toggleTheme() => Mevcut tema light ise dark, dark ise system, system ise light olarak değişir.
  */
-export const toggleTheme = (): void => {
+export const toggleTheme = (theme: ThemeInstance): void => {
    const current = getTheme();
    let next: any;
    if (current === "light") {
@@ -44,7 +58,8 @@ export const toggleTheme = (): void => {
    } else {
       next = "light";
    }
-   setTheme(next);
+
+   setTheme(theme, next);
 };
 
 /**
@@ -66,10 +81,19 @@ export const getTheme = (): string => {
  * @example
  * setLocale("tr-TR") => Dil Türkçe olarak değişir.
  */
-export const setLocale = (locale: string = getLocale()): void => {
+export const setLocale = (i18n: I18n, locale: string, message: Record<string, string>): void => {
    document.documentElement.setAttribute("lang", locale);
    localStorage.setItem(appConfig.key.locale, locale);
-   i18n.global.locale.value = locale;
+
+   if (Object.keys(message).length) {
+      i18n.global.setLocaleMessage(locale, message);
+   }
+
+   if (isRef(i18n.global.locale)) {
+      i18n.global.locale.value = locale;
+   } else {
+      i18n.global.locale = locale;
+   }
 };
 
 /**
@@ -94,56 +118,35 @@ const cache_locale: string[] = [];
  * @example
  * loadLocale("tr-TR") => Dil dosyaları yüklenir.
  */
-export const loadLocale = async (locale: string): Promise<void> => {
-   if (!cache_locale.includes(locale)) {
-      const [common, vuetify, ...modules] = await Promise.all([
-         import(`@/locales/${locale}.json`).then((res) => res.default).catch(() => {}),
-         import("vuetify/locale").then((res: any) => res[locale.split("-")[0].toLowerCase()]).catch(() => {}),
-         ...appConfig.module.map((item: string) =>
-            import(`@/modules/${item}/locales/${locale}.json`)
-               .then((res) => res.default)
-               .catch(() => {
-                  console.error(`[loadLocale] ${item} module not found`);
-                  return {};
-               })
-         )
-      ]);
-
-      cache_locale.push(locale);
-
-      i18n.global.setLocaleMessage(locale, {
-         ...common,
-         ...Object.assign({}, ...modules),
-         $vuetify: { ...vuetify }
-      });
+export const loadLocale = async (locale: string): Promise<Record<string, any>> => {
+   if (cache_locale.includes(locale)) {
+      return {};
    }
 
-   return nextTick();
-};
+   const commonPromise = import(`@/locales/${locale}.json`)
+      .then((mod) => mod.default)
+      .catch(() => {
+         errorLog(`[loadLocale] ${locale} not found`);
+         return {};
+      });
 
-/**
- * Modüllerdeki menü dosyalarını yükler.
- * @example
- * loadMenu() => Menü dosyaları yüklenir.
- */
-export const loadMenu = async (): Promise<Record<string, TList[]>> => {
-   const menu = await Promise.all(
-      appConfig.module.map(async (module: string) => {
-         try {
-            const mod = await import(`@/modules/${module}/utils/menu.ts`);
-            const items = Object.values(mod)
-               .filter((exported) => Array.isArray(exported))
-               .flat();
+   const modulePromise = appConfig.module.map(async (module: string) => {
+      return import(`@/modules/${module}/locales/${locale}.json`)
+         .then((mod) => mod.default)
+         .catch(() => {
+            errorLog(`[loadLocale] ${module} module locales not found`);
+            return {};
+         });
+   });
 
-            return { [module.toLowerCase()]: items };
-         } catch {
-            console.error(`[loadMenu] ${module} module not found`);
-            return { [module.toLowerCase()]: [] };
-         }
-      })
-   );
+   const [common, ...modules] = await Promise.all([commonPromise, ...modulePromise]);
+   cache_locale.push(locale);
 
-   return Object.assign({}, ...menu);
+   return {
+      ...common,
+      ...Object.assign({}, ...modules),
+      $vuetify: appConfig.language.locales[locale as keyof typeof appConfig.language.locales]?.vuetify
+   };
 };
 
 /**
@@ -152,21 +155,73 @@ export const loadMenu = async (): Promise<Record<string, TList[]>> => {
  * loadRoute() => Route dosyaları yüklenir.
  */
 export const loadRoute = async (): Promise<RouteRecordRaw[]> => {
-   const routes = await Promise.all(
-      appConfig.module.map(async (module: string) => {
-         try {
-            const mod = await import(`@/modules/${module}/utils/routes.ts`);
-            return Object.values(mod)
-               .filter((exported) => Array.isArray(exported))
-               .flat();
-         } catch {
-            console.error(`[loadRoute] ${module} module not found`);
-            return [];
-         }
+   const commonPromise = import("@/utils/routes.ts")
+      .then((mod) => {
+         return Object.values(mod)
+            .filter((res) => Array.isArray(res))
+            .flat();
       })
+      .catch(() => {
+         errorLog("[loadRoute] routes not found");
+         return [];
+      });
+
+   const modulePromise = appConfig.module.map((module: string) =>
+      import(`@/modules/${module}/utils/routes.ts`)
+         .then((mod) => {
+            return Object.values(mod)
+               .filter((res) => Array.isArray(res))
+               .flat();
+         })
+         .catch(() => {
+            errorLog(`[loadRoute] ${module} module routes not found`);
+            return [];
+         })
    );
 
-   return routes.flat();
+   const [common, ...modules] = await Promise.all([commonPromise, ...modulePromise]);
+   return [...common, ...modules.flat()];
+};
+
+/**
+ * Modüllerdeki menü dosyalarını yükler.
+ * @example
+ * loadMenu() => Menü dosyaları yüklenir.
+ */
+export const loadMenu = async (): Promise<Record<string, TList[]>> => {
+   const commonPromise = import("@/utils/menu.ts")
+      .then((mod) => {
+         return {
+            default: Object.values(mod)
+               .filter((res) => Array.isArray(res))
+               .flat()
+         };
+      })
+      .catch(() => {
+         errorLog("[loadMenu] menu not found");
+         return { default: [] };
+      });
+
+   const modulePromise = appConfig.module.map((module: string) =>
+      import(`@/modules/${module}/utils/menu.ts`)
+         .then((mod) => {
+            return {
+               [module.toLowerCase()]: Object.values(mod)
+                  .filter((res) => Array.isArray(res))
+                  .flat()
+            };
+         })
+         .catch(() => {
+            errorLog(`[loadMenu] ${module} module menu not found`);
+            return { [module.toLowerCase()]: [] };
+         })
+   );
+
+   const [common, ...modules] = await Promise.all([commonPromise, ...modulePromise]);
+   return {
+      ...common,
+      ...Object.assign({}, ...modules)
+   };
 };
 
 /**
@@ -253,9 +308,9 @@ const cache_number: Record<string, { group: string; decimal: string }> = {};
 /**
  * Verilen dil için grup ve ondalık ayraç karakterlerini döndürür.
  * @example
- * separateNumber("tr-TR") => { group: ".", decimal: "," }
+ * decimalSeparator("tr-TR") => { group: ".", decimal: "," }
  */
-export const separateNumber = (locale: string) => {
+export const decimalSeparator = (locale: string) => {
    if (!cache_number[locale]) {
       const sample = 123456.7;
       const format = new Intl.NumberFormat(locale).format(sample);
@@ -266,6 +321,19 @@ export const separateNumber = (locale: string) => {
       cache_number[locale] = { group, decimal };
    }
    return cache_number[locale];
+};
+
+/**
+ * Verilen para birimi için dilde kullanılan sembolü döndürür.
+ * @example
+ * currencySymbol("TRY") => "₺"
+ */
+export const currencySymbol = (currency: string = "TRY", locale: string = getLocale()): string => {
+   const format = new Intl.NumberFormat(locale, { style: "currency", currency, currencyDisplay: "narrowSymbol" });
+   const parts = format.formatToParts(0);
+   const symbol = parts.find((p) => p.type === "currency");
+
+   return symbol?.value ?? currency;
 };
 
 /**
@@ -293,7 +361,7 @@ export const formatNumber = (value: number, min: number = 2, max: number = 2, lo
  */
 export const parseNumber = (value: string, locale: string = getLocale()): number => {
    if (!cache_number[locale]) {
-      cache_number[locale] = separateNumber(locale);
+      cache_number[locale] = decimalSeparator(locale);
    }
 
    const { group, decimal } = cache_number[locale];
@@ -341,7 +409,7 @@ export const prefixNumber = (value: number, pad: number = 2): string => {
  */
 export const suffixNumber = (value: string, pad: number = 2, locale: string = getLocale()): string => {
    if (!cache_number[locale]) {
-      cache_number[locale] = separateNumber(locale);
+      cache_number[locale] = decimalSeparator(locale);
    }
 
    const { decimal } = cache_number[locale];
@@ -351,19 +419,6 @@ export const suffixNumber = (value: string, pad: number = 2, locale: string = ge
 
    const [integer, fraction = ""] = value.split(decimal);
    return `${integer}${decimal}${fraction.padEnd(pad, "0")}`;
-};
-
-/**
- * Verilen para birimi için dilde kullanılan sembolü döndürür.
- * @example
- * currencySymbol("TRY") => "₺"
- */
-export const currencySymbol = (currency: string = "TRY", locale: string = getLocale()): string => {
-   const format = new Intl.NumberFormat(locale, { style: "currency", currency, currencyDisplay: "narrowSymbol" });
-   const parts = format.formatToParts(0);
-   const symbol = parts.find((p) => p.type === "currency");
-
-   return symbol?.value ?? currency;
 };
 
 /**
@@ -763,48 +818,6 @@ export const getComponentAsync = (component: string, error: Component): Componen
       delay: 0,
       errorComponent: error
    });
-};
-
-/**
- * Kullanıcının tercih ettiği dili değiştirir ve `localStorage[appConfig.key.locale]` anahtarına kaydeder.
- * @example
- * useLocale().setLocale("tr-TR") => Dil Türkçe olarak değişir.
- */
-export const useLocale = () => {
-   const isLoading = ref(false);
-   const isError = ref(false);
-   const appStore = useAppStore();
-
-   const setLocale = async (locale: string, options: { global?: boolean } = {}) => {
-      isError.value = false;
-
-      if (options.global) {
-         appStore.setLocaleLoading(true);
-      } else {
-         isLoading.value = true;
-      }
-
-      try {
-         await loadLocale(locale);
-         document.documentElement.setAttribute("lang", locale);
-         localStorage.setItem(appConfig.key.locale, locale);
-         i18n.global.locale.value = locale;
-      } catch {
-         isError.value = true;
-      } finally {
-         if (options.global) {
-            appStore.setLocaleLoading(false);
-         } else {
-            isLoading.value = false;
-         }
-      }
-   };
-
-   return {
-      setLocale,
-      isLoading: computed(() => isLoading.value),
-      isError: computed(() => isError.value)
-   };
 };
 
 /**

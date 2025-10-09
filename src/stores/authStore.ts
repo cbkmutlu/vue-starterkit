@@ -1,3 +1,5 @@
+import { router } from "@/plugins/router";
+
 export const useAuthStore = defineStore(
    "authStore",
    () => {

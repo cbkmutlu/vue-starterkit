@@ -1,4 +1,4 @@
 {
    "css.customData": [".vscode/tailwind.json"],
-   "i18n-ally.localesPaths": ["src/locales"]
+   "i18n-ally.localesPaths": ["src/locales", "src/modules/**/locales"]
 }

@@ -1,3 +1,4 @@
+import { IconProps } from "vuetify";
 import {
    PhArrowDown,
    PhArrowsCounterClockwise,

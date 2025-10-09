@@ -8,15 +8,6 @@ declare module "axios" {
    }
 }
 
-export type TResponse<T = any> = {
-   success: boolean;
-   message?: string;
-   data: T;
-   error: any;
-   meta: any;
-   status: number;
-};
-
 export const appAxios = axios.create({
    baseURL: import.meta.env.VITE_BASE,
    withCredentials: false,

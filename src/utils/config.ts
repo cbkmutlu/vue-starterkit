@@ -1,4 +1,5 @@
-import { TR, US } from "country-flag-icons/string/3x2";
+import { US, TR } from "country-flag-icons/string/3x2";
+import { en,tr } from "vuetify/locale";
 
 export const appConfig = {
    module: [],
@@ -12,11 +13,13 @@ export const appConfig = {
       locales: {
          "tr-TR": {
             name: "Türkçe",
-            flag: TR
+            flag: TR,
+            vuetify: tr
          },
          "en-US": {
             name: "English",
-            flag: US
+            flag: US,
+            vuetify: en
          }
       }
    },

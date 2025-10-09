@@ -1,16 +1,6 @@
-export const registerMenu = async (): Promise<void> => {
-   const appStore = useAppStore();
-   appStore.setMenuLoading(true);
-   await loadMenu()
-      .then((menu) => {
-         appStore.setMenu({ ...menu, default: appMenu });
-      })
-      .finally(() => {
-         appStore.setMenuLoading(false);
-      });
-};
+import { i18n } from "@/plugins/i18n";
 
-export const appMenu: TList[] = [
+const appMenu: TList[] = [
    {
       type: "subheader",
       title: "Menu"
@@ -56,3 +46,5 @@ export const appMenu: TList[] = [
       ]
    }
 ];
+
+export default appMenu;

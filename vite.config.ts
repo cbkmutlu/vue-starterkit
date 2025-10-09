@@ -27,7 +27,7 @@ export default defineConfig(function ({ mode }) {
             runtimeOnly: false,
             compositionOnly: true,
             fullInstall: true,
-            include: [resolve(__dirname, "src/locales/**")]
+            include: [resolve(__dirname, "src/locales/**"), resolve(__dirname, "src/modules/**/locales/**")]
          }),
          webfont(),
          autoImport({
@@ -38,13 +38,8 @@ export default defineConfig(function ({ mode }) {
                "vue-i18n",
                "pinia",
                {
-                  from: "vue",
-                  imports: ["App"],
-                  type: true
-               },
-               {
                   from: "vue-router",
-                  imports: ["createRouter", "createWebHistory", "useRouter", "useRouter"]
+                  imports: ["createRouter", "createWebHistory"]
                },
                {
                   from: "vue-router",
@@ -52,12 +47,12 @@ export default defineConfig(function ({ mode }) {
                   type: true
                },
                {
-                  from: "pinia-plugin-persistedstate",
-                  imports: [["default", "persistedstate"]]
-               },
-               {
                   from: "vue-i18n",
                   imports: ["createI18n"]
+               },
+               {
+                  from: "pinia-plugin-persistedstate",
+                  imports: [["default", "persistedstate"]]
                },
                {
                   from: "axios",
@@ -74,12 +69,7 @@ export default defineConfig(function ({ mode }) {
                },
                {
                   from: "vuetify",
-                  imports: ["useTheme", "createVuetify", "useDate"]
-               },
-               {
-                  from: "vuetify",
-                  imports: ["ThemeInstance", "IconProps"],
-                  type: true
+                  imports: ["useTheme", "useDate"]
                }
             ],
             dts: "./vite-imports.d.ts",
@@ -120,7 +110,7 @@ export default defineConfig(function ({ mode }) {
          extensions: [".js", ".ts", ".vue", ".json"]
       },
       optimizeDeps: {
-         exclude: ["vuetify"],
+         exclude: ["vuetify", "vue-router"],
          extensions: [".scss", ".sass"],
          entries: ["./src/**/*.vue"],
          esbuildOptions: {

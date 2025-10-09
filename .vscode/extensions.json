@@ -1,9 +1,3 @@
 {
-   "recommendations": [
-      "lokalise.i18n-ally",
-      "esbenp.prettier-vscode",
-      "bradlc.vscode-tailwindcss",
-      "andygongea.update-now",
-      "vue.volar"
-   ]
+   "recommendations": ["lokalise.i18n-ally", "esbenp.prettier-vscode", "bradlc.vscode-tailwindcss", "andygongea.update-now", "vue.volar"]
 }

@@ -16,7 +16,6 @@ declare global {
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const appAxios: typeof import('./src/utils/axios')['appAxios']
   const appConfig: typeof import('./src/utils/config')['appConfig']
-  const appMenu: typeof import('./src/utils/menu')['appMenu']
   const appRules: typeof import('./src/utils/rules')['appRules']
   const attemptDelay: typeof import('./src/utils/helper')['attemptDelay']
   const axios: typeof import('axios')['default']
@@ -27,11 +26,11 @@ declare global {
   const createPinia: typeof import('pinia')['createPinia']
   const createRouter: typeof import('vue-router')['createRouter']
   const createSlug: typeof import('./src/utils/helper')['createSlug']
-  const createVuetify: typeof import('vuetify')['createVuetify']
   const createWebHistory: typeof import('vue-router')['createWebHistory']
   const currencySymbol: typeof import('./src/utils/helper')['currencySymbol']
   const customRef: typeof import('vue')['customRef']
   const debounceTimer: typeof import('./src/utils/helper')['debounceTimer']
+  const decimalSeparator: typeof import('./src/utils/helper')['decimalSeparator']
   const deepValue: typeof import('./src/utils/helper')['deepValue']
   const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
   const defineComponent: typeof import('vue')['defineComponent']
@@ -39,6 +38,7 @@ declare global {
   const dragHide: typeof import('./src/utils/helper')['dragHide']
   const effectScope: typeof import('vue')['effectScope']
   const endOfDay: typeof import('./src/utils/helper')['endOfDay']
+  const errorLog: typeof import('./src/utils/helper')['errorLog']
   const escapeUrl: typeof import('./src/utils/helper')['escapeUrl']
   const fileInfo: typeof import('./src/utils/helper')['fileInfo']
   const formatCounter: typeof import('./src/utils/helper')['formatCounter']
@@ -59,7 +59,6 @@ declare global {
   const getProvider: typeof import('./src/utils/helper')['getProvider']
   const getTheme: typeof import('./src/utils/helper')['getTheme']
   const h: typeof import('vue')['h']
-  const i18n: typeof import('./src/utils/i18n')['i18n']
   const inject: typeof import('vue')['inject']
   const isProxy: typeof import('vue')['isProxy']
   const isReactive: typeof import('vue')['isReactive']
@@ -78,6 +77,7 @@ declare global {
   const markRaw: typeof import('vue')['markRaw']
   const mat: typeof import('./src/utils/icons-material')['mat']
   const matAliases: typeof import('./src/utils/icons-material')['matAliases']
+  const menu: typeof import('./src/utils/menu')['default']
   const nextTick: typeof import('vue')['nextTick']
   const onActivated: typeof import('vue')['onActivated']
   const onBeforeMount: typeof import('vue')['onBeforeMount']
@@ -99,27 +99,18 @@ declare global {
   const persistedstate: typeof import('pinia-plugin-persistedstate')['default']
   const pho: typeof import('./src/utils/icons-phosphor')['pho']
   const phoAliases: typeof import('./src/utils/icons-phosphor')['phoAliases']
-  const pinia: typeof import('./src/utils/pinia')['pinia']
   const position: typeof import('./src/utils/helper')['position']
   const prefixNumber: typeof import('./src/utils/helper')['prefixNumber']
   const provide: typeof import('vue')['provide']
-  const query: typeof import('./src/utils/query')['query']
   const queryData: typeof import('./src/utils/helper')['queryData']
-  const queryOptions: typeof import('./src/utils/query')['queryOptions']
   const queryPrefetch: typeof import('./src/utils/helper')['queryPrefetch']
   const reactive: typeof import('vue')['reactive']
   const readonly: typeof import('vue')['readonly']
   const ref: typeof import('vue')['ref']
-  const registerDirectives: typeof import('./src/utils/directives')['registerDirectives']
-  const registerI18n: typeof import('./src/utils/i18n')['registerI18n']
-  const registerMenu: typeof import('./src/utils/menu')['registerMenu']
-  const registerProviders: typeof import('./src/utils/provider')['registerProviders']
-  const registerRoutes: typeof import('./src/utils/router')['registerRoutes']
   const replaceString: typeof import('./src/utils/helper')['replaceString']
   const resolveComponent: typeof import('vue')['resolveComponent']
-  const router: typeof import('./src/utils/router')['router']
+  const routes: typeof import('./src/utils/routes')['default']
   const searchString: typeof import('./src/utils/helper')['searchString']
-  const separateNumber: typeof import('./src/utils/helper')['separateNumber']
   const setActivePinia: typeof import('pinia')['setActivePinia']
   const setInitialData: typeof import('./src/utils/helper')['setInitialData']
   const setLocale: typeof import('./src/utils/helper')['setLocale']
@@ -157,7 +148,6 @@ declare global {
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useId: typeof import('vue')['useId']
   const useLink: typeof import('vue-router')['useLink']
-  const useLocale: typeof import('./src/utils/helper')['useLocale']
   const useModel: typeof import('vue')['useModel']
   const useMutation: typeof import('@tanstack/vue-query')['useMutation']
   const useNotifyStore: typeof import('./src/stores/notifyStore')['useNotifyStore']
@@ -173,7 +163,6 @@ declare global {
   const useSnackbarStore: typeof import('./src/stores/snackbarStore')['useSnackbarStore']
   const useTemplateRef: typeof import('vue')['useTemplateRef']
   const useTheme: typeof import('vuetify')['useTheme']
-  const vuetify: typeof import('./src/utils/vuetify')['vuetify']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
@@ -182,7 +171,7 @@ declare global {
 // for type re-export
 declare global {
   // @ts-ignore
-  export type { Component, Slot, Slots, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, ShallowRef, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef, App } from 'vue'
+  export type { Component, Slot, Slots, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, ShallowRef, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
   // @ts-ignore
   export type { RouteLocation, RouteRecordRaw, Router, RouteMeta, RouteLocationNormalizedLoaded } from 'vue-router'
@@ -191,26 +180,11 @@ declare global {
   export type { VueQueryPluginOptions, UseQueryReturnType, UseQueryOptions } from '@tanstack/vue-query'
   import('@tanstack/vue-query')
   // @ts-ignore
-  export type { ThemeInstance, IconProps } from 'vuetify'
-  import('vuetify')
-  // @ts-ignore
-  export type { TResponse } from './src/utils/axios'
-  import('./src/utils/axios')
-  // @ts-ignore
   export type { EButton, ENotify, EUser, ELanguage } from './src/utils/enums'
   import('./src/utils/enums')
   // @ts-ignore
-  export type { TParams, TQuery, TMutation } from './src/utils/query'
-  import('./src/utils/query')
-  // @ts-ignore
-  export type { TRoute } from './src/utils/router'
-  import('./src/utils/router')
-  // @ts-ignore
-  export type { IListImage, IDefaultFields, ITranslate, THeader, TNotify, TSnackbar } from './src/utils/types'
+  export type { Neverify, UnwrapReadonlyArray, NestedKeys, IListImage, IDefaultFields, ITranslate, THeader, TNotify, TSnackbar, TResponse, TRoute, TParams, TQuery, TMutation, TList, TDataTable, TMultiSelect, TDateField, TToolbar, TCard, TContainer, TBtn, TField } from './src/utils/types'
   import('./src/utils/types')
-  // @ts-ignore
-  export type { TList, TDataTable, TMultiSelect, TDateField, TToolbar, TCard, TContainer, TBtn, TField } from './src/utils/vuetify'
-  import('./src/utils/vuetify')
 }
 
 // for vue template auto import
@@ -228,7 +202,6 @@ declare module 'vue' {
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly appAxios: UnwrapRef<typeof import('./src/utils/axios')['appAxios']>
     readonly appConfig: UnwrapRef<typeof import('./src/utils/config')['appConfig']>
-    readonly appMenu: UnwrapRef<typeof import('./src/utils/menu')['appMenu']>
     readonly appRules: UnwrapRef<typeof import('./src/utils/rules')['appRules']>
     readonly attemptDelay: UnwrapRef<typeof import('./src/utils/helper')['attemptDelay']>
     readonly axios: UnwrapRef<typeof import('axios')['default']>
@@ -239,11 +212,11 @@ declare module 'vue' {
     readonly createPinia: UnwrapRef<typeof import('pinia')['createPinia']>
     readonly createRouter: UnwrapRef<typeof import('vue-router')['createRouter']>
     readonly createSlug: UnwrapRef<typeof import('./src/utils/helper')['createSlug']>
-    readonly createVuetify: UnwrapRef<typeof import('vuetify')['createVuetify']>
     readonly createWebHistory: UnwrapRef<typeof import('vue-router')['createWebHistory']>
     readonly currencySymbol: UnwrapRef<typeof import('./src/utils/helper')['currencySymbol']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
     readonly debounceTimer: UnwrapRef<typeof import('./src/utils/helper')['debounceTimer']>
+    readonly decimalSeparator: UnwrapRef<typeof import('./src/utils/helper')['decimalSeparator']>
     readonly deepValue: UnwrapRef<typeof import('./src/utils/helper')['deepValue']>
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
@@ -251,6 +224,7 @@ declare module 'vue' {
     readonly dragHide: UnwrapRef<typeof import('./src/utils/helper')['dragHide']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly endOfDay: UnwrapRef<typeof import('./src/utils/helper')['endOfDay']>
+    readonly errorLog: UnwrapRef<typeof import('./src/utils/helper')['errorLog']>
     readonly escapeUrl: UnwrapRef<typeof import('./src/utils/helper')['escapeUrl']>
     readonly fileInfo: UnwrapRef<typeof import('./src/utils/helper')['fileInfo']>
     readonly formatCounter: UnwrapRef<typeof import('./src/utils/helper')['formatCounter']>
@@ -271,7 +245,6 @@ declare module 'vue' {
     readonly getProvider: UnwrapRef<typeof import('./src/utils/helper')['getProvider']>
     readonly getTheme: UnwrapRef<typeof import('./src/utils/helper')['getTheme']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
-    readonly i18n: UnwrapRef<typeof import('./src/utils/i18n')['i18n']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
     readonly isProxy: UnwrapRef<typeof import('vue')['isProxy']>
     readonly isReactive: UnwrapRef<typeof import('vue')['isReactive']>
@@ -290,6 +263,7 @@ declare module 'vue' {
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
     readonly mat: UnwrapRef<typeof import('./src/utils/icons-material')['mat']>
     readonly matAliases: UnwrapRef<typeof import('./src/utils/icons-material')['matAliases']>
+    readonly menu: UnwrapRef<typeof import('./src/utils/menu')['default']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
@@ -311,27 +285,18 @@ declare module 'vue' {
     readonly persistedstate: UnwrapRef<typeof import('pinia-plugin-persistedstate')['default']>
     readonly pho: UnwrapRef<typeof import('./src/utils/icons-phosphor')['pho']>
     readonly phoAliases: UnwrapRef<typeof import('./src/utils/icons-phosphor')['phoAliases']>
-    readonly pinia: UnwrapRef<typeof import('./src/utils/pinia')['pinia']>
     readonly position: UnwrapRef<typeof import('./src/utils/helper')['position']>
     readonly prefixNumber: UnwrapRef<typeof import('./src/utils/helper')['prefixNumber']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
-    readonly query: UnwrapRef<typeof import('./src/utils/query')['query']>
     readonly queryData: UnwrapRef<typeof import('./src/utils/helper')['queryData']>
-    readonly queryOptions: UnwrapRef<typeof import('./src/utils/query')['queryOptions']>
     readonly queryPrefetch: UnwrapRef<typeof import('./src/utils/helper')['queryPrefetch']>
     readonly reactive: UnwrapRef<typeof import('vue')['reactive']>
     readonly readonly: UnwrapRef<typeof import('vue')['readonly']>
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
-    readonly registerDirectives: UnwrapRef<typeof import('./src/utils/directives')['registerDirectives']>
-    readonly registerI18n: UnwrapRef<typeof import('./src/utils/i18n')['registerI18n']>
-    readonly registerMenu: UnwrapRef<typeof import('./src/utils/menu')['registerMenu']>
-    readonly registerProviders: UnwrapRef<typeof import('./src/utils/provider')['registerProviders']>
-    readonly registerRoutes: UnwrapRef<typeof import('./src/utils/router')['registerRoutes']>
     readonly replaceString: UnwrapRef<typeof import('./src/utils/helper')['replaceString']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
-    readonly router: UnwrapRef<typeof import('./src/utils/router')['router']>
+    readonly routes: UnwrapRef<typeof import('./src/utils/routes')['default']>
     readonly searchString: UnwrapRef<typeof import('./src/utils/helper')['searchString']>
-    readonly separateNumber: UnwrapRef<typeof import('./src/utils/helper')['separateNumber']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
     readonly setInitialData: UnwrapRef<typeof import('./src/utils/helper')['setInitialData']>
     readonly setLocale: UnwrapRef<typeof import('./src/utils/helper')['setLocale']>
@@ -369,7 +334,6 @@ declare module 'vue' {
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
-    readonly useLocale: UnwrapRef<typeof import('./src/utils/helper')['useLocale']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
     readonly useMutation: UnwrapRef<typeof import('@tanstack/vue-query')['useMutation']>
     readonly useNotifyStore: UnwrapRef<typeof import('./src/stores/notifyStore')['useNotifyStore']>
@@ -385,7 +349,6 @@ declare module 'vue' {
     readonly useSnackbarStore: UnwrapRef<typeof import('./src/stores/snackbarStore')['useSnackbarStore']>
     readonly useTemplateRef: UnwrapRef<typeof import('vue')['useTemplateRef']>
     readonly useTheme: UnwrapRef<typeof import('vuetify')['useTheme']>
-    readonly vuetify: UnwrapRef<typeof import('./src/utils/vuetify')['vuetify']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>
