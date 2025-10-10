@@ -35,6 +35,9 @@
                <TableButton
                   icon="$edit"
                   @click.stop="recordHandler(item)" />
+               <TableButton
+                  icon="$browser"
+                  @click.stop="promptHandler(item)" />
             </template>
          </DataTable>
       </PageCard>
@@ -57,6 +60,7 @@ const CategoryDialog = defineAsyncComponent(() => import("@/pages/Category/Categ
 const { t } = useI18n();
 const snackbarStore = useSnackbarStore();
 const confirmStore = useConfirmStore();
+const propmptStore = usePromptStore();
 
 // states
 const filter = ref("");
@@ -67,7 +71,7 @@ const headers = computed((): THeader<ICategory>[] => [
    { title: t("app.status"), key: "is_active", width: "150" },
    { title: t("app.createDate"), key: "created_at", width: "250", date: "fullDate" },
    { title: t("app.updateDate"), key: "updated_at", width: "250", date: "fullDate" },
-   { key: "actions", width: "60" }
+   { key: "actions", width: "90" }
 ]);
 const categoryDialog = ref<InstanceType<typeof CategoryDialog>>();
 
@@ -84,7 +88,7 @@ const deleteHandler = async (item: ICategory) => {
    try {
       const confirm = await confirmStore.open({
          title: t("app.confirm"),
-         message: t("app.deleteRecord")
+         content: t("app.deleteRecord")
       });
 
       if (confirm) {
@@ -95,6 +99,25 @@ const deleteHandler = async (item: ICategory) => {
       snackbarStore.error(error || t("app.recordFailed"));
    } finally {
       confirmStore.close();
+   }
+};
+
+const promptHandler = async (item: ICategory) => {
+   try {
+      const confirm = await propmptStore.open({
+         content: t("app.edit"),
+         prompt: item.title,
+         onInput: (value: string) => upperCase(value),
+         rules: [appRules.required()]
+      });
+
+      if (confirm) {
+         snackbarStore.add({ text: propmptStore.dialog.prompt });
+      }
+   } catch (error) {
+      snackbarStore.error(error || t("app.recordFailed"));
+   } finally {
+      propmptStore.close();
    }
 };
 </script>

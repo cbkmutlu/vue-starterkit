@@ -72,7 +72,7 @@ const deleteHandler = async (item: IProduct) => {
    try {
       const confirm = await confirmStore.open({
          title: t("app.confirm"),
-         message: t("app.deleteRecord")
+         content: t("app.deleteRecord")
       });
 
       if (confirm) {
