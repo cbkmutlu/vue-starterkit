@@ -2,6 +2,7 @@
    <v-dialog
       v-model="promptStore.dialog.show"
       v-bind:max-width="promptStore.dialog.width"
+      class="items-start"
       @after-leave="promptStore.reset()"
       @keydown.esc="promptStore.close()">
       <v-form
@@ -24,14 +25,20 @@
             </v-toolbar>
 
             <v-card-text class="text-sm">
+               <div
+                  v-if="promptStore.dialog.content"
+                  class="mb-2">
+                  {{ promptStore.dialog.content }}
+               </div>
                <v-text-field
-                  v-model.trim="promptStore.dialog.message"
-                  v-bind:autofocus="promptStore.dialog.focus"
+                  v-model.trim="promptStore.dialog.prompt"
+                  v-bind:hide-details="!promptStore.dialog.detail"
                   v-bind:label="promptStore.dialog.label"
                   v-bind:readonly="promptStore.dialog.request"
                   v-bind:rules="promptStore.dialog.rules"
+                  autofocus
                   tabindex="1"
-                  @input="promptStore.dialog.callback && (promptStore.dialog.message = promptStore.dialog.callback(promptStore.dialog.message))" />
+                  @input="promptStore.dialog.onInput && (promptStore.dialog.prompt = promptStore.dialog.onInput(promptStore.dialog.prompt))" />
             </v-card-text>
 
             <v-divider></v-divider>
@@ -52,7 +59,6 @@
                   v-bind:loading="promptStore.dialog.request"
                   v-bind:text="promptStore.dialog.acceptText || t('app.accept')"
                   v-bind:variant="promptStore.dialog.acceptVariant"
-                  v-focus
                   type="submit"
                   density="default"
                   tabindex="1" />

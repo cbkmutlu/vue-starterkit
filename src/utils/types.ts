@@ -143,9 +143,11 @@ export const TDialog = {
    show: false,
    loading: false as boolean | MaybeRef<boolean>,
    request: false,
-   focus: false,
    validate: false,
    title: "",
+   label: "",
+   content: "",
+   prompt: "",
    titleColor: "transparent",
    acceptText: "",
    acceptColor: "primary",
@@ -153,11 +155,10 @@ export const TDialog = {
    cancelText: "",
    cancelColor: "error",
    cancelVariant: undefined,
-   label: "",
-   message: "",
    rules: [] as any[],
+   detail: false,
    width: 320,
-   callback: Function as (item: any) => any,
-   resolve: (_value: boolean) => {},
-   reject: (_value: boolean) => {}
+   onInput: null as unknown as (item: any) => any,
+   resolve: null as unknown as (item: any) => any,
+   reject: null as unknown as (item: any) => any
 };

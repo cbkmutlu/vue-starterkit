@@ -4,6 +4,7 @@
       v-if="!model.loading"
       v-model="model.show"
       v-bind:max-width="model?.width"
+      class="items-start"
       @after-leave="reset()"
       @keydown.escape="close()">
       <v-form

@@ -2,6 +2,7 @@
    <v-dialog
       v-model="confirmStore.dialog.show"
       v-bind:max-width="confirmStore.dialog.width"
+      class="items-start"
       @after-leave="confirmStore.reset()"
       @keydown.esc="confirmStore.close()">
       <v-card v-bind:loading="confirmStore.dialog.loading">
@@ -21,9 +22,9 @@
          </v-toolbar>
 
          <v-card-text
-            v-if="confirmStore.dialog.message"
+            v-if="confirmStore.dialog.content"
             class="text-sm">
-            {{ confirmStore.dialog.message }}
+            {{ confirmStore.dialog.content }}
          </v-card-text>
 
          <v-divider></v-divider>
