@@ -19,7 +19,6 @@ type TProps = {
 };
 
 // hooks
-const { t } = useI18n();
 const snackbarStore = useSnackbarStore();
 
 // states
@@ -35,9 +34,9 @@ const { translate, isLoading } = useGoogleTranslate();
 const translateHandler = async () => {
    try {
       model.value = await translate(model.value, props.from, props.to);
-      snackbarStore.add({ text: t("app.recordSuccess") });
+      snackbarStore.success();
    } catch (error) {
-      snackbarStore.error(error || t("app.recordFailed"));
+      snackbarStore.error(error);
    }
 };
 </script>

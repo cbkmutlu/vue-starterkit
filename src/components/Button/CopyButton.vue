@@ -11,7 +11,6 @@
 
 <script lang="ts" setup>
 // hooks
-const { t } = useI18n();
 const snackbarStore = useSnackbarStore();
 
 // states
@@ -23,9 +22,9 @@ const copyHandler = async () => {
    isLoading.value = true;
    try {
       await navigator.clipboard.writeText(model.value);
-      snackbarStore.add({ text: t("app.recordSuccess") });
+      snackbarStore.success();
    } catch (error) {
-      snackbarStore.error(error || t("app.recordFailed"));
+      snackbarStore.error(error);
    } finally {
       isLoading.value = false;
    }
