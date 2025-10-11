@@ -12,9 +12,9 @@
       closable>
       <template v-slot:actions="{ props }">
          <v-btn
+            density="compact"
             icon="$close"
             ripple
-            density="compact"
             variant="text"
             @click="props.onClick()" />
       </template>

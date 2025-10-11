@@ -2,6 +2,8 @@ import { i18n } from "@/plugins/i18n";
 import { VFileUpload, VFileUploadItem } from "vuetify/labs/VFileUpload";
 import { createVuetify } from "vuetify";
 import { createVueI18nAdapter } from "vuetify/locale/adapters/vue-i18n";
+// import vuetifyColors from "vuetify/util/colors";
+// import tailwindColors from "tailwindcss/colors";
 
 export const vuetify = createVuetify({
    locale: {
@@ -22,9 +24,8 @@ export const vuetify = createVuetify({
       themes: {
          light: {
             colors: {
-               error: tailwind3.red["600"],
-               info: tailwind3.violet["600"],
-               warning: tailwind3.amber["600"],
+               // info: tailwind3.violet["600"],
+               warning: tailwind3.orange["600"],
                "on-surface": tailwind3.neutral["800"],
                "on-background": tailwind3.neutral["800"]
             }

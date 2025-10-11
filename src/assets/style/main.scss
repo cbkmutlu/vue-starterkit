@@ -97,6 +97,12 @@
    //    border-radius: 0;
    // }
 
+   // vSnackbar
+   .v-snackbar--variant-tonal,
+   .v-chip--variant-tonal {
+      @apply border border-current/20 bg-[rgb(var(--v-theme-surface))];
+   }
+
    // vProgressCircular
    .v-progress-circular--indeterminate svg {
       animation: rotateProgress 1.2s linear infinite;
