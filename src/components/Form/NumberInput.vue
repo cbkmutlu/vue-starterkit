@@ -1,7 +1,11 @@
 <template>
    <v-text-field
       v-model="maskedValue"
-      v-bind:class="{ 'field-appended:pe-0': props.controlVariant !== 'hidden' }"
+      v-bind:class="{
+         'number-append': props.controlVariant !== 'hidden',
+         'number-prepend': props.controlVariant === 'split',
+         'number-icon': props.controlVariant === 'split',
+      }"
       v-maska="options"
       @blur="blurHandler"
       @focus="focusHandler"
@@ -13,38 +17,35 @@
          <v-btn
             v-bind:disabled="parseNumber(maskedValue) <= props.min"
             v-bind:ripple="false"
+            v-press="decreaseHandler"
             class="h-full rounded-none"
             density="compact"
             icon="$expand"
             variant="text"
-            @click="decreaseHandler"
             @mousedown.stop />
          <v-divider vertical />
          <v-btn
             v-bind:disabled="parseNumber(maskedValue) >= props.max"
             v-bind:ripple="false"
+            v-press="increaseHandler"
             class="h-full rounded-none"
             density="compact"
             icon="$collapse"
             variant="text"
-            @click="increaseHandler"
             @mousedown.stop />
       </template>
 
       <template
          v-if="props.controlVariant === 'split'"
          v-slot:prepend-inner>
-         <v-divider
-            class="ms-1"
-            vertical />
          <v-btn
             v-bind:disabled="parseNumber(maskedValue) <= props.min"
             v-bind:ripple="false"
+            v-press="decreaseHandler"
             class="h-full rounded-none"
             density="compact"
             icon="$minus"
             variant="text"
-            @click="decreaseHandler"
             @mousedown.stop />
          <v-divider vertical />
       </template>
@@ -55,11 +56,11 @@
          <v-btn
             v-bind:disabled="parseNumber(maskedValue) >= props.max"
             v-bind:ripple="false"
+            v-press="increaseHandler"
             class="h-full rounded-none"
             density="compact"
             icon="$plus"
             variant="text"
-            @click="increaseHandler"
             @mousedown.stop />
       </template>
 
@@ -91,7 +92,7 @@ const i18n = useI18n();
 const emits = defineEmits(["update:modelValue"]);
 const props = withDefaults(defineProps<TField & TProps>(), {
    controlVariant: "hidden",
-   step: 1,
+   step: 10,
    shiftStep: 0.1,
    min: 0,
    max: Infinity,
@@ -109,6 +110,7 @@ const options = computed(() => ({
    eager: true
 }));
 const maskedValue = ref(formatNumber(Number(props.modelValue)));
+const inputFocused = ref(false);
 
 // handlers
 const increaseHandler = (event: MouseEvent) => {
@@ -134,6 +136,7 @@ const decreaseHandler = (event: MouseEvent) => {
 };
 
 const focusHandler = (event: FocusEvent) => {
+   inputFocused.value = true;
    const input = event.target as HTMLInputElement;
    const cursorPos = input.selectionStart || maskedValue.value.length;
 
@@ -144,6 +147,7 @@ const focusHandler = (event: FocusEvent) => {
 };
 
 const blurHandler = () => {
+   inputFocused.value = false;
    maskedValue.value = formatNumber(Math.min(Math.max(parseNumber(maskedValue.value), props.min), props.max));
    maskedValue.value = suffixNumber(maskedValue.value, props.fraction);
 };
@@ -153,6 +157,15 @@ watch(
    (value) => {
       locale.value = value;
       maskedValue.value = formatNumber(Number(props.modelValue));
+   }
+);
+
+watch(
+   () => props.modelValue,
+   (value) => {
+      if (!inputFocused.value) {
+         maskedValue.value = formatNumber(Number(value));
+      }
    }
 );
 </script>

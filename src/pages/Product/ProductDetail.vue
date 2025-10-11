@@ -76,7 +76,21 @@
                   <v-list-subheader>{{ t("app.price") }}</v-list-subheader>
                </v-col>
                <v-col md="8">
-                  <NumberInput v-model="product.price" />
+                  <NumberInput
+                     v-model="product.price"
+                     control-variant="split"
+                     prepend-inner-icon="$tag">
+                     <template v-slot:append>
+                        <v-btn
+                           v-bind:ripple="false"
+                           class="h-full"
+                           density="compact"
+                           variant="tonal"
+                           @click="product.price = 500">
+                           500
+                        </v-btn>
+                     </template>
+                  </NumberInput>
                </v-col>
 
                <v-col md="4">
@@ -196,7 +210,7 @@ const deleteImageHandler = async (image: any) => {
    try {
       const confirm = await confirmStore.open({
          title: t("app.confirm"),
-         content: t("app.deleteImage"),
+         content: t("app.deleteImage")
       });
 
       if (confirm) {
@@ -239,6 +253,8 @@ const formHandler = async () => {
             }
          });
       }
+
+      console.info(payload);
    } catch (error) {
       snackbarStore.error(error || t("app.recordFailed"));
    }

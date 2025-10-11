@@ -70,10 +70,26 @@ https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities
    }
 }
 
+@utility number-append {
+   .v-field:has(.v-field__append-inner > .v-btn:last-child) {
+      @apply pe-0;
+   }
+}
+
+@utility number-prepend {
+   .v-field:has(.v-field__prepend-inner > .v-btn:first-child) {
+      @apply ps-0;
+   }
+}
+
+@utility number-icon {
+   .v-field__prepend-inner:has(.v-btn) > .v-icon {
+      @apply me-1;
+   }
+}
+
 /* [&_.v-navigation-drawer\_\_content]:flex [&_.v-navigation-drawer\_\_content]:flex-col */
 @custom-variant drawer-content (& .v-navigation-drawer__content);
-
-@custom-variant field-appended (& .v-field--appended);
 
 @custom-variant button-default (& .v-btn--size-default);
 

@@ -167,7 +167,7 @@ const deleteImageHandler = async () => {
    try {
       const confirm = await confirmStore.open({
          title: t("app.confirm"),
-         message: t("app.deleteImage")
+         content: t("app.deleteImage")
       });
 
       if (confirm) {

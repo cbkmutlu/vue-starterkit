@@ -83,6 +83,7 @@ import {
    IconStarFilled,
    IconStarHalfFilled,
    IconSun,
+   IconTag,
    IconTags,
    IconTarget,
    IconTie,
@@ -95,6 +96,7 @@ import {
    IconVolume2,
    IconVolume3,
    IconVolumeOff,
+   IconWallet,
    IconX
 } from "@tabler/icons-vue";
 
@@ -186,6 +188,8 @@ export const tablerAliases = {
    moon: IconMoonStars,
    sun: IconSun,
    tags: IconTags,
+   tag: IconTag,
+   wallet: IconWallet,
    tools: IconTools,
    browser: IconBrowser,
    target: IconTarget,

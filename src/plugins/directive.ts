@@ -44,6 +44,58 @@ export const registerDirective = (app: App) => {
 
    app.directive("maska", vMaska);
 
+   // v-press:'{"delay":700,"interval":200}'="handlerFunction"
+   // v-press="handlerFunction"
+   app.directive("press", {
+      mounted(el: HTMLElement, binding: DirectiveBinding) {
+         if (typeof binding.value !== "function") {
+            console.warn("[v-press] value must be a function");
+            return;
+         }
+
+         let pressTimer: any = null;
+         let repeatTimer: any = null;
+         const delay = binding.arg?.delay ?? 500;
+         const interval = binding.arg?.interval ?? 100;
+
+         const handler = (e: any) => binding.value(e);
+         const start = (e: any) => {
+            if (e.type === "click" && e.button !== 0) return;
+            cancel();
+
+            pressTimer = setTimeout(() => {
+               handler(e);
+               repeatTimer = setInterval(() => handler(e), interval);
+            }, delay);
+         };
+
+         const cancel = () => {
+            if (pressTimer) {
+               clearTimeout(pressTimer);
+               pressTimer = null;
+            }
+            if (repeatTimer) {
+               clearInterval(repeatTimer);
+               repeatTimer = null;
+            }
+         };
+
+         el.addEventListener("pointerdown", start);
+         el.addEventListener("pointerup", cancel);
+         el.addEventListener("pointercancel", cancel);
+         el.addEventListener("pointerleave", cancel);
+         el.addEventListener("click", handler);
+      },
+
+      unmounted(el: HTMLElement) {
+         el.removeEventListener("pointerdown", () => {});
+         el.removeEventListener("pointerup", () => {});
+         el.removeEventListener("pointercancel", () => {});
+         el.removeEventListener("pointerleave", () => {});
+         el.removeEventListener("click", () => {});
+      }
+   });
+
    app.directive("tooltip", {
       beforeUnmount: (el: HTMLElement) => {
          const tooltipIndex = tooltips.findIndex((tooltip) => tooltip.el === el);
