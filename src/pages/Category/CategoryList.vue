@@ -23,7 +23,9 @@
             v-bind:items="data"
             @row:click="(item) => $router.push({ name: 'categoryDetail', params: { id: item.id } })">
             <template v-slot:item.is_active="{ item }">
-               <v-chip v-bind:color="item.is_active ? 'success' : undefined">
+               <v-chip
+                  v-bind:color="item.is_active ? 'success' : undefined"
+                  class="border border-current/25">
                   {{ item.is_active ? t("app.active") : t("app.passive") }}
                </v-chip>
             </template>
