@@ -215,10 +215,10 @@ const deleteImageHandler = async (image: any) => {
 
       if (confirm) {
          await deleteImageMutate(image);
-         snackbarStore.add({ text: t("app.imageDeleted") });
+         snackbarStore.success(t("app.imageDeleted"));
       }
    } catch (error) {
-      snackbarStore.error(error || t("app.recordFailed"));
+      snackbarStore.error(error);
    } finally {
       confirmStore.close();
    }
@@ -244,19 +244,19 @@ const formHandler = async () => {
 
       if (isDetail.value) {
          await updateProduct.mutateAsync({ id: product.value.id, ...payload });
-         snackbarStore.add({ text: t("app.recordUpdated") });
+         snackbarStore.success(t("app.recordUpdated"));
       } else {
          await createProduct.mutateAsync(payload, {
             onSuccess: (data) => {
                router.push({ name: "productDetail", params: { id: data.data.id } });
-               snackbarStore.add({ text: t("app.recordCreated") });
+               snackbarStore.success(t("app.recordCreated"));
             }
          });
       }
 
       console.info(payload);
    } catch (error) {
-      snackbarStore.error(error || t("app.recordFailed"));
+      snackbarStore.error(error);
    }
 };
 </script>

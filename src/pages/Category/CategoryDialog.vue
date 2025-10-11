@@ -103,14 +103,14 @@ const open = async (item?: ICategory) => {
 
          if (!item?.id) {
             await createCategory.mutateAsync(payload);
-            snackbarStore.add({ text: t("app.recordCreated") });
+            snackbarStore.success(t("app.recordCreated"));
          } else {
             await updateCategory.mutateAsync(payload);
-            snackbarStore.add({ text: t("app.recordUpdated") });
+            snackbarStore.success(t("app.recordUpdated"));
          }
       }
    } catch (error) {
-      snackbarStore.error(error || t("app.recordFailed"));
+      snackbarStore.error(error);
    } finally {
       recordDialog.value?.close();
    }

@@ -172,10 +172,10 @@ const deleteImageHandler = async () => {
 
       if (confirm) {
          await deleteImageMutate();
-         snackbarStore.add({ text: t("app.imageDeleted") });
+         snackbarStore.success(t("app.imageDeleted"));
       }
    } catch (error) {
-      snackbarStore.error(error || t("app.recordFailed"));
+      snackbarStore.error(error);
    } finally {
       confirmStore.close();
    }
@@ -194,7 +194,7 @@ const formHandler = async () => {
       if (imageUpload.value.length) {
          if (category.value.image_path) {
             await deleteImageMutate();
-            snackbarStore.add({ text: t("app.imageDeleted") });
+            snackbarStore.success(t("app.imageDeleted"));
          }
 
          const upload = await uploadImageMutate();
@@ -204,17 +204,17 @@ const formHandler = async () => {
 
       if (isDetail.value) {
          await updateCategory.mutateAsync({ id: category.value.id, ...payload });
-         snackbarStore.add({ text: t("app.recordUpdated") });
+         snackbarStore.success(t("app.recordUpdated"));
       } else {
          await createCategory.mutateAsync(payload, {
             onSuccess: (data) => {
                router.push({ name: "categoryDetail", params: { id: data.data.id } });
-               snackbarStore.add({ text: t("app.recordCreated") });
+               snackbarStore.success(t("app.recordCreated"));
             }
          });
       }
    } catch (error) {
-      snackbarStore.error(error || t("app.recordFailed"));
+      snackbarStore.error(error);
    }
 };
 </script>

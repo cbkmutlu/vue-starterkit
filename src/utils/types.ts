@@ -58,6 +58,7 @@ export type TNotify = {
 export type TSnackbar = {
    text: string;
    color?: string;
+   variant?: string;
    timeout?: number;
 };
 

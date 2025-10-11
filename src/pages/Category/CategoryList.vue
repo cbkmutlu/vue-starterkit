@@ -23,9 +23,7 @@
             v-bind:items="data"
             @row:click="(item) => $router.push({ name: 'categoryDetail', params: { id: item.id } })">
             <template v-slot:item.is_active="{ item }">
-               <v-chip
-                  v-bind:color="item.is_active ? 'success' : undefined"
-                  class="border border-current/25">
+               <v-chip v-bind:color="item.is_active ? 'success' : undefined">
                   {{ item.is_active ? t("app.active") : t("app.passive") }}
                </v-chip>
             </template>
@@ -95,10 +93,10 @@ const deleteHandler = async (item: ICategory) => {
 
       if (confirm) {
          await deleteProduct.mutateAsync({ id: item.id });
-         snackbarStore.add({ text: t("app.recordDeleted") });
+         snackbarStore.success(t("app.recordDeleted"));
       }
    } catch (error) {
-      snackbarStore.error(error || t("app.recordFailed"));
+      snackbarStore.error(error);
    } finally {
       confirmStore.close();
    }
@@ -114,10 +112,10 @@ const promptHandler = async (item: ICategory) => {
       });
 
       if (confirm) {
-         snackbarStore.add({ text: propmptStore.dialog.prompt });
+         snackbarStore.success(propmptStore.dialog.prompt);
       }
    } catch (error) {
-      snackbarStore.error(error || t("app.recordFailed"));
+      snackbarStore.error(error);
    } finally {
       propmptStore.close();
    }

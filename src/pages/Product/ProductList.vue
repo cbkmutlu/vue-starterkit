@@ -77,10 +77,10 @@ const deleteHandler = async (item: IProduct) => {
 
       if (confirm) {
          await deleteProduct.mutateAsync({ id: item.id });
-         snackbarStore.add({ text: t("app.recordDeleted") });
+         snackbarStore.success(t("app.recordDeleted"));
       }
    } catch (error) {
-      snackbarStore.error(error || t("app.recordFailed"));
+      snackbarStore.error(error);
    } finally {
       confirmStore.close();
    }
