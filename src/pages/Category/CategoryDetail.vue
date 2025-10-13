@@ -9,7 +9,7 @@
                v-bind:disabled="isLoading || isPending"
                type="submit"
                prepend-icon="$save">
-               {{ isDetail ? t("app.update") : t("app.save") }}
+               {{ enabled ? t("app.update") : t("app.save") }}
             </ActionButton>
          </template>
 
@@ -110,24 +110,27 @@ import { useDeleteImage, useUploadImage } from "@/services/ImageService";
 
 // hooks
 const { t } = useI18n();
-const route = useRoute() as TRoute;
+const route = useRoute();
 const router = useRouter();
 const snackbarStore = useSnackbarStore();
 const confirmStore = useConfirmStore();
 
-// states
-const category = ref({
+// initials
+const categoryInitial = {
    is_active: 1,
    sort_order: 0
-} as ICategory);
+} as ICategory;
+
+// states
+const category = ref({ ...categoryInitial });
 const routeId = computed(() => route.params.id);
-const isDetail = computed(() => !!routeId.value);
+const enabled = computed(() => !!routeId.value);
 const language = ref(1);
 const imageUpload = ref([] as File[]);
 
 // services
 const getCategoryById = useGetCategoryById({
-   enabled: isDetail,
+   enabled: enabled,
    params: {
       id: routeId,
       language: language
@@ -202,7 +205,7 @@ const formHandler = async () => {
          imageUpload.value = [];
       }
 
-      if (isDetail.value) {
+      if (enabled.value) {
          await updateCategory.mutateAsync({ id: category.value.id, ...payload });
          snackbarStore.success(t("app.recordUpdated"));
       } else {

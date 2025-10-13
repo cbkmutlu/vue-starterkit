@@ -44,6 +44,7 @@ declare global {
   const formatCounter: typeof import('./src/utils/helper')['formatCounter']
   const formatDate: typeof import('./src/utils/helper')['formatDate']
   const formatNumber: typeof import('./src/utils/helper')['formatNumber']
+  const formatPhone: typeof import('./src/utils/helper')['formatPhone']
   const formatSize: typeof import('./src/utils/helper')['formatSize']
   const generateRandomGuid: typeof import('./src/utils/helper')['generateRandomGuid']
   const generateRandomString: typeof import('./src/utils/helper')['generateRandomString']
@@ -183,7 +184,7 @@ declare global {
   export type { EButton, ENotify, EUser, ELanguage } from './src/utils/enums'
   import('./src/utils/enums')
   // @ts-ignore
-  export type { Neverify, UnwrapReadonlyArray, NestedKeys, IListImage, IDefaultFields, ITranslate, THeader, TNotify, TSnackbar, TResponse, TRoute, TParams, TQuery, TMutation, TList, TDataTable, TMultiSelect, TDateField, TToolbar, TCard, TContainer, TBtn, TField } from './src/utils/types'
+  export type { Neverify, UnwrapReadonlyArray, NestedKeys, IListImage, IDefaultFields, ITranslate, THeader, TNotify, TSnackbar, TResponse, TParams, TQuery, TMutation, TList, TDataTable, TMultiSelect, TDateField, TToolbar, TCard, TContainer, TBtn, TField } from './src/utils/types'
   import('./src/utils/types')
 }
 
@@ -230,6 +231,7 @@ declare module 'vue' {
     readonly formatCounter: UnwrapRef<typeof import('./src/utils/helper')['formatCounter']>
     readonly formatDate: UnwrapRef<typeof import('./src/utils/helper')['formatDate']>
     readonly formatNumber: UnwrapRef<typeof import('./src/utils/helper')['formatNumber']>
+    readonly formatPhone: UnwrapRef<typeof import('./src/utils/helper')['formatPhone']>
     readonly formatSize: UnwrapRef<typeof import('./src/utils/helper')['formatSize']>
     readonly generateRandomGuid: UnwrapRef<typeof import('./src/utils/helper')['generateRandomGuid']>
     readonly generateRandomString: UnwrapRef<typeof import('./src/utils/helper')['generateRandomString']>

@@ -9,7 +9,7 @@
                v-bind:disabled="isLoading || isPending"
                type="submit"
                prepend-icon="$save">
-               {{ isDetail ? t("app.update") : t("app.save") }}
+               {{ enabled ? t("app.update") : t("app.save") }}
             </ActionButton>
          </template>
 
@@ -148,25 +148,28 @@ import { IProduct, IProductStore, useCreateProduct, useGetProductById, useUpdate
 
 // hooks
 const { t } = useI18n();
-const route = useRoute() as TRoute;
+const route = useRoute();
 const router = useRouter();
 const snackbarStore = useSnackbarStore();
 const confirmStore = useConfirmStore();
 
-// states
-const product = ref({
+// initials
+const productInitial = {
    is_active: 1,
    sort_order: 0,
    category_list: [] as any
-} as IProduct);
+} as IProduct;
+
+// states
+const product = ref({ ...productInitial });
 const routeId = computed(() => route.params.id);
-const isDetail = computed(() => !!routeId.value);
+const enabled = computed(() => !!routeId.value);
 const language = ref(1);
 const imageUpload = ref([] as File[]);
 
 // services
 const getProductById = useGetProductById({
-   enabled: isDetail,
+   enabled: enabled,
    params: {
       id: routeId,
       language: language
@@ -242,7 +245,7 @@ const formHandler = async () => {
          imageUpload.value = [];
       }
 
-      if (isDetail.value) {
+      if (enabled.value) {
          await updateProduct.mutateAsync({ id: product.value.id, ...payload });
          snackbarStore.success(t("app.recordUpdated"));
       } else {

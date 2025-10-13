@@ -69,10 +69,10 @@ const categoryInitial = {
 } as ICategory;
 
 // states
-const recordDialog = ref<InstanceType<typeof RecordDialog>>();
 const category = ref({ ...categoryInitial });
 const dialogId = computed(() => category.value.id);
 const enabled = computed(() => !!dialogId.value);
+const recordDialog = ref<InstanceType<typeof RecordDialog>>();
 
 // services
 const { isLoading } = useGetCategoryById({

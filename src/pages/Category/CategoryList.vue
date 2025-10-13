@@ -63,7 +63,7 @@ const confirmStore = useConfirmStore();
 const propmptStore = usePromptStore();
 
 // states
-const filter = ref("");
+const filter = ref();
 const selected = ref([]);
 const headers = computed((): THeader<ICategory>[] => [
    { title: t("app.code"), key: "code", width: "100" },

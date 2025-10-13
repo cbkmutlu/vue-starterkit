@@ -76,17 +76,10 @@ export type TResponse<T = any> = {
    status: number;
 };
 
-// router
-export type TRoute = RouteLocationNormalizedLoaded & {
-   params: {
-      id: number;
-   };
-};
-
 // tanstack
 export type TParams = {
    id?: Ref<number>;
-   language?: MaybeRef<string | number>;
+   language?: Ref<string | number>;
    page?: MaybeRef<string | number>;
    query?: MaybeRef<string>;
    sort?: MaybeRef<string>;

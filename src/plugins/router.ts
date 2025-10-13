@@ -6,6 +6,12 @@ declare module "vue-router" {
       auth?: boolean;
       module?: string;
    }
+
+   interface RouteLocationNormalizedLoadedGeneric {
+      params: {
+         id: number;
+      };
+   }
 }
 
 const routes: RouteRecordRaw[] = [

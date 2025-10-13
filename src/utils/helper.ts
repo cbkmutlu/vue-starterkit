@@ -884,14 +884,14 @@ export function useParam(param: string, useFirstIfArray = true): Ref<string | st
    const route = useRoute();
 
    return computed(() => {
-      let paramValue = route.params[param];
+      let paramValue = route.params[param as keyof typeof route.params];
 
       if (useFirstIfArray && Array.isArray(paramValue) && paramValue.length) {
          [paramValue] = paramValue;
       }
 
       return paramValue;
-   });
+   }) as any;
 }
 
 /**
