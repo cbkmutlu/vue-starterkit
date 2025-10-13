@@ -36,6 +36,7 @@
                   v-bind:label="promptStore.dialog.label"
                   v-bind:readonly="promptStore.dialog.request"
                   v-bind:rules="promptStore.dialog.rules"
+                  v-maska="promptStore.dialog.mask"
                   autofocus
                   tabindex="1"
                   @input="promptStore.dialog.onInput && (promptStore.dialog.prompt = promptStore.dialog.onInput(promptStore.dialog.prompt))" />

@@ -238,19 +238,19 @@ export const createSlug = (input: any, locale: string = getLocale()): string => 
    }
 
    const locales: Record<string, Record<string, string>> = {
-      "de-DE": { ß: "ss", ä: "ae", ö: "oe", ü: "ue" },
+      "de-DE": { ä: "ae", ö: "oe", ü: "ue" },
       "fr-FR": { œ: "oe", æ: "ae" },
       "da-DK": { ø: "o", æ: "ae", å: "a" },
       "tr-TR": { ı: "i", ß: "b", "&": "-ve-" },
       fallback: { œ: "oe", æ: "ae", ß: "ss", ø: "o", ı: "i", "&": "-and-" }
    };
-   const map = Object.assign({}, locales["fallback"] || {}, locales[locale] || {});
+   const chars = Object.assign({}, locales[locale] || {}, locales["fallback"] || {});
 
    return String(input)
       .normalize("NFD")
       .toLocaleLowerCase(locale)
       .replace(/[\u0300-\u036f]/g, "")
-      .replace(/./g, (ch: string) => map[ch] ?? ch)
+      .replace(/./g, (ch: string) => chars[ch] ?? ch)
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/-+/g, "-")
       .replace(/^-|-$/g, "");
@@ -290,7 +290,8 @@ export const searchString = (items: string, query: string, locale: string = getL
       fallback: ["iİıI", "üÜuU", "ğĞgG", "şŞsS", "çÇcC", "öÖoO"]
    };
 
-   const chars = locales[locale] || locales["fallback"] || [];
+   // const chars = locales[locale] || locales["fallback"] || [];
+   const chars = [...new Set([...(locales[locale] || []), ...(locales.fallback || [])])];
    query = lowerCase(query)
       .replace(/[.+?^${}()|[\]\\]/g, "\\$&")
       .replace(/[\*\s]/g, ".*");
@@ -337,13 +338,26 @@ export const currencySymbol = (currency: string = "TRY", locale: string = getLoc
 };
 
 /**
+ * Verilen telefon numarasını formatlar.
+ * @example
+ * formatPhone("05321234567") => "0532 123 4567"
+ */
+export const formatPhone = (value: string) => {
+   return value.replace(/(\d{4})(\d{3})(\d{4})/, "$1 $2 $3");
+};
+
+/**
  * Verilen değeri Türkiye para yazım formatına çevirir.
  * @example
  * formatNumber(0)       => "0,00"
  * formatNumber(2155)    => "2.155,00"
  * formatNumber(2155.00) => "2.155,00"
  */
-export const formatNumber = (value: number, min: number = 2, max: number = 2, locale: string = getLocale()): string => {
+export const formatNumber = (value: number | undefined, min: number = 2, max: number = 2, locale: string = getLocale()): string => {
+   if (value === undefined) {
+      value = 0;
+   }
+
    if (isNaN(value)) {
       value = 0;
    }

@@ -283,6 +283,23 @@
       }
    }
 
+   .motion-row {
+      &-enter-from,
+      &-leave-to {
+         opacity: 0;
+      }
+
+      &-enter-to,
+      &-leave-from {
+         opacity: 1;
+      }
+
+      &-enter-active,
+      &-leave-active {
+         transition: all 195ms cubic-bezier(0.4, 0, 0.6, 1);
+      }
+   }
+
    .motion-fade {
       @include transition-default();
 

@@ -18,7 +18,9 @@
       @update:page="expandedItems = []">
       <template v-slot:loading>
          <slot name="loading">
-            <v-skeleton-loader v-bind:type="props.skeleton" v-bind:boilerplate="getMotionReduction()" />
+            <v-skeleton-loader
+               v-bind:boilerplate="getMotionReduction()"
+               v-bind:type="props.skeleton" />
          </slot>
       </template>
 
@@ -30,6 +32,7 @@
          v-if="!props.loading"
          v-slot:body="{ internalItems, isSelected, toggleSelect, columns }: BodySlotScope<T>">
          <v-fade-transition
+            name="motion-row"
             group
             hide-on-leave>
             <template
@@ -77,7 +80,7 @@
                         v-bind:data-label="columns[index].title"
                         class="v-data-table__td">
                         <template v-if="column === 'actions'">
-                           <div class="table-action flex justify-between opacity-0 transition-opacity [tr:hover_.table-action]:!opacity-100">
+                           <div class="table-action flex justify-between opacity-0 transition-opacity [tr:hover_>td>.table-action]:!opacity-100">
                               <slot
                                  v-bind:index="itemIndex"
                                  v-bind:item="{ ...(item.value as T) }"
@@ -90,8 +93,19 @@
                            v-bind:item="{ ...(item.value as T) }"
                            v-bind:name="`item.${column}`">
                            <template v-if="columns[index].date">
-                              {{ date.format(new Date(item.columns[column]), columns[index].date) }}
+                              {{ item.columns[column] && date.format(new Date(item.columns[column]), columns[index].date) }}
                            </template>
+                           <template v-else-if="columns[index].format">
+                              <template v-if="columns[index].prefix">
+                                 {{ columns[index].prefix }}
+                              </template>
+                              {{ columns[index].format(item.columns[column]) }}
+                              <template v-if="columns[index].suffix">
+                                 {{ columns[index].suffix }}
+                              </template>
+                           </template>
+                           <template v-else-if="columns[index].prefix">{{ columns[index].prefix }}{{ item.columns[column] }}</template>
+                           <template v-else-if="columns[index].suffix">{{ item.columns[column] }}{{ columns[index].suffix }}</template>
                            <template v-else>
                               {{ item.columns[column] }}
                            </template>
@@ -163,14 +177,20 @@
 
 <script generic="T" lang="ts" setup>
 import TableHeader from "@/components/Table/TableHeader.vue";
-import type { TDataTable } from "@/utils/types";
+import type { TDataTable, THeader } from "@/utils/types";
 import { SelectableItem } from "vuetify/lib/components/VDataTable/composables/select.mjs";
 import { DataTableItem, InternalDataTableHeader } from "vuetify/lib/components/VDataTable/types.mjs";
 type BodySlotScope<T> = {
    internalItems: readonly DataTableItem<T>[];
    isSelected: (item: SelectableItem) => boolean;
    toggleSelect: (item: SelectableItem, index?: number, event?: MouseEvent) => void;
-   columns: InternalDataTableHeader[] & { date?: string }[];
+   columns: InternalDataTableHeader[] &
+      {
+         date?: string;
+         prefix?: string;
+         suffix?: string;
+         format?: (value: any) => string;
+      }[];
 };
 type TProps<T> = {
    items?: T[];
@@ -201,26 +221,30 @@ const props = withDefaults(defineProps<TDataTable & TProps<T>>(), {
    accentOnExpand: true,
    skeleton: "table-row-divider, list-item-three-line, list-item-two-line, list-item-two-line"
 });
+
 const items = computed(() => {
    const filter = lowerCase(props.filter);
-   const keys = props.headers?.map((h) => h.key);
+   if (!props.items || !Array.isArray(props.items)) return [];
+   if (!filter) return props.items;
 
-   if (!props.items || !Array.isArray(props.items)) {
-      return [];
-   }
+   return props.items.filter((item) => {
+      const headers = props.headers
+         ?.map((h: any) => {
+            if (h.merge?.length) {
+               return h.merge
+                  .map((k: any) => k.split(".").reduce((acc: any, cur: any) => acc?.[cur], item))
+                  .filter(Boolean)
+                  .join(" ");
+            } else {
+               return h.key.split(".").reduce((acc: any, cur: any) => acc?.[cur], item);
+            }
+         })
+         .join(" ");
 
-   return props.items
-      .map((item) => {
-         const headers = lowerCase(keys?.map((key: any) => key.split(".").reduce((acc: any, cur: any) => acc[cur], item)).join(" "));
-         return { ...item, headers };
-      })
-      .filter((item) => {
-         if (!filter) {
-            return true;
-         }
-         return searchString(item.headers, filter);
-      });
+      return searchString(lowerCase(headers), filter);
+   });
 });
+
 const emit = defineEmits<{
    (event: "row:click", item: T, index: number): void;
    (event: "row:expand", item: T, index: number): void;

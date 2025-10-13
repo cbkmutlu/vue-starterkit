@@ -4,7 +4,7 @@
    "tabWidth": 3,
    "singleQuote": false,
    "trailingComma": "none",
-   "printWidth": 180,
+   "printWidth": 200,
    "singleAttributePerLine": true,
    "bracketSameLine": true,
    "attributeGroups": ["^v-if", "^v-else-if", "^v-else", "^v-for", "^v-model", "^:model-value", "^v-", "$CODE_GUIDE", "^:", "$DEFAULT", "^tabindex", "^@"],

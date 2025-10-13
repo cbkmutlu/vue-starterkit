@@ -43,6 +43,10 @@ export type THeader<T> = {
     * https://vuetifyjs.com/en/features/dates/#format-options
     */
    date?: string;
+   prefix?: string;
+   suffix?: string;
+   format?: (value: any) => string;
+   merge?: string[];
 };
 
 export type TNotify = {
@@ -75,13 +79,13 @@ export type TResponse<T = any> = {
 // router
 export type TRoute = RouteLocationNormalizedLoaded & {
    params: {
-      id: string;
+      id: number;
    };
 };
 
 // tanstack
 export type TParams = {
-   id?: MaybeRef<string | string[] | number>;
+   id?: Ref<number>;
    language?: MaybeRef<string | number>;
    page?: MaybeRef<string | number>;
    query?: MaybeRef<string>;
@@ -159,6 +163,7 @@ export const TDialog = {
    rules: [] as any[],
    detail: false,
    width: 320,
+   mask: {},
    onInput: null as unknown as (item: any) => any,
    resolve: null as unknown as (item: any) => any,
    reject: null as unknown as (item: any) => any
