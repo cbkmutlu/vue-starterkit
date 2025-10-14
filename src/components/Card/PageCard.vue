@@ -33,6 +33,12 @@
          <v-toolbar-items v-if="$slots.items">
             <slot name="items" />
          </v-toolbar-items>
+
+         <template v-slot:append v-if="$slots.append">
+            <div class="me-1">
+               <slot name="append" />
+            </div>
+         </template>
       </v-toolbar>
 
       <slot />
