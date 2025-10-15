@@ -1,7 +1,6 @@
 <template>
    <v-select
       v-model="model"
-      v-bind="{ ...$attrs }"
       v-bind:item-title="props.itemTitle"
       v-bind:items="items"
       v-bind:loading="props.loading"
@@ -13,12 +12,12 @@
       @update:menu="$event && clearHandler()">
       <template v-slot:prepend-item>
          <v-list-item
-            v-if="props.search"
+            v-if="props.filter"
             v-bind:link="false"
             class="mb-0 px-0">
             <v-list-item-title>
                <v-text-field
-                  v-model="search"
+                  v-model="filterRaw"
                   hide-details
                   @click:clear="clearHandler()"
                   @input="inputHandler($event)"
@@ -53,7 +52,9 @@
             </v-list-item-title>
          </v-list-item>
 
-         <v-divider class="my-2"></v-divider>
+         <v-divider
+            v-if="props.filter"
+            class="my-2"></v-divider>
       </template>
 
       <template v-slot:item="{ item, props: itemProps }">
@@ -139,9 +140,8 @@ import type { TMultiSelect } from "@/utils/types";
 type TProps = {
    items?: any[];
    count?: number;
-   search?: boolean;
-   searchDeep?: boolean;
-   searchItem?: string[];
+   filter?: boolean | string[];
+   filterDeep?: boolean;
    multiple?: boolean;
    openOnClear?: boolean;
    menuProps?: any;
@@ -155,11 +155,11 @@ const { t } = useI18n();
 
 // states
 const model = defineModel({ type: [Array, Object, Number, null], default: null });
-const search = defineModel("search", { type: String, default: "" });
-const props = withDefaults(defineProps</* @ts-ignore */TMultiSelect & TProps>(), {
+const filterRaw = defineModel("filterRaw", { type: String, default: "" });
+const props = withDefaults(defineProps</* @ts-ignore */ TMultiSelect & TProps>(), {
+   filter: true,
+   filterDeep: false,
    count: 2,
-   search: true,
-   searchDeep: false,
    multiple: false,
    openOnClear: true,
    loading: false,
@@ -167,16 +167,25 @@ const props = withDefaults(defineProps</* @ts-ignore */TMultiSelect & TProps>(),
 });
 const debounce = ref("");
 const items = computed(() => {
-   return props.items?.filter((item: any) => {
-      let value = lowerCase(debounce.value.toString());
+   const query = debounce.value;
+   if (!query) {
+      return props.items;
+   }
 
-      if (props.searchDeep) {
-         return !(value && !searchString(Object.values(item).join(" ").toString(), value));
+   return props.items?.filter((item) => {
+      let data: any[];
+
+      if (props.filterDeep) {
+         data = Object.values(item).flatMap((v) => (v && typeof v === "object" ? Object.values(v) : v));
+      } else {
+         if (Array.isArray(props.filter)) {
+            data = props.filter.map((title) => title.split(".").reduce((acc, cur) => acc?.[cur], item));
+         } else {
+            data = [item[props.itemTitle]];
+         }
       }
-      if (props.searchItem) {
-         return !(value && !searchString(props.searchItem.map((title: any) => item[title]).join(" "), value));
-      }
-      return !(value && !searchString(item[props.itemTitle].toString(), value));
+
+      return searchString(query, data.join(" "));
    });
 });
 const allSelected = computed(() => model.value && model.value.length === items.value?.length);
@@ -189,7 +198,7 @@ const selectAll = (value: boolean) => {
 
 const clearHandler = () => {
    debounce.value = "";
-   search.value = "";
+   filterRaw.value = "";
 };
 
 const inputHandler = debounceTimer(async ($event) => {
@@ -198,7 +207,7 @@ const inputHandler = debounceTimer(async ($event) => {
 
 const keydownHandler = (event: KeyboardEvent) => {
    if (event.key === "Escape") {
-      if (search.value) {
+      if (filterRaw.value) {
          clearHandler();
          event.stopPropagation();
       }

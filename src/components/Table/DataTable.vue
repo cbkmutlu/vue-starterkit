@@ -1,6 +1,5 @@
 <template>
    <v-data-table
-      v-bind="{ ...$attrs }"
       v-bind:class="{
          'v-table--sticky-header': props.stickyHeader,
          'v-table--sticky-footer': props.stickyFooter,
@@ -193,19 +192,21 @@ type BodySlotScope<T> = {
       }[];
 };
 type TProps<T> = {
+   headers?: THeader<T>[];
    items?: T[];
+   filter?: string;
+   filterDeep?: boolean;
+   filterKey?: string[];
+   ripple?: boolean;
    stickyHeader?: boolean;
    stickyFooter?: boolean;
    accentHeader?: boolean;
+   accentOnExpand?: boolean;
+   skeleton?: string;
+   loading?: boolean;
    disableSort?: boolean;
    multiExpand?: boolean;
-   loading?: boolean;
-   filter?: string;
-   headers?: THeader<T>[];
-   ripple?: boolean;
-   skeleton?: string;
    expandOnClick?: boolean;
-   accentOnExpand?: boolean;
 };
 
 // hooks
@@ -213,42 +214,50 @@ const date = useDate();
 
 // states
 const props = withDefaults(defineProps<TDataTable & TProps<T>>(), {
+   filter: "",
+   filterDeep: false,
+   ripple: false,
    stickyHeader: true,
    stickyFooter: true,
    accentHeader: false,
-   filter: "",
-   ripple: false,
    accentOnExpand: true,
    skeleton: "table-row-divider, list-item-three-line, list-item-two-line, list-item-two-line"
 });
-
-const items = computed(() => {
-   const filter = lowerCase(props.filter);
-   if (!props.items || !Array.isArray(props.items)) return [];
-   if (!filter) return props.items;
-
-   return props.items.filter((item) => {
-      const headers = props.headers
-         ?.map((h: any) => {
-            if (h.merge?.length) {
-               return h.merge
-                  .map((k: any) => k.split(".").reduce((acc: any, cur: any) => acc?.[cur], item))
-                  .filter(Boolean)
-                  .join(" ");
-            } else {
-               return h.key.split(".").reduce((acc: any, cur: any) => acc?.[cur], item);
-            }
-         })
-         .join(" ");
-
-      return searchString(lowerCase(headers), filter);
-   });
-});
-
 const emit = defineEmits<{
    (event: "row:click", item: T, index: number): void;
    (event: "row:expand", item: T, index: number): void;
 }>();
+const items = computed(() => {
+   const query = props.filter;
+   if (!query) {
+      return props.items;
+   }
+
+   return props.items?.filter((item) => {
+      let data: any[];
+
+      if (props.filterDeep) {
+         data = Object.values(item).flatMap((v) => (v && typeof v === "object" ? Object.values(v) : v));
+      } else {
+         let headers: THeader<T>[] = [];
+         if (Array.isArray(props.filterKey)) {
+            headers = props.headers?.filter((h: THeader<T>) => props.filterKey?.includes(h.key!)) as THeader<T>[];
+         } else {
+            headers = props.headers as THeader<T>[];
+         }
+
+         data = headers?.map((h) => {
+            if (h.merge) {
+               return h.merge.map((k) => k.split(".").reduce((acc, cur) => acc?.[cur], item)).join(" ");
+            } else {
+               return h.key?.split(".").reduce((acc, cur) => acc?.[cur], item);
+            }
+         });
+      }
+
+      return searchString(query, data.join(" "));
+   });
+});
 const expandedItems: any = ref([]);
 const optionsLoading = ref(false);
 const currentOptions: any = ref({});

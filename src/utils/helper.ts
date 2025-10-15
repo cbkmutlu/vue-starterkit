@@ -280,9 +280,9 @@ export const replaceString = (format: string, args: any[]): string => {
  * @example
  * searchString("hello", "hello world") => true
  */
-export const searchString = (items: string, query: string, locale: string = getLocale()) => {
-   if (!query || !items) {
-      return false;
+export const searchString = (query: string, data: string | undefined, locale: string = getLocale()) => {
+   if (!query || !data) {
+      return true;
    }
 
    const locales: Record<string, string[]> = {
@@ -302,7 +302,7 @@ export const searchString = (items: string, query: string, locale: string = getL
    }
 
    const filter = new RegExp(query, "i");
-   return items.search(filter) !== -1;
+   return data.search(filter) !== -1;
 };
 
 const cache_number: Record<string, { group: string; decimal: string }> = {};
@@ -548,6 +548,7 @@ export const deepValue = <T>(source: T): T => {
             return acc;
          }, {} as T);
       }
+
       return input;
    };
 
@@ -880,7 +881,7 @@ export function useGoogleTranslate() {
  * useParam("id", true) => "1"
  * useParam("id", false) => ["1", "2", "3"]
  */
-export function useParam(param: string, useFirstIfArray = true): Ref<string | string[]> {
+export function useParam(param: string, useFirstIfArray = true): ComputedRef<any> {
    const route = useRoute();
 
    return computed(() => {
@@ -891,7 +892,7 @@ export function useParam(param: string, useFirstIfArray = true): Ref<string | st
       }
 
       return paramValue;
-   }) as any;
+   });
 }
 
 /**

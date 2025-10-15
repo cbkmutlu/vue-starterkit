@@ -7,20 +7,23 @@
          bg-color="surface"
          hide-details
          min-width="250"
-         @click:clear="search = ''"
+         @click:clear="model = ''"
          @input="inputHandler($event)" />
    </div>
 </template>
 
 <script lang="ts" setup>
+import type { TField } from "@/utils/types";
+
 // hooks
 const { t } = useI18n();
 
 // states
-const search = defineModel("search", { type: String, default: "" });
+withDefaults(defineProps<TField>(), {});
+const model = defineModel({ type: String, default: "" });
 
 // handlers
 const inputHandler = debounceTimer(async ($event) => {
-   search.value = $event.target.value;
+   model.value = $event.target.value;
 });
 </script>
