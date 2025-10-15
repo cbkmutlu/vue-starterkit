@@ -2,7 +2,7 @@
    <Container v-bind:loading="isLoading">
       <PageCard>
          <template v-slot:header>
-            <SearchInput v-model:search="filter" />
+            <SearchInput v-model="filter" />
          </template>
 
          <template v-slot:actions>

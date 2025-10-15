@@ -2,7 +2,7 @@
    <Container v-bind:loading="isLoading">
       <PageCard>
          <template v-slot:header>
-            <SearchInput v-model:search="filter" />
+            <SearchInput v-model="filter" />
          </template>
 
          <template v-slot:actions>
@@ -17,7 +17,6 @@
          <template v-slot:title>{{ t("app.categoryList") }}</template>
 
          <DataTable
-            v-model="selected"
             v-bind:filter="filter"
             v-bind:headers="headers"
             v-bind:items="data"
@@ -64,7 +63,6 @@ const propmptStore = usePromptStore();
 
 // states
 const filter = ref();
-const selected = ref([]);
 const headers = computed((): THeader<ICategory>[] => [
    { title: t("app.code"), key: "code", width: "100" },
    { title: t("app.title"), key: "title" },
