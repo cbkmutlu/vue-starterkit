@@ -10,6 +10,11 @@ export interface IListImage {
    image_path: string;
 }
 
+export interface IOrderStore {
+   id: number;
+   order: number;
+}
+
 export interface IDefaultFields {
    created_at: string;
    updated_at: string;
@@ -32,7 +37,8 @@ export interface ITranslate {
 export type THeader<T> = {
    title?: string;
    key?: NestedKeys<T> | "actions";
-   width?: string;
+   width?: number;
+   minWidth?: number;
    value?: string;
    sortable?: boolean;
    align?: "start" | "center" | "end";
@@ -89,6 +95,7 @@ export type TParams = {
    status?: MaybeRef<string | number>;
    start_date?: MaybeRef<Date>;
    end_date?: MaybeRef<Date>;
+   type?: MaybeRef<string | number>;
 };
 
 export type TQuery<T> = {
@@ -99,10 +106,10 @@ export type TQuery<T> = {
 };
 
 export type TMutation = {
-   invalidate?: string[];
+   invalidate?: (string | number)[];
 };
 
-import { VBtn, VCard, VContainer, VDataTable, VDatePicker, VListItem, VSelect, VTextField, VToolbar } from "vuetify/components";
+import { VAlert, VAvatar, VBtn, VCard, VContainer, VDataTable, VDatePicker, VListItem, VSelect, VTextField, VToolbar } from "vuetify/components";
 /* @ts-ignore */ type TListBase = {
    title?: string | (() => string);
    subtitle?: string | (() => string);
@@ -136,6 +143,8 @@ import { VBtn, VCard, VContainer, VDataTable, VDatePicker, VListItem, VSelect, V
 /* @ts-ignore */ export type TContainer = Partial<ComponentProps<typeof VContainer>>;
 /* @ts-ignore */ export type TBtn = Partial<ComponentProps<typeof VBtn>>;
 /* @ts-ignore */ export type TField = Partial<ComponentProps<typeof VTextField>>;
+/* @ts-ignore */ export type TAvatar = Partial<ComponentProps<typeof VAvatar>>;
+/* @ts-ignore */ export type TAlert = Partial<ComponentProps<typeof VAlert>>;
 
 export const TDialog = {
    show: false,
