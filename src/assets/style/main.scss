@@ -46,6 +46,10 @@
       height: 100%;
    }
 
+   html.grabbing {
+      cursor: grab !important;
+   }
+
    .bg-light {
       background: var(--bg-light);
    }
@@ -168,13 +172,19 @@
       }
    }
 
+   // vList
+   .v-list .v-list-item--nav:last-child {
+      margin-bottom: 0;
+   }
+
    // vTable
    .v-table {
       > .v-table__wrapper {
-         overflow: visible;
+         overflow-x: auto;
+         // max-height: 640px;
 
          > table {
-            table-layout: fixed;
+            // table-layout: fixed;
             border-collapse: separate;
 
             > tbody > tr:last-child {

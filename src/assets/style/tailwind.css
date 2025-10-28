@@ -102,5 +102,6 @@ https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities
 /* list-spacer:w-3 */
 /* @custom-variant list-spacer (& ~ .v-list-item__spacer); */
 
+@custom-variant grabbing (&:where(.grabbing *));
 @custom-variant light (&:where(.v-theme--light *));
 @custom-variant dark (&:not(.v-theme--light *));
