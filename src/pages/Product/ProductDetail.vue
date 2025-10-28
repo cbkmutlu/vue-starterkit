@@ -143,7 +143,7 @@ import NumberInput from "@/components/Form/NumberInput.vue";
 import SelectInput from "@/components/Form/SelectInput.vue";
 import LanguageTab from "@/components/Tab/LanguageTab.vue";
 import { useGetCategoryAll } from "@/services/CategoryService";
-import { useDeleteImage, useUploadImage } from "@/services/ImageService";
+import { useUnlinkFile, useUploadFile } from "@/services/FileService";
 import { IProduct, IProductStore, useCreateProduct, useGetProductById, useUpdateProduct } from "@/services/ProductService";
 
 // hooks
@@ -180,8 +180,8 @@ const getProductById = useGetProductById({
 });
 const updateProduct = useUpdateProduct();
 const createProduct = useCreateProduct();
-const uploadImage = useUploadImage();
-const deleteImage = useDeleteImage({ invalidate: ["product", "productById"] });
+const uploadFile = useUploadFile();
+const unlinkFile = useUnlinkFile({ invalidate: ["product", "productById"] });
 
 // relation services
 const { data: categoryAll, isLoading: categoryLoading } = useGetCategoryAll();
@@ -192,22 +192,6 @@ const isFirst = computed(() => getProductById.isFirst.value);
 const isPending = computed(() => createProduct.isPending.value || updateProduct.isPending.value);
 const isError = computed(() => getProductById.isError.value);
 
-// mutates
-const deleteImageMutate = async (item: IListImage) => {
-   return await deleteImage.mutateAsync({
-      id: item.id,
-      table: "product_image",
-      delete: true
-   });
-};
-
-const uploadImageMutate = async () => {
-   return await uploadImage.mutateAsync({
-      files: imageUpload.value,
-      path: "product/" + product.value.id
-   });
-};
-
 // handlers
 const deleteImageHandler = async (image: any) => {
    try {
@@ -217,7 +201,12 @@ const deleteImageHandler = async (image: any) => {
       });
 
       if (confirm) {
-         await deleteImageMutate(image);
+         await unlinkFile.mutateAsync({
+            id: image.id,
+            table: "product_image",
+            field: "image_path",
+            delete: true
+         });
          snackbarStore.success(t("app.imageDeleted"));
       }
    } catch (error) {
@@ -240,9 +229,15 @@ const formHandler = async () => {
 
    try {
       if (imageUpload.value.length) {
-         const upload = await uploadImageMutate();
-         payload.image_path = upload.data;
-         imageUpload.value = [];
+         await uploadFile
+            .mutateAsync({
+               files: imageUpload.value,
+               path: "product"
+            })
+            .then((upload) => {
+               payload.image_path = upload.data;
+               imageUpload.value = [];
+            });
       }
 
       if (enabled.value) {

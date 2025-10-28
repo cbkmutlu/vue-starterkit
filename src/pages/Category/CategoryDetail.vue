@@ -106,7 +106,7 @@ import ImageList from "@/components/Form/ImageList.vue";
 import ImageUpload from "@/components/Form/ImageUpload.vue";
 import LanguageTab from "@/components/Tab/LanguageTab.vue";
 import { ICategory, ICategoryStore, useCreateCategory, useGetCategoryById, useUpdateCategory } from "@/services/CategoryService";
-import { useDeleteImage, useUploadImage } from "@/services/ImageService";
+import { useUnlinkFile, useUploadFile } from "@/services/FileService";
 
 // hooks
 const { t } = useI18n();
@@ -141,29 +141,14 @@ const getCategoryById = useGetCategoryById({
 });
 const updateCategory = useUpdateCategory();
 const createCategory = useCreateCategory();
-const uploadImage = useUploadImage();
-const deleteImage = useDeleteImage({ invalidate: ["category", "categoryById"] });
+const uploadFile = useUploadFile();
+const unlinkFile = useUnlinkFile({ invalidate: ["category", "categoryById"] });
 
 // status
 const isLoading = computed(() => getCategoryById.isLoading.value);
 const isFirst = computed(() => getCategoryById.isFirst.value);
 const isPending = computed(() => createCategory.isPending.value || updateCategory.isPending.value);
 const isError = computed(() => getCategoryById.isError.value);
-
-// mutates
-const deleteImageMutate = async () => {
-   return await deleteImage.mutateAsync({
-      id: category.value.id,
-      table: "category"
-   });
-};
-
-const uploadImageMutate = async () => {
-   return await uploadImage.mutateAsync({
-      files: imageUpload.value,
-      path: "category"
-   });
-};
 
 // handlers
 const deleteImageHandler = async () => {
@@ -174,7 +159,11 @@ const deleteImageHandler = async () => {
       });
 
       if (confirm) {
-         await deleteImageMutate();
+         await unlinkFile.mutateAsync({
+            id: category.value.id,
+            table: "category",
+            field: "image_path"
+         });
          snackbarStore.success(t("app.imageDeleted"));
       }
    } catch (error) {
@@ -195,14 +184,15 @@ const formHandler = async () => {
 
    try {
       if (imageUpload.value.length) {
-         if (category.value.image_path) {
-            await deleteImageMutate();
-            snackbarStore.success(t("app.imageDeleted"));
-         }
-
-         const upload = await uploadImageMutate();
-         payload.image_path = upload.data[0];
-         imageUpload.value = [];
+         await uploadFile
+            .mutateAsync({
+               files: imageUpload.value,
+               path: "category"
+            })
+            .then((upload) => {
+               payload.image_path = upload.data[0];
+               imageUpload.value = [];
+            });
       }
 
       if (enabled.value) {
