@@ -14,9 +14,9 @@
          {{ t("app.english") }}
       </v-tab>
       <v-menu transition="dialog-transition">
-         <template v-slot:activator="{ props: menuProps }">
+         <template v-slot:activator="{ props: slotProps }">
             <v-btn
-               v-bind="menuProps"
+               v-bind="slotProps"
                v-bind:color="props.color"
                height="100%"
                rounded="0">

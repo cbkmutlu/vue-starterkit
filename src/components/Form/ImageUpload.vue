@@ -4,14 +4,22 @@
          <v-file-upload
             v-model="model"
             v-bind:multiple="props.multiple"
-            v-bind:title="t('app.selectOrDropImage')"
+            class="p-4"
             clearable
-            density="compact"
+            density="comfortable"
             show-size>
-            <template v-slot:item="{ props: itemProps }">
+            <template v-slot:item="{ props: slotProps }">
                <v-file-upload-item
-                  v-bind="itemProps"
+                  v-bind="slotProps"
                   nav></v-file-upload-item>
+            </template>
+
+            <template v-slot:title>
+               <div class="text-base font-normal">{{ t("app.selectOrDropImage") }}</div>
+            </template>
+
+            <template v-slot:icon>
+               <v-icon size="xlarge">$upload</v-icon>
             </template>
          </v-file-upload>
       </v-col>

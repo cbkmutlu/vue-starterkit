@@ -1,8 +1,8 @@
 <template>
    <v-list-group v-bind:value="props.item.props?.value">
-      <template v-slot:activator="{ props }">
+      <template v-slot:activator="{ props: slotProps }">
          <ListItem
-            v-bind="props"
+            v-bind="slotProps"
             v-bind:item="item" />
       </template>
 

@@ -3,11 +3,11 @@
       v-model="menu"
       v-bind:close-on-content-click="false"
       v-bind:offset="props.hideDetails ? [0, 0] : [-22, 0]"
-      class="[&_.v-overlay\_\_content]:!min-w-min"
+      class="[&_.v-overlay\_\_content]:min-w-min!"
       transition="dialog-transition">
-      <template v-slot:activator="{ props: activatorProps }">
+      <template v-slot:activator="{ props: slotProps }">
          <v-text-field
-            v-bind="{ ...activatorProps, ...$attrs }"
+            v-bind="{ ...slotProps, ...$attrs }"
             v-bind:active="menu"
             v-bind:hide-details="props.hideDetails"
             v-bind:model-value="display"

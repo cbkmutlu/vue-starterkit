@@ -1,8 +1,10 @@
 <template>
-   <v-menu offset="3, 0" transition="dialog-transition">
-      <template v-slot:activator="{ props }">
+   <v-menu
+      offset="3, 0"
+      transition="dialog-transition">
+      <template v-slot:activator="{ props: slotProps }">
          <v-btn
-            v-bind="props"
+            v-bind="slotProps"
             icon="$dots" />
       </template>
 

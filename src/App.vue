@@ -10,13 +10,13 @@
    <v-snackbar-queue
       v-model="snackbarStore.queue"
       closable>
-      <template v-slot:actions="{ props }">
+      <template v-slot:actions="{ props: slotProps }">
          <v-btn
+            v-ripple
             density="compact"
             icon="$close"
-            ripple
             variant="text"
-            @click="props.onClick()" />
+            @click="slotProps.onClick()" />
       </template>
    </v-snackbar-queue>
 

@@ -2,9 +2,9 @@
    <v-menu
       offset="3, 0"
       transition="dialog-transition">
-      <template v-slot:activator="{ props }">
+      <template v-slot:activator="{ props: slotProps }">
          <v-btn
-            v-bind="props"
+            v-bind="slotProps"
             v-bind:loading="isLoading"
             icon="$translate" />
       </template>
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { i18n } from '@/plugins/i18n';
+import { i18n } from "@/plugins/i18n";
 
 // states
 const isLoading = ref(false);
