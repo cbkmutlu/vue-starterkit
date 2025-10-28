@@ -1,6 +1,5 @@
 <template>
    <v-btn
-      v-bind:="$attrs"
       v-bind:color="props.color"
       density="default"
       variant="flat">
