@@ -4,9 +4,9 @@
          v-if="props.items?.[0] !== null && props.items?.[0] !== undefined"
          v-for="(item, index) in props.items"
          v-bind:key="index"
-         cols="4"
-         md="2"
-         sm="3">
+         cols="6"
+         md="3"
+         sm="4">
          <v-img
             v-bind:src="getMedia(typeof item === 'string' ? item : item?.image_path)"
             aspect-ratio="1"
@@ -14,8 +14,9 @@
             rounded>
             <div
                v-if="props.delete"
-               class="flex-center size-full bg-surface/50 text-white opacity-0 transition-opacity hover:opacity-100">
+               class="flex-center bg-surface/50 size-full text-white opacity-0 transition-opacity hover:opacity-100">
                <v-btn
+                  density="compact"
                   icon="$trash"
                   @click="props.delete && props.delete(item)" />
             </div>
