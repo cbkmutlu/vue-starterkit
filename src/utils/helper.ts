@@ -2,18 +2,6 @@ import type { I18n } from "vue-i18n";
 import type { ThemeInstance } from "vuetify";
 
 /**
- * Verilen dosya yolunu `VITE_MEDIA` ile birleştirir.
- * @example
- * getMedia("image.png") => "http://localhost:3000/image.png"
- */
-export const getMedia = (path: string | undefined): string => {
-   if (typeof path !== "string") {
-      errorLog("[getMedia] path is not string");
-   }
-   return import.meta.env.VITE_MEDIA + "/" + path;
-};
-
-/**
  * Geliştirme ortamında hata mesajı gösterir.
  * @example
  * errorLog("Hello World") => "Hello World"
@@ -22,6 +10,21 @@ export const errorLog = (message: any, ...optionalParams: any[]) => {
    if (process.env.NODE_ENV === "development") {
       console.error(message, ...optionalParams);
    }
+};
+
+/**
+ * Verilen dosya yolunu `VITE_MEDIA` ile birleştirir.
+ * @example
+ * getMedia("image.png") => "http://localhost:3000/image.png"
+ */
+export const getMedia = (path: string | undefined): string => {
+   if (!path || typeof path !== "string") {
+      errorLog("[getMedia] path is not string or empty");
+      return "";
+   }
+
+   path = path.replace(/^\/+/, "");
+   return import.meta.env.VITE_MEDIA.replace(/\/+$/, "") + "/" + path;
 };
 
 /**
@@ -1036,6 +1039,8 @@ export const escapeUrl = (url: any): string => {
 export const dragHide = (e: any): void => {
    let crt = e.target.cloneNode(true);
    crt.style.display = "none";
+   e.dataTransfer.dropEffect = "none";
+   e.dataTransfer.effectAllowed = "none";
    e.dataTransfer.setDragImage(crt, 0, 0);
 };
 
