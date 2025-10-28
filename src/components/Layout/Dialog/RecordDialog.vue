@@ -96,5 +96,5 @@ const open = (payload?: { [K in keyof typeof TDialog]?: (typeof TDialog)[K] }) =
    });
 };
 
-defineExpose({ open, accept, close });
+defineExpose({ open, close });
 </script>
