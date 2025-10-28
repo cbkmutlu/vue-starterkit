@@ -11,50 +11,52 @@
       @click:clear="clearHandler()"
       @update:menu="$event && clearHandler()">
       <template v-slot:prepend-item>
-         <v-list-item
-            v-if="props.filter"
-            v-bind:link="false"
-            class="mb-0 px-0">
-            <v-list-item-title>
-               <v-text-field
-                  v-model="filterRaw"
-                  hide-details
-                  @click:clear="clearHandler()"
-                  @input="inputHandler($event)"
-                  @keydown="keydownHandler($event)"
-                  @keydown.space.stop
-                  @mousedown.stop>
-                  <template v-slot:append-inner>
-                     <v-icon>$search</v-icon>
-                  </template>
-               </v-text-field>
-            </v-list-item-title>
-         </v-list-item>
+         <div class="sticky top-0 bg-surface z-10">
+            <v-list-item
+               v-if="props.filter"
+               v-bind:link="false"
+               class="mb-0 px-0">
+               <v-list-item-title>
+                  <v-text-field
+                     v-model="filterRaw"
+                     hide-details
+                     @click:clear="clearHandler()"
+                     @input="inputHandler($event)"
+                     @keydown="keydownHandler($event)"
+                     @keydown.space.stop
+                     @mousedown.stop>
+                     <template v-slot:append-inner>
+                        <v-icon>$search</v-icon>
+                     </template>
+                  </v-text-field>
+               </v-list-item-title>
+            </v-list-item>
 
-         <v-list-item
-            v-if="props.multiple"
-            class="mb-0"
-            @click="selectAll(!allSelected)">
-            <template
+            <v-list-item
                v-if="props.multiple"
-               v-slot:prepend>
-               <v-checkbox-btn
-                  v-bind:indeterminate="someSelected && !allSelected"
-                  v-bind:model-value="allSelected"
-                  v-bind:ripple="false"
-                  class="me-2"
-                  density="compact"
-                  tabindex="-1"
-                  @update:model-value="selectAll(!allSelected)" />
-            </template>
-            <v-list-item-title>
-               {{ t("app.selectAll") }}
-            </v-list-item-title>
-         </v-list-item>
+               class="mb-0"
+               @click="selectAll(!allSelected)">
+               <template
+                  v-if="props.multiple"
+                  v-slot:prepend>
+                  <v-checkbox-btn
+                     v-bind:indeterminate="someSelected && !allSelected"
+                     v-bind:model-value="allSelected"
+                     v-bind:ripple="false"
+                     class="me-2"
+                     density="compact"
+                     tabindex="-1"
+                     @update:model-value="selectAll(!allSelected)" />
+               </template>
+               <v-list-item-title>
+                  {{ t("app.selectAll") }}
+               </v-list-item-title>
+            </v-list-item>
 
-         <v-divider
-            v-if="props.filter"
-            class="my-2"></v-divider>
+            <v-divider
+               v-if="props.filter"
+               class="my-2"></v-divider>
+         </div>
       </template>
 
       <template v-slot:item="{ item, props: itemProps }">
@@ -72,7 +74,7 @@
 
             <template v-slot:title>
                <slot
-                  v-bind:item="item"
+                  v-bind:item="{ ...(item.raw as T) }"
                   name="title">
                   {{ item.title }}
                </slot>
@@ -80,18 +82,18 @@
 
             <template v-slot:subtitle>
                <slot
-                  v-bind:item="item"
+                  v-bind:item="{ ...(item.raw as T) }"
                   name="subtitle" />
             </template>
          </v-list-item>
       </template>
 
       <template v-slot:selection="{ item, index }">
-         <template v-if="index === 0 && model.length > props.count && props.count > 0">
+         <template v-if="index === 0 && model.length > props.count && props.count > 0 && typeof model !== 'string'">
             <v-chip
                class="mr-1"
                color="primary"
-               density="compact"
+               density="default"
                variant="tonal">
                {{ model.length }}
             </v-chip>
@@ -104,7 +106,7 @@
                   name="selection">
                   {{ item.title }}
                </slot>
-               <template v-if="index < model.length - 1 && (index < props.count - 1 || props.count === 0)">
+               <template v-if="index < model.length - 1 && (index < props.count - 1 || props.count === 0) && typeof model !== 'string'">
                   <span class="v-select__selection-comma">,</span>
                </template>
             </span>
@@ -135,10 +137,10 @@
    </v-select>
 </template>
 
-<script lang="ts" setup>
+<script generic="T" lang="ts" setup>
 import type { TMultiSelect } from "@/utils/types";
 type TProps = {
-   items?: any[];
+   items?: T[];
    count?: number;
    filter?: boolean | string[];
    filterDeep?: boolean;
@@ -154,7 +156,7 @@ type TProps = {
 const { t } = useI18n();
 
 // states
-const model = defineModel({ type: [Array, Object, Number, null], default: null });
+const model = defineModel({ type: [Array, Object, Number, String, null], default: null });
 const filterRaw = defineModel("filterRaw", { type: String, default: "" });
 const props = withDefaults(defineProps</* @ts-ignore */ TMultiSelect & TProps>(), {
    filter: true,
@@ -201,10 +203,6 @@ const clearHandler = () => {
    filterRaw.value = "";
 };
 
-const inputHandler = debounceTimer(async ($event) => {
-   debounce.value = $event.target.value;
-});
-
 const keydownHandler = (event: KeyboardEvent) => {
    if (event.key === "Escape") {
       if (filterRaw.value) {
@@ -215,4 +213,8 @@ const keydownHandler = (event: KeyboardEvent) => {
       event.stopPropagation();
    }
 };
+
+const inputHandler = debounceTimer(async ($event) => {
+   debounce.value = $event.target.value;
+});
 </script>
