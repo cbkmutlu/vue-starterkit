@@ -1,6 +1,6 @@
 <template>
    <v-navigation-drawer
-      v-bind:class="{ '!w-60': expand }"
+      v-bind:class="{ 'w-60!': expand }"
       class="bg-dark drawer-content:flex drawer-content:flex-col pt-1 select-none"
       color="background"
       rail
@@ -95,7 +95,7 @@
 
    <v-overlay
       v-model="expand"
-      class="!z-[1007]"
+      class="z-1007!"
       no-click-animation
       @click="expand = false" />
 </template>
