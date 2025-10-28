@@ -1,20 +1,45 @@
 <template>
    <v-data-table
       v-bind:class="{
-         'v-table--sticky-header': props.stickyHeader,
-         'v-table--sticky-footer': props.stickyFooter,
+         // 'v-table--sticky-header': props.stickyHeader,
+         // 'v-table--sticky-footer': props.stickyFooter,
          'v-table--accent-header': props.accentHeader
       }"
       v-bind:headers="props.headers"
       v-bind:items="items"
       v-bind:items-per-page-options="[10, 25, 50, 100, -1]"
       v-bind:loading="props.loading || optionsLoading"
+      v-bind:sortBy="props.sortBy"
       density="compact"
       hover
       items-per-page="25"
       return-object
       @update:options="optionsUpdateHandler"
       @update:page="expandedItems = []">
+
+      <template v-slot:colgroup="{ columns }">
+         <colgroup>
+            <template v-for="column in columns">
+               <col
+                  v-if="column.key === 'data-table-select' || column.key === 'data-table-expand'"
+                  v-bind:style="{ width: '54px' }" />
+               <col
+                  v-else-if="column.key === 'actions'"
+                  v-bind:style="{ width: (column.width ? Number(column.width) + 24 : 54) + 'px' }" />
+               <col
+                  v-else
+                  v-bind:style="[
+                     { width: column.width ? column.width + 'px' : 'auto' },
+                     { minWidth: (column.minWidth ? column.minWidth : column.width ? column.width : 120) + 'px' }
+                     ]" />
+            </template>
+         </colgroup>
+      </template>
+
+      <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort, someSelected, allSelected, selectAll }">
+         <TableHeader v-bind="{ columns, isSorted, getSortIcon, toggleSort, someSelected, allSelected, selectAll, disableSort }" />
+      </template>
+
       <template v-slot:loading>
          <slot name="loading">
             <v-skeleton-loader
@@ -23,8 +48,12 @@
          </slot>
       </template>
 
-      <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort, someSelected, allSelected, selectAll }">
-         <TableHeader v-bind="{ columns, isSorted, getSortIcon, toggleSort, someSelected, allSelected, selectAll, disableSort }" />
+      <template v-slot:body.prepend>
+         <slot name="body.prepend" />
+      </template>
+
+      <template v-slot:body.append>
+         <slot name="body.append" />
       </template>
 
       <template
@@ -34,6 +63,16 @@
             name="motion-row"
             group
             hide-on-leave>
+            <slot name="no-data">
+               <tr v-if="!internalItems.length">
+                  <td
+                     v-bind:colspan="columns.length"
+                     class="v-data-table__td v-data-table-column--no-padding"
+                     align="center">
+                     {{ props.noDataText || t("app.noData") }}
+                  </td>
+               </tr>
+            </slot>
             <template
                v-for="(item, itemIndex) in internalItems"
                :key="itemIndex">
@@ -79,7 +118,7 @@
                         v-bind:data-label="columns[index].title"
                         class="v-data-table__td">
                         <template v-if="column === 'actions'">
-                           <div class="table-action flex justify-between opacity-0 transition-opacity [tr:hover_>td>.table-action]:!opacity-100">
+                           <div class="table-action flex justify-between opacity-0 transition-opacity [tr:hover>td>.table-action]:opacity-100">
                               <slot
                                  v-bind:index="itemIndex"
                                  v-bind:item="{ ...(item.value as T) }"
@@ -128,37 +167,29 @@
             </template>
          </v-fade-transition>
       </template>
-
-      <template v-slot:body.prepend>
-         <slot name="prepend" />
-      </template>
-      <template v-slot:body.append>
-         <slot name="append" />
-      </template>
    </v-data-table>
 </template>
 
+<!--
 <style>
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1279px) {
+   .v-data-table__tr {
+      display: block;
+   }
+
    .v-data-table td {
       position: relative;
-      /* display: inline-flex; */
       display: flex;
-      /* align-items: flex-end; */
-      align-items: center;
       justify-content: flex-end;
-      /* width: 50%; */
    }
 
    .v-data-table td::before {
       content: attr(data-label);
       position: absolute;
-      left: 8px;
+      left: 12px;
       top: 0;
       font-size: 12px;
-      /* line-height: 2em; */
       opacity: 0.5;
-
       display: flex;
       align-items: center;
       height: 100%;
@@ -173,6 +204,7 @@
    }
 }
 </style>
+-->
 
 <script generic="T" lang="ts" setup>
 import TableHeader from "@/components/Table/TableHeader.vue";
@@ -207,10 +239,13 @@ type TProps<T> = {
    disableSort?: boolean;
    multiExpand?: boolean;
    expandOnClick?: boolean;
+   noDataText?: string;
+   sortBy?: any;
 };
 
 // hooks
 const date = useDate();
+const { t } = useI18n();
 
 // states
 const props = withDefaults(defineProps<TDataTable & TProps<T>>(), {

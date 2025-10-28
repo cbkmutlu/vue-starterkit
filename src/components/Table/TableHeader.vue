@@ -5,7 +5,6 @@
          :key="column.key">
          <th
             v-if="column.key === 'data-table-select'"
-            v-bind:style="{ width: '54px' }"
             class="v-data-table__td v-data-table-column--no-padding v-data-table-column--align-start v-data-table__th">
             <v-checkbox-btn
                v-bind:indeterminate="someSelected && !allSelected"
@@ -16,13 +15,11 @@
 
          <th
             v-else-if="column.key === 'data-table-expand'"
-            v-bind:style="{ width: '54px' }"
             class="v-data-table__td v-data-table-column--no-padding v-data-table-column--align-start v-data-table__th"></th>
 
          <th
             v-else-if="column.key === 'actions'"
             v-bind:class="[`v-data-table-column--align-${column.align || 'start'}`]"
-            v-bind:style="[{ width: column.width ? (Number(column.width) + 24) + 'px' : '54px' }]"
             class="v-data-table__td v-data-table__th">
             <div
                v-if="column.title"
@@ -34,7 +31,6 @@
          <th
             v-else
             v-bind:class="[`v-data-table-column--align-${column.align || 'start'}`, { 'v-data-table__th--sortable': !disableSort && column.sortable }]"
-            v-bind:style="{ width: column.width ? column.width + 'px' : '100%' }"
             class="v-data-table__td v-data-table__th">
             <div
                class="v-data-table-header__content"
