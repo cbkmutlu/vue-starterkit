@@ -184,7 +184,7 @@ declare global {
   export type { EButton, ENotify, EUser, ELanguage } from './src/utils/enums'
   import('./src/utils/enums')
   // @ts-ignore
-  export type { Neverify, UnwrapReadonlyArray, NestedKeys, IListImage, IDefaultFields, ITranslate, THeader, TNotify, TSnackbar, TResponse, TParams, TQuery, TMutation, TList, TDataTable, TMultiSelect, TDateField, TToolbar, TCard, TContainer, TBtn, TField } from './src/utils/types'
+  export type { Neverify, UnwrapReadonlyArray, NestedKeys, IListImage, IOrderStore, IDefaultFields, ITranslate, THeader, TNotify, TSnackbar, TResponse, TParams, TQuery, TMutation, TList, TDataTable, TMultiSelect, TDateField, TToolbar, TCard, TContainer, TBtn, TField, TAvatar, TAlert } from './src/utils/types'
   import('./src/utils/types')
 }
 
