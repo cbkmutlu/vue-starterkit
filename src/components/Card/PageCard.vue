@@ -22,6 +22,7 @@
       </template>
 
       <v-toolbar
+         v-if="$slots.title || $slots.items || $slots.append"
          class="overflow-hidden rounded-t-sm"
          color="transparent">
          <v-toolbar-title
@@ -38,6 +39,10 @@
             <div class="me-1">
                <slot name="append" />
             </div>
+         </template>
+
+         <template v-slot:extension v-if="$slots.extension">
+            <slot name="extension" />
          </template>
       </v-toolbar>
 
