@@ -10,7 +10,7 @@
             <div class="flex-center h-full">
                <v-icon
                   icon="$photo"
-                  size="default" />
+                  v-bind:size="props.iconSize" />
             </div>
          </template>
       </v-img>
@@ -21,7 +21,7 @@
       size="28">
       <v-icon
          icon="$photo"
-         size="default" />
+         v-bind:size="props.iconSize" />
    </v-avatar>
 </template>
 
@@ -29,7 +29,8 @@
 import type { TAvatar } from "@/utils/types";
 
 // states
-const props = withDefaults(defineProps<TAvatar & { image: any }>(), {
-   image: "no-image.png"
+const props = withDefaults(defineProps<TAvatar & { image: any; iconSize?: string }>(), {
+   image: "no-image.png",
+   iconSize: "default"
 });
 </script>
