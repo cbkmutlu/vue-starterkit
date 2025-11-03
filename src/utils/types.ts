@@ -53,6 +53,7 @@ export type THeader<T> = {
    suffix?: string;
    format?: (value: any) => string;
    merge?: string[];
+   enum?: any;
 };
 
 export type TNotify = {
@@ -106,7 +107,7 @@ export type TQuery<T> = {
 };
 
 export type TMutation = {
-   invalidate?: (string | number)[];
+   invalidate?: (MaybeRef<string | number>)[];
 };
 
 import { VAlert, VAvatar, VBtn, VCard, VContainer, VDataTable, VDatePicker, VListItem, VSelect, VTextField, VToolbar } from "vuetify/components";
