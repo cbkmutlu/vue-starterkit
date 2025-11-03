@@ -8,10 +8,8 @@
          <template v-slot:actions>
             <ActionButton
                v-bind:disabled="isLoading"
-               v-bind:to="{ name: 'productCreate' }"
-               color="primary">
-               {{ t("app.add") }}
-            </ActionButton>
+               v-bind:text="t('app.add')"
+               v-bind:to="{ name: 'productCreate' }" />
          </template>
 
          <template v-slot:title>{{ t("app.productList") }}</template>
@@ -20,9 +18,8 @@
             v-model="selected"
             v-bind:filter="filter"
             v-bind:headers="headers"
-            v-bind:items="data"
+            v-bind:items="productAll"
             @row:click="(item) => $router.push({ name: 'productDetail', params: { id: item.id } })">
-
             <template v-slot:item.category_list="{ item }">
                {{ item.category_list && item.category_list.map((category: any) => category.title).join(", ") }}
             </template>
@@ -63,8 +60,8 @@ const headers = computed((): THeader<IProduct>[] => [
 ]);
 
 // services
-const { data, isLoading } = useGetProductAll();
-const deleteProduct = useDeleteProduct();
+const { data: productAll, isLoading } = useGetProductAll();
+const { mutateAsync: deleteProduct } = useDeleteProduct();
 
 // handlers
 const deleteHandler = async (item: IProduct) => {
@@ -75,7 +72,7 @@ const deleteHandler = async (item: IProduct) => {
       });
 
       if (confirm) {
-         await deleteProduct.mutateAsync({ id: item.id });
+         await deleteProduct({ id: item.id });
          snackbarStore.success(t("app.recordDeleted"));
       }
    } catch (error) {

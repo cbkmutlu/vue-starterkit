@@ -3,14 +3,13 @@
       v-bind:error="isError"
       v-bind:form="formHandler"
       v-bind:loading="isLoading && isFirst">
-      <PageCard v-bind:loading="isLoading || isPending">
+      <PageCard v-bind:loading="isLoading || createPending || updatePending">
          <template v-slot:actions>
             <ActionButton
-               v-bind:disabled="isLoading || isPending"
+               v-bind:disabled="isLoading || createPending || updatePending"
+               v-bind:text="enabled ? t('app.update') : t('app.save')"
                type="submit"
-               prepend-icon="$save">
-               {{ enabled ? t("app.update") : t("app.save") }}
-            </ActionButton>
+               prepend-icon="$save" />
          </template>
 
          <template v-slot:title>{{ t("app.basicInfo") }}</template>
@@ -61,7 +60,7 @@
                   <v-textarea
                      v-model="product.content"
                      v-bind:rules="[appRules.required()]"
-                     class="max-grow-364"
+                     class="max-grow-32"
                      auto-grow
                      no-resize>
                      <template
@@ -101,7 +100,7 @@
                      v-bind:delete="deleteImageHandler"
                      v-bind:items="product.image_list" />
                   <ImageUpload
-                     v-model="imageUpload"
+                     v-model="upload"
                      multiple />
                </v-col>
             </v-row>
@@ -153,44 +152,30 @@ const router = useRouter();
 const snackbarStore = useSnackbarStore();
 const confirmStore = useConfirmStore();
 
-// initials
-const productInitial = {
-   is_active: 1,
-   sort_order: 0,
-   category_list: [] as any
-} as IProduct;
-
 // states
+const productInitial = { is_active: 1, sort_order: 0 } as IProduct;
 const product = ref({ ...productInitial });
-const routeId = computed(() => route.params.id);
-const enabled = computed(() => !!routeId.value);
+const productId = computed(() => route.params.id);
+const enabled = computed(() => !!productId.value);
 const language = ref(1);
-const imageUpload = ref([] as File[]);
+const upload = ref([] as File[]);
 
 // services
-const getProductById = useGetProductById({
+const { isLoading, isFirst, isError } = useGetProductById({
    enabled: enabled,
    params: {
-      id: routeId,
+      id: productId,
       language: language
    },
    onSuccess: (item) => {
       product.value = { ...item };
    }
 });
-const updateProduct = useUpdateProduct();
-const createProduct = useCreateProduct();
-const uploadFile = useUploadFile();
-const unlinkFile = useUnlinkFile({ invalidate: ["product", "productById"] });
-
-// relation services
+const { mutateAsync: updateProduct, isPending: updatePending } = useUpdateProduct();
+const { mutateAsync: createProduct, isPending: createPending } = useCreateProduct();
+const { mutateAsync: uploadFile } = useUploadFile();
+const { mutateAsync: unlinkFile } = useUnlinkFile({ invalidate: ["product", "productById"] });
 const { data: categoryAll, isLoading: categoryLoading } = useGetCategoryAll();
-
-// status
-const isLoading = computed(() => getProductById.isLoading.value);
-const isFirst = computed(() => getProductById.isFirst.value);
-const isPending = computed(() => createProduct.isPending.value || updateProduct.isPending.value);
-const isError = computed(() => getProductById.isError.value);
 
 // handlers
 const deleteImageHandler = async (image: any) => {
@@ -201,7 +186,7 @@ const deleteImageHandler = async (image: any) => {
       });
 
       if (confirm) {
-         await unlinkFile.mutateAsync({
+         await unlinkFile({
             id: image.id,
             table: "product_image",
             field: "image_path",
@@ -224,27 +209,25 @@ const formHandler = async () => {
       price: product.value.price,
       is_active: product.value.is_active,
       sort_order: product.value.sort_order,
-      product_category: product.value.category_list.map((item) => item.id)
+      product_category: product.value.category_list?.map((item) => item.id)
    };
 
    try {
-      if (imageUpload.value.length) {
-         await uploadFile
-            .mutateAsync({
-               files: imageUpload.value,
-               path: "product"
-            })
-            .then((upload) => {
-               payload.image_path = upload.data;
-               imageUpload.value = [];
-            });
+      if (upload.value.length) {
+         await uploadFile({
+            files: upload.value,
+            path: "product"
+         }).then((response) => {
+            payload.image_path = response.data;
+            upload.value = [];
+         });
       }
 
       if (enabled.value) {
-         await updateProduct.mutateAsync({ id: product.value.id, ...payload });
+         await updateProduct({ id: product.value.id, ...payload });
          snackbarStore.success(t("app.recordUpdated"));
       } else {
-         await createProduct.mutateAsync(payload, {
+         await createProduct(payload, {
             onSuccess: (data) => {
                router.push({ name: "productDetail", params: { id: data.data.id } });
                snackbarStore.success(t("app.recordCreated"));
