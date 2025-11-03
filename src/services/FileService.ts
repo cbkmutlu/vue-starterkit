@@ -41,9 +41,7 @@ export const useUnlinkFile = (payload?: TMutation) => {
          return (await appAxios.patch("/file/", data)).data;
       },
       onSuccess: () => {
-         if (payload?.invalidate) {
-            queryClient.invalidateQueries({ queryKey: payload?.invalidate });
-         }
+         queryClient.invalidateQueries({ queryKey: payload?.invalidate });
       }
    });
 };
