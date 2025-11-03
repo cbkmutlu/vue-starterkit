@@ -144,7 +144,9 @@ declare global {
   const useConfirmStore: typeof import('./src/stores/confirmStore')['useConfirmStore']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
+  const useDataRender: typeof import('./src/utils/helper')['useDataRender']
   const useDate: typeof import('vuetify')['useDate']
+  const useEnumDisplay: typeof import('./src/utils/helper')['useEnumDisplay']
   const useGoogleTranslate: typeof import('./src/utils/helper')['useGoogleTranslate']
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useId: typeof import('vue')['useId']
@@ -331,7 +333,9 @@ declare module 'vue' {
     readonly useConfirmStore: UnwrapRef<typeof import('./src/stores/confirmStore')['useConfirmStore']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
+    readonly useDataRender: UnwrapRef<typeof import('./src/utils/helper')['useDataRender']>
     readonly useDate: UnwrapRef<typeof import('vuetify')['useDate']>
+    readonly useEnumDisplay: UnwrapRef<typeof import('./src/utils/helper')['useEnumDisplay']>
     readonly useGoogleTranslate: UnwrapRef<typeof import('./src/utils/helper')['useGoogleTranslate']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
