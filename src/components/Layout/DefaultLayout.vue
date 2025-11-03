@@ -9,7 +9,7 @@
       <v-main class="h-full">
          <div class="v-main__content h-full overflow-y-scroll scroll-smooth">
             <router-view v-slot="{ Component }">
-               <v-fade-transition leave-absolute>
+               <v-fade-transition hide-on-leave>
                   <component v-bind:is="Component" />
                </v-fade-transition>
             </router-view>
