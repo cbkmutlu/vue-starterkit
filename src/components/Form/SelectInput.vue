@@ -11,7 +11,7 @@
       @click:clear="clearHandler()"
       @update:menu="$event && clearHandler()">
       <template v-slot:prepend-item>
-         <div class="sticky top-0 bg-surface z-10">
+         <div class="sticky -top-2 bg-surface z-10">
             <v-list-item
                v-if="props.filter"
                v-bind:link="false"
@@ -20,6 +20,7 @@
                   <v-text-field
                      v-model="filterRaw"
                      hide-details
+                     autofocus
                      @click:clear="clearHandler()"
                      @input="inputHandler($event)"
                      @keydown="keydownHandler($event)"
@@ -55,7 +56,7 @@
 
             <v-divider
                v-if="props.filter"
-               class="my-2"></v-divider>
+               class="my-1"></v-divider>
          </div>
       </template>
 
@@ -102,7 +103,7 @@
          <template v-if="index < props.count || props.count === 0">
             <span class="v-select__selection-text">
                <slot
-                  v-bind:item="item"
+                  v-bind:item="{ ...(item.raw as T) }"
                   name="selection">
                   {{ item.title }}
                </slot>
