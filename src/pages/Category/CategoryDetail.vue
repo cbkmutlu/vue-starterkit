@@ -3,14 +3,13 @@
       v-bind:error="isError"
       v-bind:form="formHandler"
       v-bind:loading="isLoading && isFirst">
-      <PageCard v-bind:loading="isLoading || isPending">
+      <PageCard v-bind:loading="isLoading || createPending || updatePending">
          <template v-slot:actions>
             <ActionButton
-               v-bind:disabled="isLoading || isPending"
+               v-bind:disabled="isLoading || createPending || updatePending"
+               v-bind:text="enabled ? t('app.update') : t('app.save')"
                type="submit"
-               prepend-icon="$save">
-               {{ enabled ? t("app.update") : t("app.save") }}
-            </ActionButton>
+               prepend-icon="$save" />
          </template>
 
          <template v-slot:title>{{ t("app.basicInfo") }}</template>
@@ -54,7 +53,7 @@
                   <v-textarea
                      v-model="category.content"
                      v-bind:rules="[appRules.required()]"
-                     class="max-grow-364"
+                     class="max-grow-32"
                      auto-grow
                      no-resize>
                      <template
@@ -89,7 +88,7 @@
                   <ImageList
                      v-bind:delete="deleteImageHandler"
                      v-bind:items="[category.image_path]" />
-                  <ImageUpload v-model="imageUpload" />
+                  <ImageUpload v-model="upload" />
                </v-col>
             </v-row>
          </v-card-text>
@@ -115,40 +114,29 @@ const router = useRouter();
 const snackbarStore = useSnackbarStore();
 const confirmStore = useConfirmStore();
 
-// initials
-const categoryInitial = {
-   is_active: 1,
-   sort_order: 0
-} as ICategory;
-
 // states
+const categoryInitial = { is_active: 1, sort_order: 0 } as ICategory;
 const category = ref({ ...categoryInitial });
-const routeId = computed(() => route.params.id);
-const enabled = computed(() => !!routeId.value);
+const categoryId = computed(() => route.params.id);
+const enabled = computed(() => !!categoryId.value);
 const language = ref(1);
-const imageUpload = ref([] as File[]);
+const upload = ref([] as File[]);
 
 // services
-const getCategoryById = useGetCategoryById({
+const { isLoading, isFirst, isError } = useGetCategoryById({
    enabled: enabled,
    params: {
-      id: routeId,
+      id: categoryId,
       language: language
    },
    onSuccess: (data) => {
       category.value = { ...data };
    }
 });
-const updateCategory = useUpdateCategory();
-const createCategory = useCreateCategory();
-const uploadFile = useUploadFile();
-const unlinkFile = useUnlinkFile({ invalidate: ["category", "categoryById"] });
-
-// status
-const isLoading = computed(() => getCategoryById.isLoading.value);
-const isFirst = computed(() => getCategoryById.isFirst.value);
-const isPending = computed(() => createCategory.isPending.value || updateCategory.isPending.value);
-const isError = computed(() => getCategoryById.isError.value);
+const { mutateAsync: updateCategory, isPending: updatePending } = useUpdateCategory();
+const { mutateAsync: createCategory, isPending: createPending } = useCreateCategory();
+const { mutateAsync: uploadFile } = useUploadFile();
+const { mutateAsync: unlinkFile } = useUnlinkFile({ invalidate: ["category", "categoryById"] });
 
 // handlers
 const deleteImageHandler = async () => {
@@ -159,7 +147,7 @@ const deleteImageHandler = async () => {
       });
 
       if (confirm) {
-         await unlinkFile.mutateAsync({
+         await unlinkFile({
             id: category.value.id,
             table: "category",
             field: "image_path"
@@ -183,23 +171,21 @@ const formHandler = async () => {
    };
 
    try {
-      if (imageUpload.value.length) {
-         await uploadFile
-            .mutateAsync({
-               files: imageUpload.value,
-               path: "category"
-            })
-            .then((upload) => {
-               payload.image_path = upload.data[0];
-               imageUpload.value = [];
-            });
+      if (upload.value.length) {
+         await uploadFile({
+            files: upload.value,
+            path: "category"
+         }).then((response) => {
+            payload.image_path = response.data[0];
+            upload.value = [];
+         });
       }
 
       if (enabled.value) {
-         await updateCategory.mutateAsync({ id: category.value.id, ...payload });
+         await updateCategory({ id: category.value.id, ...payload });
          snackbarStore.success(t("app.recordUpdated"));
       } else {
-         await createCategory.mutateAsync(payload, {
+         await createCategory(payload, {
             onSuccess: (data) => {
                router.push({ name: "categoryDetail", params: { id: data.data.id } });
                snackbarStore.success(t("app.recordCreated"));

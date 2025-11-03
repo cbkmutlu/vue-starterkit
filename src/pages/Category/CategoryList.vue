@@ -8,10 +8,8 @@
          <template v-slot:actions>
             <ActionButton
                v-bind:disabled="isLoading"
-               color="primary"
-               @click="recordHandler()">
-               {{ t("app.add") }}
-            </ActionButton>
+               v-bind:text="t('app.add')"
+               @click="categoryDialog?.open()" />
          </template>
 
          <template v-slot:title>{{ t("app.categoryList") }}</template>
@@ -19,7 +17,7 @@
          <DataTable
             v-bind:filter="filter"
             v-bind:headers="headers"
-            v-bind:items="data"
+            v-bind:items="categoryAll"
             @row:click="(item) => $router.push({ name: 'categoryDetail', params: { id: item.id } })">
             <template v-slot:item.is_active="{ item }">
                <v-chip v-bind:color="item.is_active ? 'success' : undefined">
@@ -33,7 +31,7 @@
                   @click.stop="deleteHandler(item)" />
                <TableButton
                   icon="$edit"
-                  @click.stop="recordHandler(item)" />
+                  @click.stop="categoryDialog?.open(item)" />
                <TableButton
                   icon="$browser"
                   @click.stop="promptHandler(item)" />
@@ -74,14 +72,10 @@ const headers = computed((): THeader<ICategory>[] => [
 const categoryDialog = ref<InstanceType<typeof CategoryDialog>>();
 
 // services
-const { data, isLoading } = useGetCategoryAll();
-const deleteProduct = useDeleteCategory();
+const { data: categoryAll, isLoading } = useGetCategoryAll();
+const { mutateAsync: deleteCategory } = useDeleteCategory();
 
 // handlers
-const recordHandler = (item?: ICategory) => {
-   categoryDialog.value?.open(item);
-};
-
 const deleteHandler = async (item: ICategory) => {
    try {
       const confirm = await confirmStore.open({
@@ -90,7 +84,7 @@ const deleteHandler = async (item: ICategory) => {
       });
 
       if (confirm) {
-         await deleteProduct.mutateAsync({ id: item.id });
+         await deleteCategory({ id: item.id });
          snackbarStore.success(t("app.recordDeleted"));
       }
    } catch (error) {

@@ -29,7 +29,7 @@
          <v-col md="8">
             <v-textarea
                v-model="category.content"
-               class="[&_.v-field\_\_input]:min-h-[min(var(--v-input-control-height,56px),364px)]"
+               class="max-grow-32"
                auto-grow
                no-resize />
          </v-col>
@@ -62,28 +62,25 @@ import { ICategory, useCreateCategory, useGetCategoryById, useUpdateCategory } f
 const { t } = useI18n();
 const snackbarStore = useSnackbarStore();
 
-// initials
-const categoryInitial = {
-   is_active: 1,
-   sort_order: 0
-} as ICategory;
-
 // states
+const categoryInitial = { is_active: 1, sort_order: 0 } as ICategory;
 const category = ref({ ...categoryInitial });
-const dialogId = computed(() => category.value.id);
-const enabled = computed(() => !!dialogId.value);
+const categoryId = computed(() => category.value.id);
+const enabled = computed(() => !!categoryId.value);
 const recordDialog = ref<InstanceType<typeof RecordDialog>>();
 
 // services
 const { isLoading } = useGetCategoryById({
    enabled: enabled,
-   params: { id: dialogId },
+   params: {
+      id: categoryId
+   },
    onSuccess: (item) => {
       category.value = { ...item };
    }
 });
-const createCategory = useCreateCategory();
-const updateCategory = useUpdateCategory();
+const { mutateAsync: createCategory } = useCreateCategory();
+const { mutateAsync: updateCategory } = useUpdateCategory();
 
 // handlers
 const open = async (item?: ICategory) => {
@@ -102,10 +99,10 @@ const open = async (item?: ICategory) => {
          };
 
          if (!item?.id) {
-            await createCategory.mutateAsync(payload);
+            await createCategory(payload);
             snackbarStore.success(t("app.recordCreated"));
          } else {
-            await updateCategory.mutateAsync(payload);
+            await updateCategory(payload);
             snackbarStore.success(t("app.recordUpdated"));
          }
       }
