@@ -17,6 +17,6 @@ import type { TBtn } from "@/utils/types";
 
 // states
 const props = withDefaults(defineProps<TBtn & { color?: string }>(), {
-   color: "success"
+   color: "primary"
 });
 </script>
