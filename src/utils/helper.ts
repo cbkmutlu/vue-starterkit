@@ -899,6 +899,74 @@ export function useParam(param: string, useFirstIfArray = true): ComputedRef<any
 }
 
 /**
+ * useDataRender({ chunkSize: 12, delay: 100 }) => { render: (source: Ref<T[]>) => Ref<T[]> }
+ */
+export function useDataRender(options: { chunkSize?: number; delay?: number } = {}) {
+   const { chunkSize = 15, delay = 0 } = options;
+
+   function render<T>(source: Ref<T[]>) {
+      const displayCount = ref(0);
+      const data = ref<T[]>([]);
+      const lastLength = ref(0);
+
+      watchEffect(async () => {
+         const newLength = source.value.length;
+         const oldLength = lastLength.value;
+
+         if (newLength < (oldLength ?? 0)) {
+            displayCount.value = 0;
+            data.value = [];
+            lastLength.value = 0;
+         }
+
+         if (newLength <= chunkSize) {
+            displayCount.value = newLength;
+            data.value = source.value.slice(0, newLength);
+            lastLength.value = newLength;
+            return;
+         }
+
+         for (let i = oldLength; i <= newLength; i += chunkSize) {
+            displayCount.value = i;
+            data.value = source.value.slice(0, i);
+            await nextTick();
+            if (delay > 0) {
+               await new Promise((r) => setTimeout(r, delay));
+            } else {
+               await new Promise((r) => setTimeout(r));
+            }
+         }
+
+         displayCount.value = newLength;
+         data.value = [...source.value];
+         lastLength.value = newLength;
+      });
+
+      return data;
+   }
+
+   return { render };
+}
+
+/**
+ * useEnumDisplay() => { resolve: (enumObj: any, labelFn: (key: any) => string) => ComputedRef<any> }
+ */
+export const useEnumDisplay = () => {
+   const resolve = <T extends Record<string, any>>(enumObj: T, labelFn: (key: keyof T) => string) => {
+      return computed(() =>
+         Object.values(enumObj)
+            .filter((key) => !isNaN(Number(key)))
+            .map((key: any) => ({
+               name: labelFn(key),
+               value: key
+            }))
+      );
+   };
+
+   return { resolve };
+};
+
+/**
  * Tanstack Query wrapper
  * @link
  * https://tanstack.com/query/latest/docs/framework/vue/reference/useQuery
@@ -906,12 +974,14 @@ export function useParam(param: string, useFirstIfArray = true): ComputedRef<any
 export const useQueryWrapper = <T>(options: UseQueryOptions<T>, payload?: TQuery<T>) => {
    const query = <UseQueryReturnType<T, Error>>useQuery<T>(toValue(options));
    const isFirst = ref(true);
+   const raw = ref<T>(null as unknown as T);
 
    watch(
       () => query.data.value,
       () => {
          if (query.isSuccess.value && query.data.value) {
             isFirst.value = false;
+            raw.value = query.data.value;
             payload?.onSuccess?.(query.data.value);
          }
       },
@@ -928,12 +998,9 @@ export const useQueryWrapper = <T>(options: UseQueryOptions<T>, payload?: TQuery
       { immediate: true }
    );
 
-   // ALTER
-   // const isLoading = computed(() => query.isLoading.value);
-
    return {
       ...query,
-      // isLoading: query.isLoading,
+      raw,
       isFirst
    };
 };
