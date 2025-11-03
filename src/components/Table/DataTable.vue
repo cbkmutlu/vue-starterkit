@@ -16,7 +16,6 @@
       return-object
       @update:options="optionsUpdateHandler"
       @update:page="expandedItems = []">
-
       <template v-slot:colgroup="{ columns }">
          <colgroup>
             <template v-for="column in columns">
@@ -28,10 +27,7 @@
                   v-bind:style="{ width: (column.width ? Number(column.width) + 24 : 54) + 'px' }" />
                <col
                   v-else
-                  v-bind:style="[
-                     { width: column.width ? column.width + 'px' : 'auto' },
-                     { minWidth: (column.minWidth ? column.minWidth : column.width ? column.width : 120) + 'px' }
-                     ]" />
+                  v-bind:style="[{ width: column.width ? column.width + 'px' : 'auto' }, { minWidth: (column.minWidth ? column.minWidth : column.width ? column.width : 120) + 'px' }]" />
             </template>
          </colgroup>
       </template>
@@ -144,6 +140,7 @@
                            </template>
                            <template v-else-if="columns[index].prefix">{{ columns[index].prefix }}{{ item.columns[column] }}</template>
                            <template v-else-if="columns[index].suffix">{{ item.columns[column] }}{{ columns[index].suffix }}</template>
+                           <template v-else-if="columns[index].enum">{{ columns[index].enum[item.columns[column]] }}</template>
                            <template v-else>
                               {{ item.columns[column] }}
                            </template>
@@ -221,11 +218,13 @@ type BodySlotScope<T> = {
          prefix?: string;
          suffix?: string;
          format?: (value: any) => string;
+         merge?: string[];
+         enum?: any;
       }[];
 };
 type TProps<T> = {
-   headers?: THeader<T>[];
    items?: T[];
+   headers?: THeader<any>[];
    filter?: string;
    filterDeep?: boolean;
    filterKey?: string[];
@@ -276,7 +275,7 @@ const items = computed(() => {
       } else {
          let headers: THeader<T>[] = [];
          if (Array.isArray(props.filterKey)) {
-            headers = props.headers?.filter((h: THeader<T>) => props.filterKey?.includes(h.key!)) as THeader<T>[];
+            headers = props.headers?.filter((h) => props.filterKey?.includes(h.key!)) as THeader<T>[];
          } else {
             headers = props.headers as THeader<T>[];
          }
