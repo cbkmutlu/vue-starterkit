@@ -23,7 +23,7 @@
                   v-bind:index="index"
                   name="prepend">
                   <FallbackAvatar
-                     :image="element.image"
+                     :image="element[props.image]"
                      icon-size="32"
                      size="36" />
                </slot>
@@ -35,7 +35,7 @@
                   v-bind:element="{ ...(element as T) }"
                   v-bind:index="index"
                   name="append">
-                  <div class="list-action items-center not-grabbing:[.v-list-item:hover_.list-action]:opacity-100 flex w-[90px] justify-between opacity-0 transition-opacity">
+                  <div class="list-action not-grabbing:[.v-list-item:hover_.list-action]:opacity-100 flex w-[90px] items-center justify-between opacity-0 transition-opacity">
                      <slot
                         v-bind:element="{ ...(element as T) }"
                         v-bind:index="index"
@@ -56,8 +56,8 @@
                v-bind:element="{ ...(element as T) }"
                v-bind:index="index"
                name="title">
-               <v-list-item-title v-if="element.name">{{ element.name }}</v-list-item-title>
-               <v-list-item-subtitle v-if="element.description">{{ element.description }}</v-list-item-subtitle>
+               <v-list-item-title v-if="element[props.title] && props.title">{{ element[props.title] }}</v-list-item-title>
+               <v-list-item-subtitle v-if="element[props.subtitle] && props.subtitle">{{ element[props.subtitle] }}</v-list-item-subtitle>
             </slot>
          </v-list-item>
       </template>
@@ -97,6 +97,18 @@ const props = defineProps({
    hideDrag: {
       type: Boolean,
       default: false
+   },
+   title: {
+      type: String,
+      default: "name"
+   },
+   subtitle: {
+      type: String,
+      default: "description"
+   },
+   image: {
+      type: String,
+      default: "image"
    }
 });
 
