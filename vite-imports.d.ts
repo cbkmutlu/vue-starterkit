@@ -41,6 +41,7 @@ declare global {
   const errorLog: typeof import('./src/utils/helper')['errorLog']
   const escapeUrl: typeof import('./src/utils/helper')['escapeUrl']
   const fileInfo: typeof import('./src/utils/helper')['fileInfo']
+  const flattenDeep: typeof import('./src/utils/helper')['flattenDeep']
   const formatCounter: typeof import('./src/utils/helper')['formatCounter']
   const formatDate: typeof import('./src/utils/helper')['formatDate']
   const formatNumber: typeof import('./src/utils/helper')['formatNumber']
@@ -230,6 +231,7 @@ declare module 'vue' {
     readonly errorLog: UnwrapRef<typeof import('./src/utils/helper')['errorLog']>
     readonly escapeUrl: UnwrapRef<typeof import('./src/utils/helper')['escapeUrl']>
     readonly fileInfo: UnwrapRef<typeof import('./src/utils/helper')['fileInfo']>
+    readonly flattenDeep: UnwrapRef<typeof import('./src/utils/helper')['flattenDeep']>
     readonly formatCounter: UnwrapRef<typeof import('./src/utils/helper')['formatCounter']>
     readonly formatDate: UnwrapRef<typeof import('./src/utils/helper')['formatDate']>
     readonly formatNumber: UnwrapRef<typeof import('./src/utils/helper')['formatNumber']>
