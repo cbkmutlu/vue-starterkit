@@ -527,9 +527,9 @@ export const endOfDay = (value: Date | string): Date => {
 };
 
 /**
- * Verilen nesnenin reaktif değerlerini alır.
+ * Verilen nesnenin reaktif değerlerini alır. (Düzleştirilmiş değil)
  * @example
- * deepValue({ a: 1, b: ref(2), c: { d: 3, e: ref(4) } }) => { a: 1, b: 2, c: { d: 3, e: 4 } }
+ * deepValue({ a: 1, b: ref(2), c: { d: 3, e: ref(4) } }) => { a: 1, b: ref(2), c: { d: 3, e: ref(4) } }
  */
 export const deepValue = <T>(source: T): T => {
    const traverse = (input: any): any => {
@@ -556,6 +556,51 @@ export const deepValue = <T>(source: T): T => {
    };
 
    return traverse(source);
+};
+
+/**
+ * Verilen nesnenin reaktif değerlerini alır ve düzleştirir.
+ * @example
+ * flattenDeep({ a: 1, b: ref(2), c: { d: 3, e: ref(4) } }) => [1, 2, 3, 4]
+ */
+export const flattenDeep = (source: any): (string | number)[] => {
+   const values: (string | number)[] = [];
+
+   const traverse = (input: any): void => {
+      if (input == null) return;
+
+      if (typeof input === "string" || typeof input === "number") {
+         values.push(input);
+         return;
+      }
+
+      if (input instanceof Date) {
+         values.push(input.toISOString());
+         return;
+      }
+
+      if (Array.isArray(input)) {
+         input.forEach(traverse);
+         return;
+      }
+
+      if (isRef(input)) {
+         traverse(input.value);
+         return;
+      }
+
+      if (isReactive(input)) {
+         traverse(toRaw(input));
+         return;
+      }
+
+      if (typeof input === "object") {
+         Object.values(input).forEach(traverse);
+      }
+   };
+
+   traverse(source);
+   return values;
 };
 
 /**
@@ -909,38 +954,42 @@ export function useDataRender(options: { chunkSize?: number; delay?: number } = 
       const data = ref<T[]>([]);
       const lastLength = ref(0);
 
-      watchEffect(async () => {
-         const newLength = source.value.length;
-         const oldLength = lastLength.value;
+      watch(
+         () => source.value.map((item: any) => item.id ?? item),
+         async () => {
+            const newLength = source.value.length;
+            const oldLength = lastLength.value;
 
-         if (newLength < (oldLength ?? 0)) {
-            displayCount.value = 0;
-            data.value = [];
-            lastLength.value = 0;
-         }
-
-         if (newLength <= chunkSize) {
-            displayCount.value = newLength;
-            data.value = source.value.slice(0, newLength);
-            lastLength.value = newLength;
-            return;
-         }
-
-         for (let i = oldLength; i <= newLength; i += chunkSize) {
-            displayCount.value = i;
-            data.value = source.value.slice(0, i);
-            await nextTick();
-            if (delay > 0) {
-               await new Promise((r) => setTimeout(r, delay));
-            } else {
-               await new Promise((r) => setTimeout(r));
+            if (newLength < (oldLength ?? 0)) {
+               displayCount.value = 0;
+               data.value = [];
+               lastLength.value = 0;
             }
-         }
 
-         displayCount.value = newLength;
-         data.value = [...source.value];
-         lastLength.value = newLength;
-      });
+            if (newLength <= chunkSize) {
+               displayCount.value = newLength;
+               data.value = source.value.slice(0, newLength);
+               lastLength.value = newLength;
+               return;
+            }
+
+            for (let i = oldLength; i <= newLength; i += chunkSize) {
+               displayCount.value = i;
+               data.value = source.value.slice(0, i);
+               await nextTick();
+               if (delay > 0) {
+                  await new Promise((r) => setTimeout(r, delay));
+               } else {
+                  await new Promise((r) => setTimeout(r));
+               }
+            }
+
+            displayCount.value = newLength;
+            data.value = [...source.value];
+            lastLength.value = newLength;
+         },
+         { immediate: true }
+      );
 
       return data;
    }
@@ -957,8 +1006,8 @@ export const useEnumDisplay = () => {
          Object.values(enumObj)
             .filter((key) => !isNaN(Number(key)))
             .map((key: any) => ({
-               name: labelFn(key),
-               value: key
+               code: key,
+               name: labelFn(key)
             }))
       );
    };
