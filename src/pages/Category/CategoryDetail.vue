@@ -5,11 +5,13 @@
       v-bind:loading="isLoading && isFirst">
       <PageCard v-bind:loading="isLoading || createPending || updatePending">
          <template v-slot:actions>
-            <ActionButton
+            <v-btn
                v-bind:disabled="isLoading || createPending || updatePending"
                v-bind:text="enabled ? t('app.update') : t('app.save')"
                type="submit"
-               prepend-icon="$save" />
+               color="primary"
+               density="default"
+               variant="tonal" />
          </template>
 
          <template v-slot:title>{{ t("app.basicInfo") }}</template>
@@ -97,7 +99,6 @@
 </template>
 
 <script lang="ts" setup>
-import ActionButton from "@/components/Button/ActionButton.vue";
 import TranslateButton from "@/components/Button/TranslateButton.vue";
 import PageCard from "@/components/Card/PageCard.vue";
 import Container from "@/components/Form/Container.vue";

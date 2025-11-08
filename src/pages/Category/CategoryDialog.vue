@@ -83,9 +83,15 @@ const { mutateAsync: createCategory } = useCreateCategory();
 const { mutateAsync: updateCategory } = useUpdateCategory();
 
 // handlers
-const open = async (item?: ICategory) => {
+const open = async (item?: ICategory, name?: string) => {
    try {
-      category.value.id = item?.id || 0;
+      if (item?.id) {
+         category.value.id = item?.id;
+      }
+
+      if (name) {
+         category.value.title = name;
+      }
 
       const confirm = await recordDialog.value?.open({
          width: 800,

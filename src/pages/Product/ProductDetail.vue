@@ -5,11 +5,13 @@
       v-bind:loading="isLoading && isFirst">
       <PageCard v-bind:loading="isLoading || createPending || updatePending">
          <template v-slot:actions>
-            <ActionButton
+            <v-btn
                v-bind:disabled="isLoading || createPending || updatePending"
                v-bind:text="enabled ? t('app.update') : t('app.save')"
                type="submit"
-               prepend-icon="$save" />
+               color="primary"
+               density="default"
+               variant="tonal" />
          </template>
 
          <template v-slot:title>{{ t("app.basicInfo") }}</template>
@@ -97,8 +99,9 @@
                </v-col>
                <v-col md="8">
                   <ImageList
-                     v-bind:delete="deleteImageHandler"
-                     v-bind:items="product.image_list" />
+                     v-bind:items="product.image_list"
+                     image="image_path"
+                     @delete="deleteImageHandler" />
                   <ImageUpload
                      v-model="upload"
                      multiple />
@@ -118,20 +121,22 @@
                <v-col md="8">
                   <SelectInput
                      v-model="product.category_list"
+                     v-model:filter-raw="categoryFilter"
                      v-bind:items="categoryAll"
                      v-bind:loading="categoryLoading"
                      item-value="id"
                      multiple
-                     return-object />
+                     return-object
+                     @empty="categoryDialog?.open(undefined, categoryFilter)" />
                </v-col>
             </v-row>
          </v-card-text>
       </PageCard>
+      <CategoryDialog ref="categoryDialog" />
    </Container>
 </template>
 
 <script lang="ts" setup>
-import ActionButton from "@/components/Button/ActionButton.vue";
 import TranslateButton from "@/components/Button/TranslateButton.vue";
 import PageCard from "@/components/Card/PageCard.vue";
 import Container from "@/components/Form/Container.vue";
@@ -144,6 +149,7 @@ import LanguageTab from "@/components/Tab/LanguageTab.vue";
 import { useGetCategoryAll } from "@/services/CategoryService";
 import { useUnlinkFile, useUploadFile } from "@/services/FileService";
 import { IProduct, IProductStore, useCreateProduct, useGetProductById, useUpdateProduct } from "@/services/ProductService";
+const CategoryDialog = defineAsyncComponent(() => import("@/pages/Category/CategoryDialog.vue"));
 
 // hooks
 const { t } = useI18n();
@@ -153,12 +159,18 @@ const snackbarStore = useSnackbarStore();
 const confirmStore = useConfirmStore();
 
 // states
-const productInitial = { is_active: 1, sort_order: 0 } as IProduct;
+const productInitial = {
+   is_active: 1,
+   sort_order: 0,
+   image_list: [] as IListImage[]
+} as IProduct;
 const product = ref({ ...productInitial });
 const productId = computed(() => route.params.id);
 const enabled = computed(() => !!productId.value);
 const language = ref(1);
 const upload = ref([] as File[]);
+const categoryFilter = ref();
+const categoryDialog = ref<InstanceType<typeof CategoryDialog>>();
 
 // services
 const { isLoading, isFirst, isError } = useGetProductById({

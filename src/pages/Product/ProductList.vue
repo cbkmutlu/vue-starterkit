@@ -6,10 +6,13 @@
          </template>
 
          <template v-slot:actions>
-            <ActionButton
+            <v-btn
                v-bind:disabled="isLoading"
                v-bind:text="t('app.add')"
-               v-bind:to="{ name: 'productCreate' }" />
+               v-bind:to="{ name: 'productCreate' }"
+               color="primary"
+               density="default"
+               variant="tonal" />
          </template>
 
          <template v-slot:title>{{ t("app.productList") }}</template>
@@ -19,15 +22,10 @@
             v-bind:filter="filter"
             v-bind:headers="headers"
             v-bind:items="productAll"
-            @row:click="(item) => $router.push({ name: 'productDetail', params: { id: item.id } })">
+            @row-click="(item) => $router.push({ name: 'productDetail', params: { id: item.id } })"
+            @row-delete="deleteHandler">
             <template v-slot:item.category_list="{ item }">
                {{ item.category_list && item.category_list.map((category: any) => category.title).join(", ") }}
-            </template>
-
-            <template v-slot:item.actions="{ item }">
-               <TableButton
-                  icon="$trash"
-                  @click.stop="deleteHandler(item)" />
             </template>
          </DataTable>
       </PageCard>
@@ -35,8 +33,6 @@
 </template>
 
 <script lang="ts" setup>
-import ActionButton from "@/components/Button/ActionButton.vue";
-import TableButton from "@/components/Button/TableButton.vue";
 import PageCard from "@/components/Card/PageCard.vue";
 import Container from "@/components/Form/Container.vue";
 import SearchInput from "@/components/Form/SearchInput.vue";

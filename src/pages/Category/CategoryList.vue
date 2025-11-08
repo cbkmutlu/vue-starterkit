@@ -6,9 +6,12 @@
          </template>
 
          <template v-slot:actions>
-            <ActionButton
+            <v-btn
                v-bind:disabled="isLoading"
                v-bind:text="t('app.add')"
+               color="primary"
+               density="default"
+               variant="tonal"
                @click="categoryDialog?.open()" />
          </template>
 
@@ -18,7 +21,9 @@
             v-bind:filter="filter"
             v-bind:headers="headers"
             v-bind:items="categoryAll"
-            @row:click="(item) => $router.push({ name: 'categoryDetail', params: { id: item.id } })">
+            @row-click="(item) => $router.push({ name: 'categoryDetail', params: { id: item.id } })"
+            @row-delete="deleteHandler"
+            @row-edit="categoryDialog?.open($event)">
             <template v-slot:item.is_active="{ item }">
                <v-chip v-bind:color="item.is_active ? 'success' : undefined">
                   {{ item.is_active ? t("app.active") : t("app.passive") }}
@@ -26,14 +31,10 @@
             </template>
 
             <template v-slot:item.actions="{ item }">
-               <TableButton
-                  icon="$trash"
-                  @click.stop="deleteHandler(item)" />
-               <TableButton
-                  icon="$edit"
-                  @click.stop="categoryDialog?.open(item)" />
-               <TableButton
+               <v-btn
+                  density="compact"
                   icon="$browser"
+                  variant="plain"
                   @click.stop="promptHandler(item)" />
             </template>
          </DataTable>
@@ -44,8 +45,6 @@
 </template>
 
 <script lang="ts" setup>
-import ActionButton from "@/components/Button/ActionButton.vue";
-import TableButton from "@/components/Button/TableButton.vue";
 import PageCard from "@/components/Card/PageCard.vue";
 import Container from "@/components/Form/Container.vue";
 import SearchInput from "@/components/Form/SearchInput.vue";
