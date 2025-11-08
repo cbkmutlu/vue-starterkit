@@ -28,10 +28,7 @@
 <script lang="ts" setup>
 const sortBy = defineModel("sortBy", { type: Array<{ key: string; order: string }>, default: [] });
 const props = defineProps({
-   headers: {
-      type: Array<any>,
-      required: true
-   }
+   headers: { type: Array<any>, required: true }
 });
 
 const icon = computed(() => {

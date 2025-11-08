@@ -2,7 +2,7 @@
    <tr>
       <template
          v-for="column in columns"
-         :key="column.key">
+         v-bind:key="column.key">
          <th
             v-if="column.key === 'data-table-select'"
             class="v-data-table__td v-data-table-column--no-padding v-data-table-column--align-start v-data-table__th">
@@ -44,8 +44,8 @@
                <v-icon
                   v-if="!disableSort && column.sortable"
                   v-bind:class="{ 'opacity-100': isSorted(column) }"
+                  v-bind:icon="getSortIcon(column)"
                   class="v-data-table-header__sort-icon"
-                  :icon="getSortIcon(column)"
                   size="x-small"></v-icon>
 
                <!-- <v-icon
@@ -58,44 +58,19 @@
       </template>
    </tr>
    <!-- <tr>
-      <th :colspan="columns.length"></th>
+      <th v-bind:colspan="columns.length"></th>
    </tr> -->
 </template>
 
 <script setup>
 defineProps({
-   columns: {
-      type: Array,
-      required: true
-   },
-   isSorted: {
-      type: Function,
-      required: true
-   },
-   getSortIcon: {
-      type: Function,
-      required: true
-   },
-   toggleSort: {
-      type: Function,
-      required: true
-   },
-   someSelected: {
-      type: Boolean,
-      required: true
-   },
-   allSelected: {
-      type: Boolean,
-      required: true
-   },
-   selectAll: {
-      type: Function,
-      required: true
-   },
-   disableSort: {
-      type: Boolean,
-      required: true,
-      default: false
-   }
+   columns: { type: Array, required: true },
+   isSorted: { type: Function, required: true },
+   getSortIcon: { type: Function, required: true },
+   toggleSort: { type: Function, required: true },
+   someSelected: { type: Boolean, required: true },
+   allSelected: { type: Boolean, required: true },
+   selectAll: { type: Function, required: true },
+   disableSort: { type: Boolean, required: true, default: false }
 });
 </script>

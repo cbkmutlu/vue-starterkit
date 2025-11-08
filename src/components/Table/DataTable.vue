@@ -71,10 +71,10 @@
             </slot>
             <template
                v-for="(item, itemIndex) in internalItems"
-               :key="itemIndex">
+               v-bind:key="itemIndex">
                <tr
-                  v-bind:class="[{ 'v-data-table__tr--clickable': rowClick || props.expandOnClick }, { 'v-data-table__tr--sticky': isExpanded(item) && props.accentOnExpand }]"
-                  v-ripple="props.ripple && (rowClick || props.expandOnClick)"
+                  v-bind:class="[{ 'v-data-table__tr--clickable': props.onRowClick || props.expandOnClick }, { 'v-data-table__tr--sticky': isExpanded(item) && props.accentOnExpand }]"
+                  v-ripple="props.ripple && (props.onRowClick || props.expandOnClick)"
                   class="v-data-table__tr"
                   @click="() => rowClickHandler(item)">
                   <template v-for="(column, index) in Object.keys(item.columns)">
@@ -114,11 +114,23 @@
                         v-bind:data-label="columns[index].title"
                         class="v-data-table__td">
                         <template v-if="column === 'actions'">
-                           <div class="table-action flex justify-between opacity-0 transition-opacity [tr:hover>td>.table-action]:opacity-100">
+                           <div class="table-action flex justify-end gap-1 opacity-0 transition-opacity [tr:hover>td>.table-action]:opacity-100">
                               <slot
                                  v-bind:index="itemIndex"
                                  v-bind:item="{ ...(item.value as T) }"
                                  name="item.actions" />
+                              <v-btn
+                                 v-if="props.onRowEdit"
+                                 density="compact"
+                                 icon="$edit"
+                                 variant="plain"
+                                 @click.stop="props.onRowEdit(item.value)" />
+                              <v-btn
+                                 v-if="props.onRowDelete"
+                                 density="compact"
+                                 icon="$trash"
+                                 variant="plain"
+                                 @click.stop="props.onRowDelete(item.value)" />
                            </div>
                         </template>
 
@@ -240,6 +252,10 @@ type TProps<T> = {
    expandOnClick?: boolean;
    noDataText?: string;
    sortBy?: any;
+   onRowDelete?: (item: T) => void;
+   onRowEdit?: (item: T) => void;
+   onRowClick?: (item: T) => void;
+   onRowExpand?: (item: T) => void;
 };
 
 // hooks
@@ -257,10 +273,7 @@ const props = withDefaults(defineProps<TDataTable & TProps<T>>(), {
    accentOnExpand: true,
    skeleton: "table-row-divider, list-item-three-line, list-item-two-line, list-item-two-line"
 });
-const emit = defineEmits<{
-   (event: "row:click", item: T, index: number): void;
-   (event: "row:expand", item: T, index: number): void;
-}>();
+
 const items = computed(() => {
    const query = props.filter;
    if (!query) {
@@ -271,7 +284,7 @@ const items = computed(() => {
       let data: any[];
 
       if (props.filterDeep) {
-         data = Object.values(item).flatMap((v) => (v && typeof v === "object" ? Object.values(v) : v));
+         data = flattenDeep(item);
       } else {
          let headers: THeader<T>[] = [];
          if (Array.isArray(props.filterKey)) {
@@ -295,7 +308,6 @@ const items = computed(() => {
 const expandedItems: any = ref([]);
 const optionsLoading = ref(false);
 const currentOptions: any = ref({});
-const rowClick = !!getCurrentInstance()?.vnode.props?.["onRow:click"];
 
 // handlers
 const isExpanded = (item: any) => expandedItems.value.includes(item);
@@ -309,7 +321,7 @@ const toggleExpand = (item: any, multiple: boolean = props.multiExpand) => {
    } else {
       expandedItems.value = isExpanded(item) ? [] : [item];
    }
-   emit("row:expand", item.value, item.index);
+   props.onRowExpand?.(item.value);
 };
 
 const optionsUpdateHandler = async (options: any) => {
@@ -326,6 +338,6 @@ const rowClickHandler = (item: DataTableItem) => {
    if (props.expandOnClick) {
       toggleExpand(item);
    }
-   emit("row:click", item.value, item.index);
+   props.onRowClick?.(item.value);
 };
 </script>
