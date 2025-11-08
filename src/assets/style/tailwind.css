@@ -36,6 +36,11 @@ https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities
    --animation-delay-1000: 1000ms;
 
    --color-surface: rgb(var(--v-theme-on-surface-bright));
+   --color-vuetify: rgba(var(--v-border-color), var(--v-border-opacity));
+
+   --breakpoint-tablet: 65rem;
+   --breakpoint-laptop: 90rem;
+   --breakpoint-desktop: 115rem;
 }
 
 @utility animation-duration-* {
