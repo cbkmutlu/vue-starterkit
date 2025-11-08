@@ -6,7 +6,7 @@
          <v-app-bar-nav-icon
             density="comfortable"
             icon="$arrowleft"
-            @click="$router.back()"></v-app-bar-nav-icon>
+            @click="$router.back"></v-app-bar-nav-icon>
       </template>
 
       <v-toolbar-title class="ms-1">{{ title }}</v-toolbar-title>

@@ -26,9 +26,6 @@ import type { TList } from "@/utils/types";
 
 // states
 const props = defineProps({
-   item: {
-      type: Object as () => TList,
-      required: true
-   }
+   item: { type: Object as () => TList, required: true }
 });
 </script>

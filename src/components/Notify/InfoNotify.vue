@@ -5,20 +5,18 @@
       type="info"
       density="comfortable"
       variant="tonal">
-      <div class="text-xs flex items-center">
-         <slot />
-      </div>
+      <slot />
 
       <template
          v-if="props.closable"
          v-slot:close="{ props: slotProps }">
          <v-btn
+            v-ripple
             density="compact"
             icon="$close"
-            v-ripple
             size="default"
             variant="text"
-            @click="slotProps.onClick()" />
+            @click="slotProps.onClick" />
       </template>
    </v-alert>
 </template>

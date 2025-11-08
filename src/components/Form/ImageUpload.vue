@@ -33,9 +33,6 @@ const { t } = useI18n();
 // states
 const model = defineModel({ type: [Array, Object] });
 const props = defineProps({
-   multiple: {
-      type: Boolean,
-      default: false
-   }
+   multiple: { type: Boolean, default: false }
 });
 </script>

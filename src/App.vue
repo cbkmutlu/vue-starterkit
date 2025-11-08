@@ -16,7 +16,7 @@
             density="compact"
             icon="$close"
             variant="text"
-            @click="slotProps.onClick()" />
+            @click="slotProps.onClick" />
       </template>
    </v-snackbar-queue>
 

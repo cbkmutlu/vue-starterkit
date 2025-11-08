@@ -50,13 +50,7 @@ const { t } = useI18n();
 // states
 const model = defineModel({ type: Number, default: 1 });
 const props = defineProps({
-   loading: {
-      type: Boolean,
-      default: false
-   },
-   color: {
-      type: String,
-      default: "primary"
-   }
+   loading: { type: Boolean, default: false },
+   color: { type: String, default: "primary" }
 });
 </script>

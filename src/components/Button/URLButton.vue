@@ -11,19 +11,13 @@
 
 <script lang="ts" setup>
 // states
-const model = defineModel({ type: String, default: "" });
-const props = defineProps({
-   source: {
-      type: String
-   }
-});
+const model = defineModel({ type: String });
 const isLoading = ref(false);
 
 // handlers
 const urlHandler = () => {
    isLoading.value = true;
-   const value = props.source ?? model.value;
-   model.value = createSlug(value);
+   model.value = createSlug(model.value || "");
    isLoading.value = false;
 };
 </script>

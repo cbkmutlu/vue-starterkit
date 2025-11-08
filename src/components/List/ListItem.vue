@@ -45,9 +45,6 @@ const { t } = useI18n();
 
 // states
 const props = defineProps({
-   item: {
-      type: Object as () => TList,
-      required: true
-   }
+   item: { type: Object as () => TList, required: true }
 });
 </script>

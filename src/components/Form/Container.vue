@@ -53,11 +53,15 @@ const formRef = ref<any>();
 
 // handlers
 const submitHandler = async (e?: Event) => {
-   if (!props.form) return;
+   if (!props.form) {
+      return;
+   }
 
    if (formRef.value) {
       const { valid } = await formRef.value.validate();
-      if (!valid) return;
+      if (!valid) {
+         return;
+      }
    }
    await props.form(e);
 };

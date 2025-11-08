@@ -8,7 +8,7 @@
          bg-color="surface"
          hide-details
          min-width="250"
-         @click:clear="clearHandler()"
+         @click:clear="clearHandler"
          @input="inputHandler($event)"
          @keydown="keydownHandler($event)" />
    </div>
