@@ -3,15 +3,19 @@
       v-model="model"
       v-bind:item-title="props.itemTitle"
       v-bind:items="items"
+      v-bind:list-props="{ class: props.filter || props.multiple ? 'pt-0' : '' }"
       v-bind:loading="props.loading"
       v-bind:menu-props="{ maxHeight: 320 }"
       v-bind:multiple="props.multiple"
       v-bind:open-on-clear="props.openOnClear"
+      item-value="id"
       transition="dialog-transition"
-      @click:clear="clearHandler()"
-      @update:menu="$event && clearHandler()">
+      @click:clear="clearHandler"
+      @update:menu="!$event && clearHandler()">
       <template v-slot:prepend-item>
-         <div class="sticky -top-2 bg-surface z-10">
+         <div
+            v-if="props.filter || props.multiple"
+            class="bg-surface sticky top-0 z-10 pt-2">
             <v-list-item
                v-if="props.filter"
                v-bind:link="false"
@@ -19,9 +23,9 @@
                <v-list-item-title>
                   <v-text-field
                      v-model="filterRaw"
-                     hide-details
                      autofocus
-                     @click:clear="clearHandler()"
+                     hide-details
+                     @click:clear="clearHandler"
                      @input="inputHandler($event)"
                      @keydown="keydownHandler($event)"
                      @keydown.space.stop
@@ -44,7 +48,7 @@
                      v-bind:indeterminate="someSelected && !allSelected"
                      v-bind:model-value="allSelected"
                      v-bind:ripple="false"
-                     class="me-2"
+                     class="me-1"
                      density="compact"
                      tabindex="-1"
                      @update:model-value="selectAll(!allSelected)" />
@@ -68,7 +72,7 @@
                <v-checkbox-btn
                   v-bind:model-value="isSelected"
                   v-bind:ripple="false"
-                  class="me-2"
+                  class="me-1"
                   density="compact"
                   tabindex="-1" />
             </template>
@@ -77,11 +81,19 @@
                <slot
                   v-bind:item="{ ...(item.raw as T) }"
                   name="title">
+                  <template v-if="props.avatarImage">
+                     <FallbackAvatar
+                        v-bind:image="item.raw[props.avatarImage]"
+                        v-bind:size="props.avatarSize"
+                        class="me-1" />
+                  </template>
                   {{ item.title }}
                </slot>
             </template>
 
-            <template v-slot:subtitle>
+            <template
+               v-if="$slots.subtitle"
+               v-slot:subtitle>
                <slot
                   v-bind:item="{ ...(item.raw as T) }"
                   name="subtitle" />
@@ -122,7 +134,9 @@
 
       <template v-slot:no-data>
          <slot name="no-data">
-            <v-list-item v-bind:link="false">
+            <v-list-item
+               v-bind:link="false"
+               class="mb-0">
                <v-list-item-title>
                   <slot name="no-data-title">{{ props.noDataText || t("app.noData") }}</slot>
                </v-list-item-title>
@@ -130,7 +144,15 @@
                   <slot name="no-data-subtitle" />
                </v-list-item-subtitle>
                <template v-slot:append>
-                  <slot name="no-data-append" />
+                  <slot name="no-data-append">
+                     <v-btn
+                        v-if="props.onEmpty"
+                        v-bind:text="t('app.add')"
+                        color="primary"
+                        density="compact"
+                        prepend-icon="$plus"
+                        @click="props.onEmpty" />
+                  </slot>
                </template>
             </v-list-item>
          </slot>
@@ -140,6 +162,7 @@
 
 <script generic="T" lang="ts" setup>
 import type { TMultiSelect } from "@/utils/types";
+import FallbackAvatar from "../Avatar/FallbackAvatar.vue";
 type TProps = {
    items?: T[];
    count?: number;
@@ -151,6 +174,9 @@ type TProps = {
    loading?: boolean;
    itemTitle?: string;
    noDataText?: string;
+   avatarImage?: string;
+   avatarSize?: string;
+   onEmpty?: () => void;
 };
 
 // hooks
@@ -166,7 +192,8 @@ const props = withDefaults(defineProps</* @ts-ignore */ TMultiSelect & TProps>()
    multiple: false,
    openOnClear: true,
    loading: false,
-   itemTitle: "title"
+   itemTitle: "title",
+   avatarSize: "32"
 });
 const debounce = ref("");
 const items = computed(() => {

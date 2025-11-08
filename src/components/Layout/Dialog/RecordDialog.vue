@@ -3,13 +3,14 @@
    <v-dialog
       v-if="!model.loading"
       v-model="model.show"
+      v-bind="{ ...$attrs }"
       v-bind:max-width="model?.width"
       class="items-start"
-      @after-leave="reset()"
-      @keydown.escape="close()">
+      @after-leave="reset"
+      @keydown.escape="close">
       <v-form
          v-model="model.validate"
-         @submit.prevent="model.validate && accept()">
+         @submit.prevent="submit">
          <v-card>
             <v-toolbar
                v-if="model?.title"
@@ -24,7 +25,7 @@
                      icon="$close"
                      variant="text"
                      tabindex="-1"
-                     @click="close()" />
+                     @click="close" />
                </template>
             </v-toolbar>
 
@@ -43,7 +44,7 @@
                      v-bind:variant="model.cancelVariant"
                      density="default"
                      tabindex="1"
-                     @click="close()" />
+                     @click="close" />
                   <v-btn
                      v-bind:color="model.acceptColor"
                      v-bind:disabled="!model.validate"
@@ -69,12 +70,10 @@ const { t } = useI18n();
 
 // states
 const model = ref({ ...TDialog });
-const emit = defineEmits(["after-leave"]);
 
 // handlers
 const reset = () => {
    model.value = { ...TDialog };
-   emit("after-leave");
 };
 
 const accept = () => {
@@ -87,6 +86,14 @@ const close = () => {
    model.value.resolve(false);
 };
 
+const submit = (e: Event) => {
+   e.preventDefault();
+   if (!model.value.validate) {
+      return;
+   }
+   accept();
+};
+
 const open = (payload?: { [K in keyof typeof TDialog]?: (typeof TDialog)[K] }) => {
    model.value = { ...model.value, ...payload, show: true };
 
@@ -96,5 +103,6 @@ const open = (payload?: { [K in keyof typeof TDialog]?: (typeof TDialog)[K] }) =
    });
 };
 
+defineOptions({ inheritAttrs: false });
 defineExpose({ open, close });
 </script>
