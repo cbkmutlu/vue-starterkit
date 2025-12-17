@@ -61,6 +61,10 @@ https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities
    border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 
+@utility bg-noise {
+   background-image: var(--bg-noise);
+}
+
 @utility max-grow-* {
    .v-field__input {
       min-height: min(var(--v-input-control-height, 56px), --value([*]));

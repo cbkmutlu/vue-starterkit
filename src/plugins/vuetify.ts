@@ -6,6 +6,9 @@ import { createVueI18nAdapter } from "vuetify/locale/adapters/vue-i18n";
 // import tailwindColors from "tailwindcss/colors";
 
 export const vuetify = createVuetify({
+   display: {
+      mobileBreakpoint: "lg"
+   },
    locale: {
       adapter: createVueI18nAdapter({ i18n, useI18n })
    },

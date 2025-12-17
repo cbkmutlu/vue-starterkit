@@ -30,15 +30,22 @@
 <script lang="ts" setup>
 import { i18n } from "@/plugins/i18n";
 
+// hooks
+const snackbarStore = useSnackbarStore();
+
 // states
 const isLoading = ref(false);
 
 // handlers
 const translateHandler = async (locale: string) => {
-   isLoading.value = true;
-   await loadLocale(locale).then((messages) => {
+   try {
+      isLoading.value = true;
+      const messages = await loadLocale(locale);
       setLocale(i18n, locale, messages);
-   });
-   isLoading.value = false;
+   } catch (error) {
+      snackbarStore.error(error);
+   } finally {
+      isLoading.value = false;
+   }
 };
 </script>

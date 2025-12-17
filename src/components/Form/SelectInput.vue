@@ -5,7 +5,7 @@
       v-bind:items="items"
       v-bind:list-props="{ class: props.filter || props.multiple ? 'pt-0' : '' }"
       v-bind:loading="props.loading"
-      v-bind:menu-props="{ maxHeight: 320 }"
+      v-bind:menu-props="{ maxHeight: 320, width: 224 }"
       v-bind:multiple="props.multiple"
       v-bind:open-on-clear="props.openOnClear"
       item-value="id"
@@ -104,7 +104,7 @@
       <template v-slot:selection="{ item, index }">
          <template v-if="index === 0 && model.length > props.count && props.count > 0 && typeof model !== 'string'">
             <v-chip
-               class="mr-1"
+               class="mr-1 min-w-8 justify-center"
                color="primary"
                density="default"
                variant="tonal">
@@ -149,7 +149,7 @@
                         v-if="props.onEmpty"
                         v-bind:text="t('app.add')"
                         color="primary"
-                        density="compact"
+                        density="comfortable"
                         prepend-icon="$plus"
                         @click="props.onEmpty" />
                   </slot>

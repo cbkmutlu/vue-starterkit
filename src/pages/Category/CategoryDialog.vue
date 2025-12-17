@@ -2,6 +2,12 @@
    <RecordDialog
       ref="recordDialog"
       @after-leave="reset">
+      <template v-slot:items>
+         <LanguageTab
+            v-model="language"
+            v-bind:loading="isLoading" />
+      </template>
+
       <v-row no-gutters>
          <v-col md="4">
             <v-list-subheader>{{ t("app.code") }}</v-list-subheader>
@@ -19,8 +25,13 @@
          <v-col md="8">
             <v-text-field
                v-model="category.title"
-               v-bind:rules="[appRules.required()]"
-               v-ucwords />
+               v-bind:rules="[appRules.required()]">
+               <template
+                  v-if="language !== 1"
+                  v-slot:append-inner>
+                  <TranslateButton v-model="category.title" />
+               </template>
+            </v-text-field>
          </v-col>
 
          <v-col md="4">
@@ -29,6 +40,7 @@
          <v-col md="8">
             <v-textarea
                v-model="category.content"
+               v-bind:rules="[appRules.required()]"
                class="max-grow-32"
                auto-grow
                no-resize />
@@ -50,30 +62,48 @@
                </template>
             </v-switch>
          </v-col>
+
+         <v-col md="4">
+            <v-list-subheader>{{ t("app.image") }}</v-list-subheader>
+         </v-col>
+         <v-col md="8">
+            <ImageList
+               v-bind:items="[category.image_path]"
+               @delete="deleteImageHandler" />
+            <ImageUpload v-model="upload" />
+         </v-col>
       </v-row>
    </RecordDialog>
 </template>
 
 <script lang="ts" setup>
+import TranslateButton from "@/components/Button/TranslateButton.vue";
+import ImageList from "@/components/Form/ImageList.vue";
+import ImageUpload from "@/components/Form/ImageUpload.vue";
 import RecordDialog from "@/components/Layout/Dialog/RecordDialog.vue";
-import { ICategory, useCreateCategory, useGetCategoryById, useUpdateCategory } from "@/services/CategoryService";
+import LanguageTab from "@/components/Tab/LanguageTab.vue";
+import { ICategory, ICategoryStore, useCreateCategory, useDeleteCategoryImage, useGetCategoryById, useUpdateCategory, useUploadCategoryImage } from "@/services/CategoryService";
 
 // hooks
 const { t } = useI18n();
 const snackbarStore = useSnackbarStore();
+const confirmStore = useConfirmStore();
 
 // states
 const categoryInitial = { is_active: 1, sort_order: 0 } as ICategory;
 const category = ref({ ...categoryInitial });
 const categoryId = computed(() => category.value.id);
-const enabled = computed(() => !!categoryId.value);
+const enabled = computed(() => !!category.value.id);
+const language = ref(1);
+const upload = ref([] as File[]);
 const recordDialog = ref<InstanceType<typeof RecordDialog>>();
 
 // services
 const { isLoading } = useGetCategoryById({
    enabled: enabled,
    params: {
-      id: categoryId
+      id: categoryId,
+      language: language
    },
    onSuccess: (item) => {
       category.value = { ...item };
@@ -81,6 +111,8 @@ const { isLoading } = useGetCategoryById({
 });
 const { mutateAsync: createCategory } = useCreateCategory();
 const { mutateAsync: updateCategory } = useUpdateCategory();
+const { mutateAsync: deleteImage } = useDeleteCategoryImage();
+const { mutateAsync: uploadImage } = useUploadCategoryImage();
 
 // handlers
 const open = async (item?: ICategory, name?: string) => {
@@ -95,27 +127,61 @@ const open = async (item?: ICategory, name?: string) => {
 
       const confirm = await recordDialog.value?.open({
          width: 800,
-         title: item?.id ? t("app.categoryUpdate") : t("app.categoryCreate"),
+         title: enabled.value ? t("app.categoryUpdate") : t("app.categoryCreate"),
          loading: isLoading
       });
 
       if (confirm) {
-         const payload: ICategory = {
-            ...category.value
+         const payload: ICategoryStore = {
+            id: category.value.id,
+            code: category.value.code,
+            translate: [
+               {
+                  language_id: language.value,
+                  title: category.value.title,
+                  content: category.value.content
+               }
+            ],
+            is_active: category.value.is_active,
+            sort_order: category.value.sort_order
          };
 
-         if (!item?.id) {
-            await createCategory(payload);
-            snackbarStore.success(t("app.recordCreated"));
-         } else {
+         if (upload.value.length) {
+            const { data } = await uploadImage({ files: upload.value });
+            payload.image_path = data[0];
+            upload.value = [];
+         }
+
+         if (enabled.value) {
             await updateCategory(payload);
             snackbarStore.success(t("app.recordUpdated"));
+         } else {
+            await createCategory(payload);
+            snackbarStore.success(t("app.recordCreated"));
          }
       }
    } catch (error) {
       snackbarStore.error(error);
    } finally {
       recordDialog.value?.close();
+   }
+};
+
+const deleteImageHandler = async () => {
+   try {
+      const confirm = await confirmStore.open({
+         title: t("app.confirm"),
+         content: t("app.deleteImage")
+      });
+
+      if (confirm) {
+         await deleteImage({ category_id: category.value.id });
+         snackbarStore.success(t("app.imageDeleted"));
+      }
+   } catch (error) {
+      snackbarStore.error(error);
+   } finally {
+      confirmStore.close();
    }
 };
 

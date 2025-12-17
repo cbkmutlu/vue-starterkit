@@ -40,6 +40,7 @@ type TProps = {
    overlay?: boolean;
    skeleton?: boolean;
    form?: (e?: Event) => void | Promise<void>;
+   validate?: (valid: boolean) => void | boolean;
 };
 
 // states
@@ -53,17 +54,24 @@ const formRef = ref<any>();
 
 // handlers
 const submitHandler = async (e?: Event) => {
-   if (!props.form) {
+   let valid = true;
+
+   if (formRef.value) {
+      const result = await formRef.value.validate();
+      valid = result.valid;
+   }
+
+   if (props.validate) {
+      props.validate(valid);
+   }
+
+   if (!valid) {
       return;
    }
 
-   if (formRef.value) {
-      const { valid } = await formRef.value.validate();
-      if (!valid) {
-         return;
-      }
+   if (props.form) {
+      await props.form(e);
    }
-   await props.form(e);
 };
 
 defineExpose({

@@ -32,7 +32,7 @@ v-bind:image="image_path"
  */
 import FallbackAvatar from "@/components/Avatar/FallbackAvatar.vue";
 type TProps = {
-   items: T[] | undefined;
+   items: T[];
    image?: string;
    size?: string;
    onDelete?: (item: T) => void;

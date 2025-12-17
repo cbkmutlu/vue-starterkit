@@ -12,17 +12,17 @@
                color="primary"
                density="default"
                variant="tonal"
-               @click="categoryDialog?.open()" />
+               @click="brandDialog?.open()" />
          </template>
 
-         <template v-slot:title>{{ t("app.categoryList") }}</template>
+         <template v-slot:title>{{ t("app.brandList") }}</template>
 
          <DataTable
             v-bind:filter="filter"
             v-bind:headers="headers"
-            v-bind:items="categoryAll"
+            v-bind:items="brandAll"
             @row-delete="deleteHandler"
-            @row-edit="categoryDialog?.open($event)">
+            @row-edit="brandDialog?.open($event)">
             <template v-slot:item.is_active="{ item }">
                <v-chip v-bind:color="item.is_active ? 'success' : undefined">
                   {{ item.is_active ? t("app.active") : t("app.passive") }}
@@ -31,7 +31,7 @@
          </DataTable>
       </PageCard>
 
-      <CategoryDialog ref="categoryDialog" />
+      <BrandDialog ref="brandDialog" />
    </Container>
 </template>
 
@@ -40,8 +40,8 @@ import PageCard from "@/components/Card/PageCard.vue";
 import Container from "@/components/Form/Container.vue";
 import SearchInput from "@/components/Form/SearchInput.vue";
 import DataTable from "@/components/Table/DataTable.vue";
-import { ICategory, useDeleteCategory, useGetCategoryAll } from "@/services/CategoryService";
-const CategoryDialog = defineAsyncComponent(() => import("@/pages/Category/CategoryDialog.vue"));
+import { IBrand, useDeleteBrand, useGetBrandAll } from "@/services/BrandService";
+const BrandDialog = defineAsyncComponent(() => import("@/pages/Brand/BrandDialog.vue"));
 
 // hooks
 const { t } = useI18n();
@@ -50,22 +50,21 @@ const confirmStore = useConfirmStore();
 
 // states
 const filter = ref();
-const headers = computed((): THeader<ICategory>[] => [
-   { title: t("app.code"), key: "code", width: 100 },
+const headers = computed((): THeader<IBrand>[] => [
    { title: t("app.title"), key: "title" },
    { title: t("app.status"), key: "is_active", width: 150 },
    { title: t("app.createDate"), key: "created_at", width: 250, date: "fullDate" },
    { title: t("app.updateDate"), key: "updated_at", width: 250, date: "fullDate" },
    { key: "actions", width: 90 }
 ]);
-const categoryDialog = ref<InstanceType<typeof CategoryDialog>>();
+const brandDialog = ref<InstanceType<typeof BrandDialog>>();
 
 // services
-const { data: categoryAll, isLoading } = useGetCategoryAll();
-const { mutateAsync: deleteCategory } = useDeleteCategory();
+const { data: brandAll, isLoading } = useGetBrandAll();
+const { mutateAsync: deleteBrand } = useDeleteBrand();
 
 // handlers
-const deleteHandler = async (item: ICategory) => {
+const deleteHandler = async (item: IBrand) => {
    try {
       const confirm = await confirmStore.open({
          title: t("app.confirm"),
@@ -73,7 +72,7 @@ const deleteHandler = async (item: ICategory) => {
       });
 
       if (confirm) {
-         await deleteCategory({ category_id: item.id });
+         await deleteBrand({ brand_id: item.id });
          snackbarStore.success(t("app.recordDeleted"));
       }
    } catch (error) {

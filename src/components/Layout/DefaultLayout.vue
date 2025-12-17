@@ -1,7 +1,5 @@
 <template>
-   <v-app
-      v-bind:class="theme.current.value.dark ? 'bg-dark' : 'bg-light'"
-      class="h-full">
+   <v-app class="bg-noise h-full">
       <!-- <DrawerBar /> -->
       <DrawerMenu />
       <Header />
@@ -25,6 +23,4 @@ import DrawerMenu from "@/components/Layout/Drawer/DrawerMenu.vue";
 import Header from "@/components/Layout/Header/Header.vue";
 const ConfirmDialog = defineAsyncComponent(() => import("@/components/Layout/Dialog/ConfirmDialog.vue"));
 const PromptDialog = defineAsyncComponent(() => import("@/components/Layout/Dialog/PromptDialog.vue"));
-
-const theme = useTheme();
 </script>

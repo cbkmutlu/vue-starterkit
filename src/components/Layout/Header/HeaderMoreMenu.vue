@@ -5,6 +5,7 @@
       <template v-slot:activator="{ props: slotProps }">
          <v-btn
             v-bind="slotProps"
+            v-bind:loading="isPending"
             icon="$dots" />
       </template>
 
@@ -26,12 +27,20 @@
 </template>
 
 <script lang="ts" setup>
+import { useLogoutUser } from '@/services/UserService';
+
 // hooks
 const { t } = useI18n();
 const authStore = useAuthStore();
 
-// states
-const logoutHandler = () => {
+// services
+const { mutateAsync: logoutUser, isPending } = useLogoutUser();
+
+// handlers
+const logoutHandler = async () => {
+   await logoutUser({
+      token: authStore.refreshToken
+   });
    authStore.userLogout();
 };
 </script>

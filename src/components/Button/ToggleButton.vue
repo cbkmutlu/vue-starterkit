@@ -11,6 +11,7 @@
          @click="toggleHandler(item)">
          <FallbackAvatar
             v-bind:image="item.image"
+            v-bind:style="{ 'background-color': 'transparent' }"
             size="40" />
       </v-btn>
    </div>

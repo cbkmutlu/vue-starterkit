@@ -17,14 +17,68 @@ export const errorLog = (message: any, ...optionalParams: any[]) => {
  * @example
  * getMedia("image.png") => "http://localhost:3000/image.png"
  */
-export const getMedia = (path: string | undefined): string => {
+export const getMedia = (path: string | Blob): string => {
+   if (path instanceof Blob) {
+      return URL.createObjectURL(path);
+   }
+
    if (!path || typeof path !== "string") {
       errorLog("[getMedia] path is not string or empty");
       return "";
    }
 
+   if (typeof path === "string" && path.startsWith("blob:")) {
+      return path;
+   }
+
    path = path.replace(/^\/+/, "");
    return import.meta.env.VITE_MEDIA.replace(/\/+$/, "") + "/" + path;
+};
+
+/**
+ * Verilen URL'yi güvenli hale getirir.
+ * @example
+ * safeUrl("https://example.com") => "https://example.com"
+ */
+export const safeUrl = (url: string) => {
+   try {
+      const u = new URL(url, window.location.origin);
+      if (["http:", "https:"].includes(u.protocol)) {
+         return u.href;
+      }
+   } catch (e) {}
+   return "#";
+};
+
+/**
+ * Verilen değeri JSON formatına çevirir.
+ */
+export const safeJsonToArray = (text: string): string[] => {
+   if (!text) return [];
+
+   try {
+      const parsed = JSON.parse(text);
+      if (Array.isArray(parsed)) {
+         return parsed;
+      }
+      return [parsed];
+   } catch (e) {
+      return [text];
+   }
+};
+
+
+/**
+ * Verilen değeri JSON formatına çevirir.
+ */
+export const safeJson = (text: string): any => {
+   if (!text) return "";
+
+   try {
+      return JSON.parse(text);
+   } catch (e) {
+      return text;
+   }
 };
 
 /**
@@ -283,7 +337,7 @@ export const replaceString = (format: string, args: any[]): string => {
  * @example
  * searchString("hello", "hello world") => true
  */
-export const searchString = (query: string, data: string | undefined, locale: string = getLocale()) => {
+export const searchString = (query: string, data: string, locale: string = getLocale()) => {
    if (!query || !data) {
       return true;
    }
@@ -356,8 +410,8 @@ export const formatPhone = (value: string) => {
  * formatNumber(2155)    => "2.155,00"
  * formatNumber(2155.00) => "2.155,00"
  */
-export const formatNumber = (value: number | undefined, min: number = 2, max: number = 2, locale: string = getLocale()): string => {
-   if (value === undefined) {
+export const formatNumber = (value: number, min: number = 2, max: number = 2, locale: string = getLocale()): string => {
+   if (!value) {
       value = 0;
    }
 
@@ -545,11 +599,17 @@ export const deepValue = <T>(source: T): T => {
       if (isReactive(input)) {
          return traverse(toRaw(input));
       }
+      if (input instanceof File) {
+         return input;
+      }
       if (input && typeof input === "object") {
          return Object.keys(input).reduce((acc, key) => {
             acc[key as keyof typeof acc] = traverse(input[key]);
             return acc;
          }, {} as T);
+      }
+      if (isProxy(input)) {
+         return traverse(toRaw(input));
       }
 
       return input;
@@ -612,7 +672,7 @@ export const flattenDeep = (source: any): (string | number)[] => {
 export const generateRandomGuid = (haystack?: string[]): string => {
    const timestamp = Date.now().toString(16).slice(-8);
    const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char: string) => {
-      let rand = (Math.random() * 16) % 16 | 0;
+      let rand = ((Math.random() * 16) % 16) | 0;
       let result = char === "x" ? rand : (rand & 0x3) | 0x8;
       return result.toString(16);
    });
@@ -888,7 +948,7 @@ export const getComponentAsync = (component: string, error: Component): Componen
  * @example
  * useGoogleTranslate().translate("Merhaba dünya", "tr", "en") => "Hello world"
  */
-export function useGoogleTranslate() {
+export const useGoogleTranslate = () => {
    const isLoading = ref(false);
    const isError = ref(false);
    const data = ref<string | null>("");
@@ -920,7 +980,7 @@ export function useGoogleTranslate() {
       isError: computed(() => isError.value),
       data: computed(() => data.value)
    };
-}
+};
 
 /**
  * Route parametrelerini okur.
@@ -929,7 +989,7 @@ export function useGoogleTranslate() {
  * useParam("id", true) => "1"
  * useParam("id", false) => ["1", "2", "3"]
  */
-export function useParam(param: string, useFirstIfArray = true): ComputedRef<any> {
+export const useParam = (param: string, useFirstIfArray = true): ComputedRef<any> => {
    const route = useRoute();
 
    return computed(() => {
@@ -941,12 +1001,53 @@ export function useParam(param: string, useFirstIfArray = true): ComputedRef<any
 
       return paramValue;
    });
-}
+};
+
+/**
+ * Bir resmin boyutlarını (genişlik ve yükseklik) yükler ve döndürür.
+ * @example
+ * const { width, height, load, isLoading, error } = useImageDimensions();
+ * await load("image.jpg") => { width: 1920, height: 1080 }
+ */
+export const useImageDimensions = () => {
+   const width = ref<number | null>(null);
+   const height = ref<number | null>(null);
+   const isLoading = ref(false);
+   const error = ref<Error | null>(null);
+
+   async function load(src: string) {
+      isLoading.value = true;
+      error.value = null;
+      width.value = null;
+      height.value = null;
+
+      return new Promise<{ width: number; height: number }>((resolve, reject) => {
+         const img = new Image();
+         img.onload = () => {
+            width.value = img.naturalWidth;
+            height.value = img.naturalHeight;
+            isLoading.value = false;
+            resolve({
+               width: img.naturalWidth,
+               height: img.naturalHeight
+            });
+         };
+         img.onerror = (err) => {
+            error.value = err as unknown as Error;
+            isLoading.value = false;
+            reject(err);
+         };
+         img.src = src;
+      });
+   }
+
+   return { width, height, isLoading, error, load };
+};
 
 /**
  * useDataRender({ chunkSize: 12, delay: 100 }) => { render: (source: Ref<T[]>) => Ref<T[]> }
  */
-export function useDataRender(options: { chunkSize?: number; delay?: number } = {}) {
+export const useDataRender = (options: { chunkSize?: number; delay?: number } = {}) => {
    const { chunkSize = 15, delay = 0 } = options;
 
    function render<T>(source: Ref<T[]>) {
@@ -995,7 +1096,7 @@ export function useDataRender(options: { chunkSize?: number; delay?: number } = 
    }
 
    return { render };
-}
+};
 
 /**
  * useEnumDisplay() => { resolve: (enumObj: any, labelFn: (key: any) => string) => ComputedRef<any> }
@@ -1020,7 +1121,7 @@ export const useEnumDisplay = () => {
  * @link
  * https://tanstack.com/query/latest/docs/framework/vue/reference/useQuery
  */
-export const useQueryWrapper = <T>(options: UseQueryOptions<T>, payload?: TQuery<T>) => {
+export const useQueryWrapper = <T>(options: UseQueryOptions<T>, payload?: TQuery<any>) => {
    const query = <UseQueryReturnType<T, Error>>useQuery<T>(toValue(options));
    const isFirst = ref(true);
    const raw = ref<T>(null as unknown as T);
@@ -1078,7 +1179,7 @@ export const queryPrefetch = async (key: string, callback: Function) => {
  * @example
  * fileInfo(blob) => "jpg"
  */
-export function fileInfo(blob: Blob | File) {
+export const fileInfo = (blob: Blob | File) => {
    const isFile = blob instanceof File;
    const name = isFile ? blob.name : null;
    const type = blob.type || null;
@@ -1094,7 +1195,37 @@ export function fileInfo(blob: Blob | File) {
    }
 
    return { name, extension, type, size, isFile };
-}
+};
+
+/**
+ * Base64 verisini Blob'a çevirir.
+ * @example
+ * base64ToBlob("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAA...") => Blob
+ */
+export const base64ToBlob = (uri: string) => {
+   const byteString = atob(uri.split(",")[1]);
+   const mimeString = uri.split(",")[0].split(":")[1].split(";")[0];
+
+   const ab = new ArrayBuffer(byteString.length);
+   const ia = new Uint8Array(ab);
+
+   for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+   }
+
+   return new Blob([ab], { type: mimeString });
+};
+
+/**
+ * Değeri minimum ve maksimum arasında tutar.
+ * @example
+ * clamp(10, 0, 100) => 10
+ * clamp(-10, 0, 100) => 0
+ * clamp(110, 0, 100) => 100
+ */
+export const clamp = (val: number, min: number, max: number) => {
+   return Math.min(Math.max(val, min), max);
+};
 
 /**
  * Büyük harfe çevirir.

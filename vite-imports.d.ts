@@ -19,6 +19,8 @@ declare global {
   const appRules: typeof import('./src/utils/rules')['appRules']
   const attemptDelay: typeof import('./src/utils/helper')['attemptDelay']
   const axios: typeof import('axios')['default']
+  const base64ToBlob: typeof import('./src/utils/helper')['base64ToBlob']
+  const clamp: typeof import('./src/utils/helper')['clamp']
   const computed: typeof import('vue')['computed']
   const createApp: typeof import('vue')['createApp']
   const createFormData: typeof import('./src/utils/helper')['createFormData']
@@ -112,6 +114,9 @@ declare global {
   const replaceString: typeof import('./src/utils/helper')['replaceString']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const routes: typeof import('./src/utils/routes')['default']
+  const safeJson: typeof import('./src/utils/helper')['safeJson']
+  const safeJsonToArray: typeof import('./src/utils/helper')['safeJsonToArray']
+  const safeUrl: typeof import('./src/utils/helper')['safeUrl']
   const searchString: typeof import('./src/utils/helper')['searchString']
   const setActivePinia: typeof import('pinia')['setActivePinia']
   const setInitialData: typeof import('./src/utils/helper')['setInitialData']
@@ -151,6 +156,7 @@ declare global {
   const useGoogleTranslate: typeof import('./src/utils/helper')['useGoogleTranslate']
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useId: typeof import('vue')['useId']
+  const useImageDimensions: typeof import('./src/utils/helper')['useImageDimensions']
   const useLink: typeof import('vue-router')['useLink']
   const useModel: typeof import('vue')['useModel']
   const useMutation: typeof import('@tanstack/vue-query')['useMutation']
@@ -187,7 +193,7 @@ declare global {
   export type { EButton, ENotify, EUser, ELanguage } from './src/utils/enums'
   import('./src/utils/enums')
   // @ts-ignore
-  export type { Neverify, UnwrapReadonlyArray, NestedKeys, IListImage, IOrderStore, IDefaultFields, ITranslate, THeader, TNotify, TSnackbar, TResponse, TParams, TQuery, TMutation, TList, TDataTable, TMultiSelect, TDateField, TToolbar, TCard, TContainer, TBtn, TField, TAvatar, TAlert } from './src/utils/types'
+  export type { Neverify, UnwrapReadonlyArray, NestedKeys, Strict, IDefaultFields, ITranslate, IListImage, IOrderStore, THeader, TNotify, TSnackbar, TResponse, TParams, TQuery, TMutation, TList, TDataTable, TMultiSelect, TDateField, TToolbar, TCard, TContainer, TBtn, TField, TAvatar, TAlert } from './src/utils/types'
   import('./src/utils/types')
 }
 
@@ -209,6 +215,8 @@ declare module 'vue' {
     readonly appRules: UnwrapRef<typeof import('./src/utils/rules')['appRules']>
     readonly attemptDelay: UnwrapRef<typeof import('./src/utils/helper')['attemptDelay']>
     readonly axios: UnwrapRef<typeof import('axios')['default']>
+    readonly base64ToBlob: UnwrapRef<typeof import('./src/utils/helper')['base64ToBlob']>
+    readonly clamp: UnwrapRef<typeof import('./src/utils/helper')['clamp']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly createFormData: UnwrapRef<typeof import('./src/utils/helper')['createFormData']>
@@ -302,6 +310,9 @@ declare module 'vue' {
     readonly replaceString: UnwrapRef<typeof import('./src/utils/helper')['replaceString']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly routes: UnwrapRef<typeof import('./src/utils/routes')['default']>
+    readonly safeJson: UnwrapRef<typeof import('./src/utils/helper')['safeJson']>
+    readonly safeJsonToArray: UnwrapRef<typeof import('./src/utils/helper')['safeJsonToArray']>
+    readonly safeUrl: UnwrapRef<typeof import('./src/utils/helper')['safeUrl']>
     readonly searchString: UnwrapRef<typeof import('./src/utils/helper')['searchString']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
     readonly setInitialData: UnwrapRef<typeof import('./src/utils/helper')['setInitialData']>
@@ -341,6 +352,7 @@ declare module 'vue' {
     readonly useGoogleTranslate: UnwrapRef<typeof import('./src/utils/helper')['useGoogleTranslate']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
+    readonly useImageDimensions: UnwrapRef<typeof import('./src/utils/helper')['useImageDimensions']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
     readonly useMutation: UnwrapRef<typeof import('@tanstack/vue-query')['useMutation']>
@@ -350,7 +362,6 @@ declare module 'vue' {
     readonly useQuery: UnwrapRef<typeof import('@tanstack/vue-query')['useQuery']>
     readonly useQueryClient: UnwrapRef<typeof import('@tanstack/vue-query')['useQueryClient']>
     readonly useQueryWrapper: UnwrapRef<typeof import('./src/utils/helper')['useQueryWrapper']>
-    readonly useReactiveStore: UnwrapRef<typeof import('./src/stores/reactiveStore')['useReactiveStore']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>

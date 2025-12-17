@@ -34,8 +34,9 @@
    }
    :root {
       @include scrollbar(8px, $background, $scroll);
-      --bg-light: url("@/assets/image/light.png");
-      --bg-dark: url("@/assets/image/dark.png");
+      // --bg-light: url("@/assets/image/light.png");
+      // --bg-dark: url("@/assets/image/dark.png");
+      --bg-noise: url("@/assets/image/noise.png");
    }
 
    // main scroller
@@ -46,16 +47,13 @@
       height: 100%;
    }
 
-   html.grabbing {
+   html.grabbing * {
       cursor: grab !important;
    }
 
-   .bg-light {
-      background: var(--bg-light);
-   }
-
-   .bg-dark {
-      background: var(--bg-dark);
+   // vApp
+   .v-application.v-theme--light {
+      background-color: #fdfeff;
    }
 
    // vBtn
@@ -145,13 +143,19 @@
    .v-text-field {
       .v-field--variant-outlined > .v-field__outline {
          --v-field-border-width: 1px;
-         --v-field-border-opacity: calc(var(--v-border-opacity) * var(--v-theme-overlay-multiplier));
-      }
-      .v-field--variant-outlined.v-field--focused > .v-field__outline {
-         --v-field-border-opacity: calc((var(--v-border-opacity) + var(--v-activated-opacity)) * var(--v-theme-overlay-multiplier));
       }
       .v-input__details {
          padding: 3px;
+      }
+
+      &:not(.v-input--error) {
+         .v-field--variant-outlined > .v-field__outline {
+            --v-field-border-opacity: calc(var(--v-border-opacity) * var(--v-theme-overlay-multiplier));
+         }
+
+         .v-field--variant-outlined.v-field--focused > .v-field__outline {
+            --v-field-border-opacity: calc((var(--v-border-opacity) + var(--v-activated-opacity)) * var(--v-theme-overlay-multiplier));
+         }
       }
    }
 

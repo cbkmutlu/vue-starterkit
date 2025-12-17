@@ -18,6 +18,14 @@
             variant="text"
             @click="slotProps.onClick" />
       </template>
+
+      <template v-slot:text="slotProps">
+         <div
+            v-for="item in safeJsonToArray(slotProps.item.text)"
+            v-bind:key="item">
+            - {{ item }}
+         </div>
+      </template>
    </v-snackbar-queue>
 
    <VueQueryDevtools />

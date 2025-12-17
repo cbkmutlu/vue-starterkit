@@ -4,7 +4,7 @@
       v-bind:class="{
          'number-append': props.controlVariant !== 'hidden',
          'number-prepend': props.controlVariant === 'split',
-         'number-icon': props.controlVariant === 'split',
+         'number-icon': props.controlVariant === 'split'
       }"
       v-maska="options"
       @blur="blurHandler"
@@ -82,7 +82,6 @@ type TProps = {
    max?: number;
    fraction?: number;
    modelValue?: number;
-   negative?: boolean;
 };
 
 // hooks
@@ -97,41 +96,40 @@ const props = withDefaults(defineProps<TField & TProps>(), {
    min: 0,
    max: Infinity,
    fraction: 2,
-   modelValue: 0,
-   negative: false
+   modelValue: 0
 });
 const locale = ref(getLocale());
 const options = computed(() => ({
    number: {
       locale: locale.value,
       fraction: props.fraction,
-      unsigned: !props.negative
+      unsigned: props.min >= 0
    },
    eager: true
 }));
-const maskedValue = ref(formatNumber(Number(props.modelValue)));
+const maskedValue = ref(formatNumber(Number(props.modelValue), props.fraction));
 const inputFocused = ref(false);
 
 // handlers
 const increaseHandler = (event: MouseEvent) => {
    const value = parseNumber(maskedValue.value);
    let step = props.step;
-   if (event.shiftKey) {
+   if (event.shiftKey && props.shiftStep && props.fraction > 0) {
       step = props.shiftStep;
    }
 
-   maskedValue.value = formatNumber(Math.min(value + step, props.max));
+   maskedValue.value = formatNumber(Math.min(value + step, props.max), props.fraction);
    emits("update:modelValue", parseNumber(maskedValue.value));
 };
 
 const decreaseHandler = (event: MouseEvent) => {
    const value = parseNumber(maskedValue.value);
    let step = props.step;
-   if (event.shiftKey) {
+   if (event.shiftKey && props.shiftStep && props.fraction > 0) {
       step = props.shiftStep;
    }
 
-   maskedValue.value = formatNumber(Math.max(value - step, props.min));
+   maskedValue.value = formatNumber(Math.max(value - step, props.min), props.fraction);
    emits("update:modelValue", parseNumber(maskedValue.value));
 };
 
@@ -148,7 +146,7 @@ const focusHandler = (event: FocusEvent) => {
 
 const blurHandler = () => {
    inputFocused.value = false;
-   maskedValue.value = formatNumber(Math.min(Math.max(parseNumber(maskedValue.value), props.min), props.max));
+   maskedValue.value = formatNumber(Math.min(Math.max(parseNumber(maskedValue.value), props.min), props.max), props.fraction);
    maskedValue.value = suffixNumber(maskedValue.value, props.fraction);
 };
 
@@ -156,7 +154,7 @@ watch(
    () => i18n.locale.value,
    (value) => {
       locale.value = value;
-      maskedValue.value = formatNumber(Number(props.modelValue));
+      maskedValue.value = formatNumber(Number(props.modelValue), props.fraction);
    }
 );
 
@@ -164,7 +162,7 @@ watch(
    () => props.modelValue,
    (value) => {
       if (!inputFocused.value) {
-         maskedValue.value = formatNumber(Number(value));
+         maskedValue.value = formatNumber(Number(value), props.fraction);
       }
    }
 );

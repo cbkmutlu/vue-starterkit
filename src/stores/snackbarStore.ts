@@ -9,13 +9,17 @@ export const useSnackbarStore = defineStore("snackbarStore", () => {
        * @param timeout Timeout in milliseconds
        */
       add({ text, color = undefined, variant = "flat", timeout = 2000 }: TSnackbar) {
-         queue.value.push({ text, color, timeout, variant });
+         if (typeof text === "object") {
+            queue.value.push({ text: JSON.stringify(Object.values(text).flat()), color, timeout, variant });
+         } else {
+            queue.value.push({ text, color, timeout, variant });
+         }
       },
       /**
        * @param text text.error || text.message
        */
       error(text: any = t("app.recordFailed"), variant?: string, timeout?: number) {
-         this.add({ text: text.error || text.message || t("app.recordFailed"), color: "error", variant, timeout });
+         this.add({ text: text.error || text.message || text, color: "error", variant, timeout });
       },
       /**
        * @param text

@@ -19,6 +19,14 @@
                   {{ model?.title }}
                </v-toolbar-title>
 
+               <v-toolbar-items v-if="$slots.items" class="mr-1">
+                  <slot name="items" />
+               </v-toolbar-items>
+
+               <template v-slot:extension v-if="$slots.extension">
+                  <slot name="extension" />
+               </template>
+
                <template v-slot:append>
                   <v-btn
                      v-bind:disabled="!!model.request"
@@ -43,7 +51,7 @@
                      v-bind:text="model.cancelText || t('app.cancel')"
                      v-bind:variant="model.cancelVariant"
                      density="default"
-                     tabindex="1"
+                     tabindex="-1"
                      @click="close" />
                   <v-btn
                      v-bind:color="model.acceptColor"
@@ -54,7 +62,7 @@
                      v-focus
                      type="submit"
                      density="default"
-                     tabindex="1" />
+                     tabindex="0" />
                </slot>
             </v-card-actions>
          </v-card>

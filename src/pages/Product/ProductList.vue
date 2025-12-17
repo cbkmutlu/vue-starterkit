@@ -25,7 +25,17 @@
             @row-click="(item) => $router.push({ name: 'productDetail', params: { id: item.id } })"
             @row-delete="deleteHandler">
             <template v-slot:item.category_list="{ item }">
-               {{ item.category_list && item.category_list.map((category: any) => category.title).join(", ") }}
+               {{ (item.category_list && item.category_list.map((category: any) => category.title).join(", ")) || "-" }}
+            </template>
+            <template v-slot:item.brand.title="{ item }">
+               {{ item.brand?.title || "-" }}
+            </template>
+            <template v-slot:item.actions="{ item }">
+               <v-btn
+                  density="compact"
+                  icon="$browser"
+                  variant="plain"
+                  @click.stop="promptHandler(item)" />
             </template>
          </DataTable>
       </PageCard>
@@ -43,6 +53,7 @@ import { IProduct, useDeleteProduct, useGetProductAll } from "@/services/Product
 const { t } = useI18n();
 const snackbarStore = useSnackbarStore();
 const confirmStore = useConfirmStore();
+const propmptStore = usePromptStore();
 
 // states
 const filter = ref();
@@ -52,6 +63,7 @@ const headers = computed((): THeader<IProduct>[] => [
    { title: t("app.title"), key: "title" },
    { title: t("app.price"), key: "price", width: 150, format: formatNumber, suffix: "₺" },
    { title: t("app.category"), key: "category_list", width: 350 },
+   { title: t("app.brand"), key: "brand.title", width: 200 },
    { key: "actions", width: 60 }
 ]);
 
@@ -60,6 +72,25 @@ const { data: productAll, isLoading } = useGetProductAll();
 const { mutateAsync: deleteProduct } = useDeleteProduct();
 
 // handlers
+const promptHandler = async (item: IProduct) => {
+   try {
+      const confirm = await propmptStore.open({
+         content: t("app.edit"),
+         prompt: item.title,
+         onInput: (value: string) => upperCase(value),
+         rules: [appRules.required()]
+      });
+
+      if (confirm) {
+         snackbarStore.success(propmptStore.dialog.prompt);
+      }
+   } catch (error) {
+      snackbarStore.error(error);
+   } finally {
+      propmptStore.close();
+   }
+};
+
 const deleteHandler = async (item: IProduct) => {
    try {
       const confirm = await confirmStore.open({
@@ -68,7 +99,7 @@ const deleteHandler = async (item: IProduct) => {
       });
 
       if (confirm) {
-         await deleteProduct({ id: item.id });
+         await deleteProduct({ product_id: item.id });
          snackbarStore.success(t("app.recordDeleted"));
       }
    } catch (error) {

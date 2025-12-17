@@ -1,5 +1,7 @@
 <template>
-   <v-container class="h-full">
+   <v-sheet
+      class="bg-noise flex-center h-full flex-col"
+      tile>
       <router-view v-bind:key="$route.fullPath" />
-   </v-container>
+   </v-sheet>
 </template>

@@ -1,6 +1,6 @@
 <template>
    <v-overlay
-      class="items-center justify-center"
+      class="bg-noise items-center justify-center"
       no-click-animation
       persistent>
       <v-progress-circular

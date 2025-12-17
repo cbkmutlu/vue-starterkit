@@ -49,13 +49,6 @@
                </v-col>
 
                <v-col md="4">
-                  <v-list-subheader>{{ t("app.date") }}</v-list-subheader>
-               </v-col>
-               <v-col md="8">
-                  <DatePicker />
-               </v-col>
-
-               <v-col md="4">
                   <v-list-subheader>{{ t("app.description") }}</v-list-subheader>
                </v-col>
                <v-col md="8">
@@ -95,6 +88,28 @@
                </v-col>
 
                <v-col md="4">
+                  <v-list-subheader>{{ t("app.stock") }}</v-list-subheader>
+               </v-col>
+               <v-col md="8">
+                  <NumberInput
+                  v-bind:fraction="0"
+                  v-bind:step="1"
+                  v-bind:min="-5"
+                  v-bind:max="5"
+                  v-model="product.stock"
+                  control-variant="default"
+                  />
+               </v-col>
+
+               <v-col md="4">
+                  <v-list-subheader>{{ t("app.date") }}</v-list-subheader>
+               </v-col>
+               <v-col md="8">
+                  <DatePicker
+                     v-model="product.date" />
+               </v-col>
+
+               <v-col md="4">
                   <v-list-subheader>{{ t("app.image", 2) }}</v-list-subheader>
                </v-col>
                <v-col md="8">
@@ -124,15 +139,28 @@
                      v-model:filter-raw="categoryFilter"
                      v-bind:items="categoryAll"
                      v-bind:loading="categoryLoading"
-                     item-value="id"
                      multiple
                      return-object
                      @empty="categoryDialog?.open(undefined, categoryFilter)" />
+               </v-col>
+
+               <v-col md="4">
+                  <v-list-subheader>{{ t("app.brand") }}</v-list-subheader>
+               </v-col>
+               <v-col md="8">
+                  <SelectInput
+                     v-model="product.brand"
+                     v-model:filter-raw="brandFilter"
+                     v-bind:items="brandAll"
+                     v-bind:loading="brandLoading"
+                     return-object
+                     @empty="brandDialog?.open(undefined, brandFilter)" />
                </v-col>
             </v-row>
          </v-card-text>
       </PageCard>
       <CategoryDialog ref="categoryDialog" />
+      <BrandDialog ref="brandDialog" />
    </Container>
 </template>
 
@@ -146,10 +174,11 @@ import ImageUpload from "@/components/Form/ImageUpload.vue";
 import NumberInput from "@/components/Form/NumberInput.vue";
 import SelectInput from "@/components/Form/SelectInput.vue";
 import LanguageTab from "@/components/Tab/LanguageTab.vue";
+import { useGetBrandAll } from "@/services/BrandService";
 import { useGetCategoryAll } from "@/services/CategoryService";
-import { useUnlinkFile, useUploadFile } from "@/services/FileService";
-import { IProduct, IProductStore, useCreateProduct, useGetProductById, useUpdateProduct } from "@/services/ProductService";
+import { IProduct, IProductStore, useCreateProduct, useDeleteProductImage, useGetProductById, useUpdateProduct, useUploadProductImage } from "@/services/ProductService";
 const CategoryDialog = defineAsyncComponent(() => import("@/pages/Category/CategoryDialog.vue"));
+const BrandDialog = defineAsyncComponent(() => import("@/pages/Brand/BrandDialog.vue"));
 
 // hooks
 const { t } = useI18n();
@@ -162,15 +191,17 @@ const confirmStore = useConfirmStore();
 const productInitial = {
    is_active: 1,
    sort_order: 0,
-   image_list: [] as IListImage[]
+   image_list: [] as IProduct["image_list"]
 } as IProduct;
 const product = ref({ ...productInitial });
 const productId = computed(() => route.params.id);
-const enabled = computed(() => !!productId.value);
+const enabled = computed(() => !!route.params.id);
 const language = ref(1);
 const upload = ref([] as File[]);
 const categoryFilter = ref();
 const categoryDialog = ref<InstanceType<typeof CategoryDialog>>();
+const brandFilter = ref();
+const brandDialog = ref<InstanceType<typeof BrandDialog>>();
 
 // services
 const { isLoading, isFirst, isError } = useGetProductById({
@@ -185,12 +216,13 @@ const { isLoading, isFirst, isError } = useGetProductById({
 });
 const { mutateAsync: updateProduct, isPending: updatePending } = useUpdateProduct();
 const { mutateAsync: createProduct, isPending: createPending } = useCreateProduct();
-const { mutateAsync: uploadFile } = useUploadFile();
-const { mutateAsync: unlinkFile } = useUnlinkFile({ invalidate: ["product", "productById"] });
+const { mutateAsync: deleteImage } = useDeleteProductImage();
+const { mutateAsync: uploadImage } = useUploadProductImage();
 const { data: categoryAll, isLoading: categoryLoading } = useGetCategoryAll();
+const { data: brandAll, isLoading: brandLoading } = useGetBrandAll();
 
 // handlers
-const deleteImageHandler = async (image: any) => {
+const deleteImageHandler = async (image: IProduct["image_list"][number]) => {
    try {
       const confirm = await confirmStore.open({
          title: t("app.confirm"),
@@ -198,12 +230,7 @@ const deleteImageHandler = async (image: any) => {
       });
 
       if (confirm) {
-         await unlinkFile({
-            id: image.id,
-            table: "product_image",
-            field: "image_path",
-            delete: true
-         });
+         await deleteImage({ image_id: image.id });
          snackbarStore.success(t("app.imageDeleted"));
       }
    } catch (error) {
@@ -218,36 +245,30 @@ const formHandler = async () => {
       code: product.value.code,
       title: product.value.title,
       content: product.value.content,
-      price: product.value.price,
       is_active: product.value.is_active,
       sort_order: product.value.sort_order,
-      product_category: product.value.category_list?.map((item) => item.id)
+      stock: product.value.stock,
+      price: product.value.price,
+      date: product.value.date,
+      product_category: product.value.category_list?.map((item) => item.id),
+      brand_id: product.value.brand?.id || 0
    };
 
    try {
       if (upload.value.length) {
-         await uploadFile({
-            files: upload.value,
-            path: "product"
-         }).then((response) => {
-            payload.image_path = response.data;
-            upload.value = [];
-         });
+         const { data } = await uploadImage({ files: upload.value });
+         payload.image_path = data;
+         upload.value = [];
       }
 
       if (enabled.value) {
          await updateProduct({ id: product.value.id, ...payload });
          snackbarStore.success(t("app.recordUpdated"));
       } else {
-         await createProduct(payload, {
-            onSuccess: (data) => {
-               router.push({ name: "productDetail", params: { id: data.data.id } });
-               snackbarStore.success(t("app.recordCreated"));
-            }
-         });
+         const { data } = await createProduct(payload);
+         router.push({ name: "productDetail", params: { id: data.id } });
+         snackbarStore.success(t("app.recordCreated"));
       }
-
-      console.info(payload);
    } catch (error) {
       snackbarStore.error(error);
    }

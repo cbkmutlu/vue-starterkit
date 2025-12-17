@@ -41,12 +41,25 @@ export const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
    const appStore = useAppStore();
+   const authStore = useAuthStore();
 
    if (from.meta.layout !== to.meta.layout) {
       appStore.setLayoutLoading(true);
    }
 
    appStore.setModule(to.meta.module || "default");
+
+   if (authStore.isAuthenticated) {
+      if (to.path === appConfig.router.login) {
+         return next(authStore.returnUrl || "/");
+      }
+   } else {
+      if (to.meta.auth !== false && to.path !== appConfig.router.login) {
+         authStore.setUrl(to.fullPath);
+         return next(appConfig.router.login);
+      }
+   }
+
    next();
 });
 
@@ -61,19 +74,3 @@ router.afterEach(async (to) => {
    await sleepDelay();
    appStore.setLayoutLoading(false);
 });
-
-// COMBAK
-// router.beforeEach(async (to, _from, next) => {
-//    const authStore = useAuthStore();
-
-//    if (authStore.isAuthenticated && to.path === appConfig.router.login) {
-//       return next(authStore.returnUrl || "/");
-//    }
-
-//    if (to.meta.auth !== false && to.path !== appConfig.router.login) {
-//       authStore.setUrl(to.fullPath);
-//       return next(appConfig.router.login);
-//    }
-
-//    next();
-// });

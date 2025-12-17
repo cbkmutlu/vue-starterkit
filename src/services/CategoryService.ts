@@ -11,59 +11,55 @@ export interface ICategory extends IDefaultFields {
 export interface ICategoryStore {
    id?: number;
    code: string;
-   title: string;
-   content?: string;
-   is_active?: number;
-   sort_order?: number;
+   translate: [{ language_id: number; title: string; content?: string }];
+   is_active: number;
+   sort_order: number;
    image_path?: string;
 }
 
-export const useGetCategoryAll = (payload?: TQuery<ICategory[]>) => {
+export const useGetCategoryAll = (query?: TQuery<ICategory[]>) => {
    const options: UseQueryOptions<ICategory[]> = {
       queryKey: ["category", "categoryAll"],
       queryFn: async ({ signal }) => {
-         // return (await appAxios.get("/category/", { signal })).data;
+         return (await appAxios.get("/category/", { signal })).data;
 
-         // simulate data
-         await sleepDelay();
-         return (await appAxios.get("data/category.json", { signal })).data;
+         // await sleepDelay();
+         // return (await appAxios.get("data/category.json", { signal })).data;
       },
-      enabled: payload?.enabled
+      enabled: query?.enabled
    };
 
-   return useQueryWrapper(options, payload);
+   return useQueryWrapper(options, query);
 };
 
-export const useGetCategoryById = (payload?: TQuery<ICategory>) => {
+export const useGetCategoryById = (query?: TQuery<ICategory>) => {
    const options: UseQueryOptions<ICategory> = {
-      queryKey: ["category", "categoryById", payload?.params?.id, payload?.params?.language],
+      queryKey: ["category", "categoryById", query?.params?.id, query?.params?.language],
       queryFn: async ({ signal }) => {
-         // return (await appAxios.get(`/category/${toValue(payload?.params?.id)}`, { signal, params: { lang_id: toValue(payload?.params?.language) } })).data;
+         return (await appAxios.get(`/category/${toValue(query?.params?.id)}`, { signal, params: { lang: toValue(query?.params?.language) } })).data;
 
-         // simulate data
-         await sleepDelay();
-         const result = (await appAxios.get("data/category.json", { signal })).data;
-         return {
-            ...result,
-            data: result.data.find((item: ICategory) => item.id === Number(toValue(payload?.params?.id)))
-         };
+         // await sleepDelay();
+         // const result = (await appAxios.get("data/category.json", { signal })).data;
+         // return {
+         //    ...result,
+         //    data: result.data.find((item: ICategory) => item.id === Number(toValue(query?.params?.id)))
+         // };
       },
-      enabled: payload?.enabled
+      enabled: query?.enabled
    };
 
-   return useQueryWrapper(options, payload);
+   return useQueryWrapper(options, query);
 };
 
 export const useUpdateCategory = () => {
    const queryClient = useQueryClient();
    return useMutation({
       mutationKey: ["category", "updateCategory"],
-      mutationFn: async (data: ICategoryStore): Promise<TResponse<ICategory>> => {
-         // return (await appAxios.put("/category/", data)).data;
+      mutationFn: async (payload: ICategoryStore): Promise<TResponse<ICategory>> => {
+         return (await appAxios.put("/category/", payload)).data;
 
-         // simulate start
-         await sleepDelay();
-         return { success: true, message: data.id?.toString(), data: data as ICategory, error: false, meta: null, status: 200 };
+         // await sleepDelay();
+         // return { success: true, message: payload.id?.toString(), data: payload as ICategory, error: false, meta: null, status: 200 };
       },
       onSuccess: () => {
          queryClient.invalidateQueries({ queryKey: ["category"] });
@@ -76,12 +72,11 @@ export const useCreateCategory = () => {
    const queryClient = useQueryClient();
    return useMutation({
       mutationKey: ["category", "createCategory"],
-      mutationFn: async (data: ICategoryStore): Promise<TResponse<ICategory>> => {
-         // return (await appAxios.post("/category/", data)).data;
+      mutationFn: async (payload: ICategoryStore): Promise<TResponse<ICategory>> => {
+         return (await appAxios.post("/category/", payload)).data;
 
-         // simulate start
-         await sleepDelay();
-         return { success: true, message: data.id?.toString(), data: data as ICategory, error: false, meta: null, status: 200 };
+         // await sleepDelay();
+         // return { success: true, message: payload.id?.toString(), data: payload as ICategory, error: false, meta: null, status: 200 };
       },
       onSuccess: () => {
          queryClient.invalidateQueries({ queryKey: ["category"] });
@@ -94,16 +89,37 @@ export const useDeleteCategory = () => {
    const queryClient = useQueryClient();
    return useMutation({
       mutationKey: ["category", "deleteCategory"],
-      mutationFn: async (payload?: { id: number }): Promise<TResponse<boolean>> => {
-         // return (await appAxios.delete(`/category/${payload?.id}`)).data;
+      mutationFn: async (payload: { category_id: number }): Promise<TResponse<boolean>> => {
+         return (await appAxios.delete(`/category/${payload.category_id}`)).data;
 
-         // simulate start
-         await sleepDelay();
-         return { success: true, message: payload?.id.toString(), data: true, error: false, meta: null, status: 200 };
+         // await sleepDelay();
+         // return { success: true, message: payload.id.toString(), data: true, error: false, meta: null, status: 200 };
       },
       onSuccess: () => {
          queryClient.invalidateQueries({ queryKey: ["category"] });
          queryClient.invalidateQueries({ queryKey: ["product"] });
+      }
+   });
+};
+
+export const useUploadCategoryImage = () => {
+   return useMutation({
+      mutationKey: ["category", "uploadCategoryImage"],
+      mutationFn: async (payload: { files: File[] }): Promise<TResponse<string[]>> => {
+         return (await appAxios.postForm("/category/image", createFormData(payload))).data;
+      }
+   });
+};
+
+export const useDeleteCategoryImage = () => {
+   const queryClient = useQueryClient();
+   return useMutation({
+      mutationKey: ["category", "deleteCategoryImage"],
+      mutationFn: async (payload: { category_id: number }): Promise<TResponse<boolean>> => {
+         return (await appAxios.delete(`/category/${payload.category_id}/image`)).data;
+      },
+      onSuccess: () => {
+         queryClient.invalidateQueries({ queryKey: ["category"] });
       }
    });
 };

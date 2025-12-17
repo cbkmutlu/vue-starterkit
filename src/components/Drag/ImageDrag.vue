@@ -7,14 +7,16 @@
       v-bind:item-key="props.itemKey"
       animation="200"
       group="draggable"
+      @end="dragEnd"
       @start="dragStart">
-      <template v-slot:item="{ element }">
+      <template v-slot:item="{ element, index }">
          <div>
             <FallbackAvatar
                v-bind:image="element[props.image]"
-               v-bind:on-delete="props.onDelete ? () => props.onDelete?.(element) : undefined"
-               v-bind:on-edit="props.onEdit ? () => props.onEdit?.(element) : undefined"
-               v-bind:size="props.size" />
+               v-bind:on-delete="props.onDelete ? () => props.onDelete?.(element, index) : undefined"
+               v-bind:on-edit="props.onEdit ? () => props.onEdit?.(element, index) : undefined"
+               v-bind:size="props.size"
+               class="border-thin" />
          </div>
       </template>
    </draggable>
@@ -28,8 +30,8 @@ type TProps = {
    itemKey?: string;
    size?: string;
    image?: string;
-   onDelete?: (item: T) => void;
-   onEdit?: (item: T) => void;
+   onDelete?: (item: T, index: number) => void;
+   onEdit?: (item: T, index: number) => void;
 };
 
 // states
@@ -46,5 +48,10 @@ const dragStart = (e: any) => {
    if (props.hideDrag) {
       dragHide(e);
    }
+   document.documentElement.classList.add("grabbing");
+};
+
+const dragEnd = () => {
+   document.documentElement.classList.remove("grabbing");
 };
 </script>

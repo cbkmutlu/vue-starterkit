@@ -7,14 +7,14 @@
          v-bind:src="getMedia(props.image || 'no-image.png')"
          cover>
          <template v-slot:error>
-            <div class="flex-center size-full border-thin rounded-sm">
+            <div class="flex-center size-full rounded-sm">
                <v-icon
                   v-bind:icon="props.icon"
                   v-bind:size="props.iconSize" />
             </div>
          </template>
          <template v-slot:placeholder>
-            <div class="flex-center size-full border-thin rounded-sm">
+            <div class="flex-center size-full rounded-sm">
                <v-progress-circular
                   v-bind:size="Math.min(Number(props.size) - 8, 32)"
                   indeterminate />
@@ -22,19 +22,19 @@
          </template>
          <div
             v-if="props.onDelete || props.onEdit"
-            class="flex-center bg-surface/64 size-full gap-1 text-white opacity-0 transition-opacity hover:opacity-100">
+            class="flex-center bg-surface/64 not-grabbing:hover:opacity-100 size-full gap-1 text-white opacity-0 transition-opacity">
             <v-btn
                v-if="props.onEdit"
                density="compact"
                icon="$edit"
                variant="tonal"
-               @click="props.onEdit" />
+               @click.stop="props.onEdit" />
             <v-btn
                v-if="props.onDelete"
                density="compact"
                icon="$trash"
                variant="tonal"
-               @click="props.onDelete" />
+               @click.stop="props.onDelete" />
          </div>
       </v-img>
    </v-avatar>

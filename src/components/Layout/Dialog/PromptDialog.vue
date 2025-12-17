@@ -38,7 +38,7 @@
                   v-bind:rules="promptStore.dialog.rules"
                   v-maska="promptStore.dialog.mask"
                   autofocus
-                  tabindex="1"
+                  tabindex="0"
                   @input="promptStore.dialog.onInput && (promptStore.dialog.prompt = promptStore.dialog.onInput(promptStore.dialog.prompt))" />
             </v-card-text>
 
@@ -46,23 +46,35 @@
 
             <v-card-actions>
                <v-btn
-                  v-bind:color="promptStore.dialog.cancelColor"
+                  v-if="promptStore.dialog.onDelete !== null"
+                  v-bind:color="promptStore.dialog.deleteColor"
                   v-bind:disabled="!!promptStore.dialog.request"
+                  v-bind:loading="promptStore.dialog.delete"
+                  v-bind:text="promptStore.dialog.deleteText || t('app.delete')"
+                  v-bind:variant="promptStore.dialog.deleteVariant"
+                  density="default"
+                  @click="handleDelete" />
+
+               <v-spacer v-if="promptStore.dialog.onDelete !== null" />
+
+               <v-btn
+                  v-bind:color="promptStore.dialog.cancelColor"
+                  v-bind:disabled="!!promptStore.dialog.request || !!promptStore.dialog.delete"
                   v-bind:text="promptStore.dialog.cancelText || t('app.cancel')"
                   v-bind:variant="promptStore.dialog.cancelVariant"
                   density="default"
-                  tabindex="1"
+                  tabindex="-1"
                   @click="promptStore.close()" />
 
                <v-btn
                   v-bind:color="promptStore.dialog.acceptColor"
-                  v-bind:disabled="!promptStore.dialog.validate"
+                  v-bind:disabled="!promptStore.dialog.validate || !!promptStore.dialog.delete"
                   v-bind:loading="promptStore.dialog.request"
                   v-bind:text="promptStore.dialog.acceptText || t('app.accept')"
                   v-bind:variant="promptStore.dialog.acceptVariant"
                   type="submit"
                   density="default"
-                  tabindex="1" />
+                  tabindex="0" />
             </v-card-actions>
          </v-card>
       </v-form>
@@ -73,4 +85,10 @@
 // hooks
 const { t } = useI18n();
 const promptStore = usePromptStore();
+
+const handleDelete = async () => {
+   promptStore.dialog.delete = true;
+   await promptStore.dialog.onDelete(true);
+   promptStore.dialog.delete = false;
+};
 </script>

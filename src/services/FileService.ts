@@ -1,47 +1,43 @@
 type TUpload = {
    files: File[];
-   path?: string;
 };
 
-type TUnlinkWithPath = {
+type TUnlink = {
    path: string;
-   id?: never;
-   table?: never;
-   field?: never;
-   delete?: never;
 };
-
-type TUnlinkWithOutPath = {
-   path?: never;
-   id: number;
-   table: string;
-   field: string;
-   delete?: boolean;
-};
-
-type TUnlink = TUnlinkWithPath | TUnlinkWithOutPath;
 
 export const useUploadFile = () => {
    return useMutation({
       mutationKey: ["file", "uploadFile"],
       mutationFn: async (data: TUpload): Promise<TResponse<string[]>> => {
-         const formData = createFormData({ files: data.files, path: data.path });
-         // const formData = createFormData(data);
+         const formData = createFormData(data);
 
          return (await appAxios.postForm("/file/", formData)).data;
       }
    });
 };
 
-export const useUnlinkFile = (payload?: TMutation) => {
+export const useUnlinkFile = (mutation?: TMutation) => {
    const queryClient = useQueryClient();
    return useMutation({
       mutationKey: ["file", "unlinkFile"],
-      mutationFn: async (data: TUnlink): Promise<TResponse<boolean>> => {
-         return (await appAxios.patch("/file/", data)).data;
+      mutationFn: async (payload: TUnlink): Promise<TResponse<boolean>> => {
+         return (await appAxios.patch("/file/", payload)).data;
       },
       onSuccess: () => {
-         queryClient.invalidateQueries({ queryKey: payload?.invalidate });
+         queryClient.invalidateQueries({ queryKey: mutation?.invalidate });
       }
    });
+};
+
+export const useProxyFile = (query?: TQuery<Blob>) => {
+   const options: UseQueryOptions<string[]> = {
+      queryKey: ["file", "proxyFile", query?.params?.path],
+      queryFn: async ({ signal }) => {
+         return await appAxios.get("/file/", { signal, params: { path: toValue(query?.params?.path) }, responseType: "blob" });
+      },
+      enabled: query?.enabled
+   };
+
+   return useQueryWrapper(options, query);
 };

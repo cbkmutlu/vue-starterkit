@@ -3,19 +3,19 @@ import { router } from "@/plugins/router";
 export const useAuthStore = defineStore(
    "authStore",
    () => {
-      const currentUser: Ref<string | null> = ref(null);
-      const accessToken: Ref<string | null> = ref(null);
-      const refreshToken: Ref<string | null> = ref(null);
-      const returnUrl: Ref<string | null> = ref(null);
+      const currentUser = ref("");
+      const accessToken = ref("");
+      const refreshToken = ref("");
+      const returnUrl = ref("");
 
       const actions = {
          reset() {
-            currentUser.value = null;
-            accessToken.value = null;
-            refreshToken.value = null;
-            returnUrl.value = null;
+            currentUser.value = "";
+            accessToken.value = "";
+            refreshToken.value = "";
+            returnUrl.value = "";
          },
-         userLogin(payload: { [key: string]: string }, redirect: boolean = true) {
+         userLogin(payload: { currentUser: string; accessToken: string; refreshToken: string }, redirect: boolean = true) {
             currentUser.value = payload.currentUser;
             accessToken.value = payload.accessToken;
             refreshToken.value = payload.refreshToken;
@@ -23,23 +23,26 @@ export const useAuthStore = defineStore(
          },
          userLogout(redirect: boolean = true) {
             this.reset();
+            localStorage.removeItem(appConfig.key.auth);
             redirect && router.push("/login");
          },
          setUrl(value: string) {
             returnUrl.value = value;
          },
-         updateTokens(payload: { [key: string]: any }) {
+         updateTokens(payload: { accessToken: string; refreshToken?: string }) {
             accessToken.value = payload.accessToken;
-            refreshToken.value = payload.refreshToken;
+            if (payload.refreshToken) {
+               refreshToken.value = payload.refreshToken;
+            }
          }
       };
 
       return {
-         currentUser: computed(() => currentUser.value),
-         accessToken: computed(() => accessToken.value),
-         refreshToken: computed(() => refreshToken.value),
-         returnUrl: computed(() => returnUrl.value),
-         isAuthenticated: computed(() => currentUser.value !== null),
+         isAuthenticated: computed(() => currentUser.value !== ""),
+         currentUser,
+         accessToken,
+         refreshToken,
+         returnUrl,
          ...actions
       };
    },

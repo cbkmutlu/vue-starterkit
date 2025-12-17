@@ -6,12 +6,12 @@
       <v-tab
          v-bind:loading="props.loading && model === 1"
          v-bind:value="1">
-         {{ t("app.turkish") }}
+         {{ t("language.turkish") }}
       </v-tab>
       <v-tab
          v-bind:loading="props.loading && model === 2"
          v-bind:value="2">
-         {{ t("app.english") }}
+         {{ t("language.english") }}
       </v-tab>
       <v-menu transition="dialog-transition">
          <template v-slot:activator="{ props: slotProps }">

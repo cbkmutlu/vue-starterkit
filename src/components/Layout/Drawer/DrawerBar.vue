@@ -1,7 +1,7 @@
 <template>
    <v-navigation-drawer
       v-bind:class="{ 'w-60!': expand }"
-      class="bg-dark drawer-content:flex drawer-content:flex-col pt-1 select-none"
+      class="bg-noise drawer-content:flex drawer-content:flex-col pt-1 select-none"
       color="background"
       rail
       theme="dark">

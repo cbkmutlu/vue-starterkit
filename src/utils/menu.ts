@@ -23,6 +23,13 @@ const appMenu: TList[] = [
       }
    },
    {
+      title: () => i18n.global.t("app.brand", 2),
+      props: {
+         prependIcon: "$tie",
+         to: "/brand"
+      }
+   },
+   {
       title: "Test",
       props: {
          prependIcon: "$browser",

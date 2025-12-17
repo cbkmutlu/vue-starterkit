@@ -63,11 +63,19 @@ const authHandler = async (axiosConfig: AxiosRequestConfig): Promise<any> => {
       return new Promise((resolve, reject) => {
          setTimeout(async () => {
             try {
-               const response = await axios.post(`${import.meta.env.VITE_BASE}/api/v1/auth/refresh-token`, { refreshToken });
-               authStore.updateTokens(response.data);
+               const { data: response } = await appAxios.post("/auth/refresh", {
+                  token: refreshToken
+               });
+
+               authStore.updateTokens({
+                  accessToken: response.data.access_token,
+                  refreshToken: response.data.refresh_token
+               });
+
                resolve(appAxios(axiosConfig));
-            } catch {
-               reject(authStore.userLogout());
+            } catch (err) {
+               authStore.userLogout();
+               reject(err);
             }
          }, retryDelay);
       });
@@ -75,27 +83,6 @@ const authHandler = async (axiosConfig: AxiosRequestConfig): Promise<any> => {
 
    return Promise.reject(new Error("Max retry attempts exceeded"));
 };
-
-// COMBAK
-// const authHandler = async (config: AxiosRequestConfig): Promise<any> => {
-//    const authStore = useAuthStore();
-//    const refreshToken = authStore.refreshToken;
-
-//    config._attempt = (config._attempt || 0) + 1;
-
-//    if (!config._retry && config._attempt <= import.meta.env.VITE_RETRY_ATTEMPT) {
-//       config._retry = true;
-
-//       await new Promise(resolve => setTimeout(resolve, delay));
-//       return await axios
-//          .post(`${import.meta.env.VITE_BASE}/api/v1/auth/refresh-token`, { refreshToken })
-//          .then((response) => {
-//             authStore.updateTokens(response.data);
-//             return appAxios(config);
-//          })
-//          .catch(() => authStore.userLogout());
-//    }
-// };
 
 const errorHandler = async (error: unknown): Promise<TResponse> => {
    const result: TResponse = {

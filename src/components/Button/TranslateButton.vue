@@ -34,7 +34,6 @@ const { translate, isLoading } = useGoogleTranslate();
 const translateHandler = async () => {
    try {
       model.value = await translate(model.value, props.from, props.to);
-      snackbarStore.success();
    } catch (error) {
       snackbarStore.error(error);
    }

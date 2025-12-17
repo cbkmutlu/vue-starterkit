@@ -96,7 +96,7 @@ export const registerDirective = (app: App) => {
       }
    });
 
-   app.directive("tooltip", {
+   app.directive("tooltip-custom", {
       beforeUnmount: (el: HTMLElement) => {
          const tooltipIndex = tooltips.findIndex((tooltip) => tooltip.el === el);
          const tooltip = tooltips.splice(tooltipIndex, 1);

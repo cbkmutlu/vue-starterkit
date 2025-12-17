@@ -4,16 +4,7 @@ type ComponentProps<C extends Component> = C extends new (...args: any) => any ?
 export type Neverify<T> = { [K in keyof T]?: never };
 export type UnwrapReadonlyArray<A> = A extends Readonly<Array<infer I>> ? I : A;
 export type NestedKeys<T> = T extends object ? { [K in keyof T & string]: K | `${K}.${NestedKeys<T[K]>}` }[keyof T & string] : never;
-
-export interface IListImage {
-   id: number;
-   image_path: string;
-}
-
-export interface IOrderStore {
-   id: number;
-   order: number;
-}
+export type Strict<T> = { [K in keyof T]: T[K] extends object ? Strict<T[K]> & Record<string, never> : T[K] };
 
 export interface IDefaultFields {
    created_at: string;
@@ -32,6 +23,16 @@ export interface ITranslate {
    meta_title?: string;
    meta_description?: string;
    meta_keywords?: string;
+}
+
+export interface IListImage {
+   id: number;
+   image_path: string;
+}
+
+export interface IOrderStore {
+   id: number;
+   order: number;
 }
 
 export type THeader<T> = {
@@ -97,6 +98,7 @@ export type TParams = {
    start_date?: MaybeRef<Date>;
    end_date?: MaybeRef<Date>;
    type?: MaybeRef<string | number>;
+   path?: MaybeRef<string>;
 };
 
 export type TQuery<T> = {
@@ -107,7 +109,8 @@ export type TQuery<T> = {
 };
 
 export type TMutation = {
-   invalidate?: (MaybeRef<string | number>)[];
+   id?: MaybeRef<number>;
+   invalidate?: MaybeRef<string | number>[];
 };
 
 import { VAlert, VAvatar, VBtn, VCard, VContainer, VDataTable, VDatePicker, VListItem, VSelect, VTextField, VToolbar } from "vuetify/components";
@@ -150,7 +153,9 @@ import { VAlert, VAvatar, VBtn, VCard, VContainer, VDataTable, VDatePicker, VLis
 export const TDialog = {
    show: false,
    loading: false as boolean | MaybeRef<boolean>,
+   image: "" as string | MaybeRef<string>,
    request: false,
+   delete: false,
    validate: false,
    title: "",
    label: "",
@@ -163,10 +168,14 @@ export const TDialog = {
    cancelText: "",
    cancelColor: "error",
    cancelVariant: undefined,
+   deleteText: "",
+   deleteColor: "error",
+   deleteVariant: "tonal" as const,
    rules: [] as any[],
    detail: false,
    width: 320,
    mask: {},
+   onDelete: null as unknown as (item: any) => any,
    onInput: null as unknown as (item: any) => any,
    resolve: null as unknown as (item: any) => any,
    reject: null as unknown as (item: any) => any

@@ -1,5 +1,5 @@
 <template>
-   <v-sheet class="flex-center fixed inset-0 z-50">
+   <v-sheet class="flex-center bg-noise fixed inset-0 z-50">
       <v-progress-circular
          color="primary"
          indeterminate

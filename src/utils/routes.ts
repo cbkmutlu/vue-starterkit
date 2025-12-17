@@ -1,5 +1,6 @@
 import DefaultLayout from "@/components/Layout/DefaultLayout.vue";
 import ErrorLayout from "@/components/Layout/ErrorLayout.vue";
+import LoginLayout from "@/components/Layout/LoginLayout.vue";
 import { i18n } from "@/plugins/i18n";
 
 const appRoutes: RouteRecordRaw[] = [
@@ -14,12 +15,22 @@ const appRoutes: RouteRecordRaw[] = [
       component: getComponent(() => import("@/components/Layout/ErrorComponent.vue"))
    },
    {
+      path: "/login",
+      name: "login",
+      meta: {
+         auth: false,
+         layout: LoginLayout
+      },
+      component: getComponent(() => import("@/pages/User/UserLogin.vue"))
+   },
+   {
       path: "/",
       redirect: appConfig.router.redirect,
       meta: {
          layout: DefaultLayout
       },
       children: [
+         // product
          {
             path: "product",
             meta: {
@@ -50,6 +61,7 @@ const appRoutes: RouteRecordRaw[] = [
                }
             ]
          },
+         // category
          {
             path: "category",
             meta: {
@@ -61,22 +73,21 @@ const appRoutes: RouteRecordRaw[] = [
                   path: "",
                   name: "categoryList",
                   component: getComponent(() => import("@/pages/Category/CategoryList.vue"))
-               },
+               }
+            ]
+         },
+         // brand
+         {
+            path: "brand",
+            meta: {
+               title: () => i18n.global.t("app.brand", 2),
+               breadcrumb: () => i18n.global.t("app.brandList")
+            },
+            children: [
                {
-                  path: ":id([0-9]+)",
-                  name: "categoryDetail",
-                  component: getComponent(() => import("@/pages/Category/CategoryDetail.vue")),
-                  meta: {
-                     breadcrumb: () => i18n.global.t("app.categoryDetail")
-                  }
-               },
-               {
-                  path: "create",
-                  name: "categoryCreate",
-                  component: getComponent(() => import("@/pages/Category/CategoryDetail.vue")),
-                  meta: {
-                     breadcrumb: () => i18n.global.t("app.categoryCreate")
-                  }
+                  path: "",
+                  name: "brandList",
+                  component: getComponent(() => import("@/pages/Brand/BrandList.vue"))
                }
             ]
          }
