@@ -2,7 +2,7 @@
    <v-app class="bg-noise h-full">
       <!-- <DrawerBar /> -->
       <DrawerMenu />
-      <Header />
+      <Appbar />
 
       <v-main class="h-full">
          <div class="v-main__content h-full overflow-y-scroll scroll-smooth">
@@ -20,7 +20,7 @@
 <script lang="ts" setup>
 // import DrawerBar from "@/components/Layout/Drawer/DrawerBar.vue";
 import DrawerMenu from "@/components/Layout/Drawer/DrawerMenu.vue";
-import Header from "@/components/Layout/Header/Header.vue";
+import Appbar from "@/components/Layout/Header/Appbar.vue";
 const ConfirmDialog = defineAsyncComponent(() => import("@/components/Layout/Dialog/ConfirmDialog.vue"));
 const PromptDialog = defineAsyncComponent(() => import("@/components/Layout/Dialog/PromptDialog.vue"));
 </script>

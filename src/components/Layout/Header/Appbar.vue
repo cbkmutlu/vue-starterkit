@@ -12,7 +12,7 @@
       <v-toolbar-title class="ms-1">{{ title }}</v-toolbar-title>
 
       <template v-slot:extension>
-         <HeaderBreadcrumb />
+         <Breadcrumb />
       </template>
 
       <template
@@ -29,8 +29,8 @@
                   v-bind:list="['light', 'dark', 'system']"
                   v-bind:toggle="theme" />
             </v-btn>
-            <HeaderLocaleMenu />
-            <HeaderMoreMenu />
+            <LocaleMenu />
+            <MoreMenu />
          </div>
       </template>
 
@@ -40,9 +40,9 @@
 
 <script lang="ts" setup>
 import ToggleIcon from "@/components/Form/ToggleIcon.vue";
-import HeaderBreadcrumb from "@/components/Layout/Header/HeaderBreadcrumb.vue";
-import HeaderLocaleMenu from "@/components/Layout/Header/HeaderLocaleMenu.vue";
-import HeaderMoreMenu from "@/components/Layout/Header/HeaderMoreMenu.vue";
+import Breadcrumb from "@/components/Layout/Header/Breadcrumb.vue";
+import LocaleMenu from "@/components/Layout/Header/LocaleMenu.vue";
+import MoreMenu from "@/components/Layout/Header/MoreMenu.vue";
 import ComponentLoader from "@/components/Layout/Loader/ComponentLoader.vue";
 import { vuetify } from "@/plugins/vuetify";
 

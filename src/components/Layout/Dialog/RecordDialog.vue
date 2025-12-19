@@ -19,21 +19,21 @@
                   {{ model?.title }}
                </v-toolbar-title>
 
-               <v-toolbar-items v-if="$slots.items" class="mr-1">
-                  <slot name="items" />
-               </v-toolbar-items>
-
-               <template v-slot:extension v-if="$slots.extension">
-                  <slot name="extension" />
-               </template>
-
                <template v-slot:append>
+                  <slot name="append" />
                   <v-btn
                      v-bind:disabled="!!model.request"
                      icon="$close"
+                     class="ms-1"
                      variant="text"
                      tabindex="-1"
                      @click="close" />
+               </template>
+
+               <template
+                  v-if="$slots.extend"
+                  v-slot:extension>
+                  <slot name="extend" />
                </template>
             </v-toolbar>
 
