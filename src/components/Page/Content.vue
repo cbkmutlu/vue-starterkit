@@ -1,15 +1,5 @@
 <template>
-   <div
-      v-if="$slots.header || $slots.actions"
-      class="flex h-12 justify-between gap-2">
-      <slot name="header" />
-      <v-spacer />
-      <slot name="actions" />
-   </div>
-
-   <v-card
-      v-bind="{ ...$attrs }"
-      class="mb-4 overflow-visible">
+   <v-card class="mb-4 overflow-visible">
       <template v-slot:loader>
          <v-fade-transition leave-absolute>
             <v-progress-linear
@@ -22,27 +12,25 @@
       </template>
 
       <v-toolbar
-         v-if="$slots.title || $slots.items || $slots.append"
+         v-if="$slots.prepend || $slots.append || $slots.extend"
          class="overflow-hidden rounded-t-sm"
          color="transparent">
          <v-toolbar-title
-            v-if="$slots.title"
+            v-if="$slots.prepend"
             class="text-base">
-            <slot name="title" />
+            <slot name="prepend" />
          </v-toolbar-title>
 
-         <v-toolbar-items v-if="$slots.items">
-            <slot name="items" />
+         <v-toolbar-items
+            v-if="$slots.append"
+            class="ms-auto">
+            <slot name="append" />
          </v-toolbar-items>
 
-         <template v-slot:append v-if="$slots.append">
-            <div class="me-1">
-               <slot name="append" />
-            </div>
-         </template>
-
-         <template v-slot:extension v-if="$slots.extension">
-            <slot name="extension" />
+         <template
+            v-if="$slots.extend"
+            v-slot:extension>
+            <slot name="extend" />
          </template>
       </v-toolbar>
 
