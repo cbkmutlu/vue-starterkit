@@ -1,5 +1,5 @@
 <template>
-   <PageCard class="bg-noise bg-white/80">
+   <Content class="bg-noise bg-white/80">
       <template v-slot:title>{{ t("app.userlogin") }}</template>
       <v-form
          v-model="validate"
@@ -43,11 +43,11 @@
             </v-btn>
          </v-card-actions>
       </v-form>
-   </PageCard>
+   </Content>
 </template>
 
 <script lang="ts" setup>
-import PageCard from "@/components/Card/PageCard.vue";
+import Content from "@/components/Page/Content.vue";
 import ToggleIcon from "@/components/Form/ToggleIcon.vue";
 import { useLoginUser } from "@/services/UserService";
 

@@ -1,11 +1,12 @@
 <template>
    <Container v-bind:loading="isLoading">
-      <PageCard>
-         <template v-slot:header>
-            <SearchInput v-model="filter" />
+      <Header>
+         <template v-slot:prepend>
+            {{ t("app.productList") }}
          </template>
 
-         <template v-slot:actions>
+         <template v-slot:append>
+            <SearchInput v-model="filter" />
             <v-btn
                v-bind:disabled="isLoading"
                v-bind:text="t('app.add')"
@@ -14,9 +15,9 @@
                density="default"
                variant="tonal" />
          </template>
+      </Header>
 
-         <template v-slot:title>{{ t("app.productList") }}</template>
-
+      <Content>
          <DataTable
             v-model="selected"
             v-bind:filter="filter"
@@ -38,14 +39,15 @@
                   @click.stop="promptHandler(item)" />
             </template>
          </DataTable>
-      </PageCard>
+      </Content>
    </Container>
 </template>
 
 <script lang="ts" setup>
-import PageCard from "@/components/Card/PageCard.vue";
-import Container from "@/components/Form/Container.vue";
 import SearchInput from "@/components/Form/SearchInput.vue";
+import Container from "@/components/Page/Container.vue";
+import Content from "@/components/Page/Content.vue";
+import Header from "@/components/Page/Header.vue";
 import DataTable from "@/components/Table/DataTable.vue";
 import { IProduct, useDeleteProduct, useGetProductAll } from "@/services/ProductService";
 

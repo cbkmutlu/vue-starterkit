@@ -3,8 +3,11 @@
       v-bind:error="isError"
       v-bind:form="formHandler"
       v-bind:loading="isLoading && isFirst">
-      <PageCard v-bind:loading="isLoading || createPending || updatePending">
-         <template v-slot:actions>
+      <Header>
+         <template v-slot:prepend>
+            {{ t("app.productDetail") }}
+         </template>
+         <template v-slot:append>
             <v-btn
                v-bind:disabled="isLoading || createPending || updatePending"
                v-bind:text="enabled ? t('app.update') : t('app.save')"
@@ -13,10 +16,13 @@
                density="default"
                variant="tonal" />
          </template>
+      </Header>
 
-         <template v-slot:title>{{ t("app.basicInfo") }}</template>
-
-         <template v-slot:items>
+      <Content v-bind:loading="isLoading || createPending || updatePending">
+         <template v-slot:prepend>
+            {{ product.code }} - {{ (product.title) }}
+         </template>
+         <template v-slot:append>
             <LanguageTab
                v-model="language"
                v-bind:loading="isLoading" />
@@ -92,21 +98,19 @@
                </v-col>
                <v-col md="8">
                   <NumberInput
-                  v-bind:fraction="0"
-                  v-bind:step="1"
-                  v-bind:min="-5"
-                  v-bind:max="5"
-                  v-model="product.stock"
-                  control-variant="default"
-                  />
+                     v-model="product.stock"
+                     v-bind:fraction="0"
+                     v-bind:max="5"
+                     v-bind:min="-5"
+                     v-bind:step="1"
+                     control-variant="default" />
                </v-col>
 
                <v-col md="4">
                   <v-list-subheader>{{ t("app.date") }}</v-list-subheader>
                </v-col>
                <v-col md="8">
-                  <DatePicker
-                     v-model="product.date" />
+                  <DatePicker v-model="product.date" />
                </v-col>
 
                <v-col md="4">
@@ -123,9 +127,9 @@
                </v-col>
             </v-row>
          </v-card-text>
-      </PageCard>
+      </Content>
 
-      <PageCard>
+      <Content>
          <template v-slot:title>Bağlantılar</template>
 
          <v-card-text>
@@ -158,7 +162,7 @@
                </v-col>
             </v-row>
          </v-card-text>
-      </PageCard>
+      </Content>
       <CategoryDialog ref="categoryDialog" />
       <BrandDialog ref="brandDialog" />
    </Container>
@@ -166,13 +170,14 @@
 
 <script lang="ts" setup>
 import TranslateButton from "@/components/Button/TranslateButton.vue";
-import PageCard from "@/components/Card/PageCard.vue";
-import Container from "@/components/Form/Container.vue";
 import DatePicker from "@/components/Form/DatePicker.vue";
 import ImageList from "@/components/Form/ImageList.vue";
 import ImageUpload from "@/components/Form/ImageUpload.vue";
 import NumberInput from "@/components/Form/NumberInput.vue";
 import SelectInput from "@/components/Form/SelectInput.vue";
+import Container from "@/components/Page/Container.vue";
+import Content from "@/components/Page/Content.vue";
+import Header from "@/components/Page/Header.vue";
 import LanguageTab from "@/components/Tab/LanguageTab.vue";
 import { useGetBrandAll } from "@/services/BrandService";
 import { useGetCategoryAll } from "@/services/CategoryService";

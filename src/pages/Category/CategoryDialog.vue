@@ -2,7 +2,7 @@
    <RecordDialog
       ref="recordDialog"
       @after-leave="reset">
-      <template v-slot:items>
+      <template v-slot:append>
          <LanguageTab
             v-model="language"
             v-bind:loading="isLoading" />
@@ -99,7 +99,7 @@ const upload = ref([] as File[]);
 const recordDialog = ref<InstanceType<typeof RecordDialog>>();
 
 // services
-const { isLoading } = useGetCategoryById({
+const { isLoading, isFirst } = useGetCategoryById({
    enabled: enabled,
    params: {
       id: categoryId,
@@ -128,7 +128,7 @@ const open = async (item?: ICategory, name?: string) => {
       const confirm = await recordDialog.value?.open({
          width: 800,
          title: enabled.value ? t("app.categoryUpdate") : t("app.categoryCreate"),
-         loading: isLoading
+         loading: isLoading && isFirst
       });
 
       if (confirm) {

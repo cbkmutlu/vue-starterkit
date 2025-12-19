@@ -1,11 +1,11 @@
 <template>
    <Container v-bind:loading="isLoading">
-      <PageCard>
-         <template v-slot:header>
-            <SearchInput v-model="filter" />
+      <Header>
+         <template v-slot:prepend>
+            {{ t("app.categoryList") }}
          </template>
-
-         <template v-slot:actions>
+         <template v-slot:append>
+            <SearchInput v-model="filter" />
             <v-btn
                v-bind:disabled="isLoading"
                v-bind:text="t('app.add')"
@@ -14,9 +14,9 @@
                variant="tonal"
                @click="categoryDialog?.open()" />
          </template>
+      </Header>
 
-         <template v-slot:title>{{ t("app.categoryList") }}</template>
-
+      <Content>
          <DataTable
             v-bind:filter="filter"
             v-bind:headers="headers"
@@ -29,16 +29,17 @@
                </v-chip>
             </template>
          </DataTable>
-      </PageCard>
+      </Content>
 
       <CategoryDialog ref="categoryDialog" />
    </Container>
 </template>
 
 <script lang="ts" setup>
-import PageCard from "@/components/Card/PageCard.vue";
-import Container from "@/components/Form/Container.vue";
 import SearchInput from "@/components/Form/SearchInput.vue";
+import Container from "@/components/Page/Container.vue";
+import Content from "@/components/Page/Content.vue";
+import Header from "@/components/Page/Header.vue";
 import DataTable from "@/components/Table/DataTable.vue";
 import { ICategory, useDeleteCategory, useGetCategoryAll } from "@/services/CategoryService";
 const CategoryDialog = defineAsyncComponent(() => import("@/pages/Category/CategoryDialog.vue"));
