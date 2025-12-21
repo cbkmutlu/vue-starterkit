@@ -9,6 +9,16 @@ declare module "axios" {
 }
 
 export const appAxios = axios.create({
+   baseURL: import.meta.env.VITE_API,
+   withCredentials: false,
+   headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+   },
+   validateStatus: (status) => status >= 200 && status <= 300
+});
+
+export const mockAxios = axios.create({
    baseURL: import.meta.env.VITE_BASE,
    withCredentials: false,
    headers: {

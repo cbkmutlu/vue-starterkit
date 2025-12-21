@@ -86,7 +86,7 @@ export default defineConfig(function ({ mode }) {
          port: env.VITE_PORT,
          proxy: {
             "/api": {
-               target: env.VITE_BASE,
+               target: env.VITE_API,
                changeOrigin: true,
                secure: false,
                ws: true,
