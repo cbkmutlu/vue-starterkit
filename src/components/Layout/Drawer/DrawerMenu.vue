@@ -1,7 +1,6 @@
 <template>
    <v-navigation-drawer
-      class="select-none not-dark:text-gray-500"
-      color="surface"
+      class="select-none not-dark:text-gray-500 not-dark:bg-[#f8fafc]"
       width="224">
       <v-list>
          <template
