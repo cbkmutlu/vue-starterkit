@@ -12,12 +12,15 @@ import {
    IconBackspace,
    IconBell,
    IconBolt,
+   IconBrandGoogleMaps,
+   IconBrandInstagram,
    IconBrowser,
    IconBuildings,
    IconBuildingWarehouse,
    IconCalendar,
    IconCaretDownFilled,
    IconCaretRightFilled,
+   IconCash,
    IconCheck,
    IconChevronCompactUp,
    IconChevronDown,
@@ -62,6 +65,7 @@ import {
    IconListDetails,
    IconLogin,
    IconLogout,
+   IconMail,
    IconMap,
    IconMapPin,
    IconMaximize,
@@ -73,6 +77,7 @@ import {
    IconPaperclip,
    IconPencil,
    IconPercentage,
+   IconPhone,
    IconPhoto,
    IconPhotoPlus,
    IconPlayerPauseFilled,
@@ -122,6 +127,7 @@ import {
    IconVolume3,
    IconVolumeOff,
    IconWallet,
+   IconWorldWww,
    IconX
 } from "@tabler/icons-vue";
 
@@ -255,6 +261,12 @@ export const tablerAliases = {
    tagPlus: IconTagPlus,
    square: IconSquareFilled,
    bolt: IconBolt,
+   www: IconWorldWww,
+   instagram: IconBrandInstagram,
+   googleMaps: IconBrandGoogleMaps,
+   phone: IconPhone,
+   mail: IconMail,
+   cash: IconCash,
 
    // app
    home: IconHome,
