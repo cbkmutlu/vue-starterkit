@@ -24,6 +24,7 @@
                      density="compact"
                      icon
                      variant="plain"
+                     tabindex="-1"
                      @click="show = !show">
                      <ToggleIcon
                         v-bind:icon="['$eyeOn', '$eyeOff']"
@@ -47,8 +48,8 @@
 </template>
 
 <script lang="ts" setup>
-import Content from "@/components/Page/Content.vue";
 import ToggleIcon from "@/components/Form/ToggleIcon.vue";
+import Content from "@/components/Page/Content.vue";
 import { useLoginUser } from "@/services/UserService";
 
 // hooks
