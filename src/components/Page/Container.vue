@@ -1,5 +1,5 @@
 <template>
-   <v-container>
+   <v-container max-width="1200">
       <ContentLoader
          v-if="props.overlay"
          v-model="props.loading" />

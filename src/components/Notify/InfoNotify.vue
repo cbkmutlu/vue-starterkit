@@ -3,7 +3,7 @@
       v-bind:closable="props.closable"
       v-bind:icon-size="'22px'"
       type="info"
-      density="comfortable"
+      density="compact"
       variant="tonal">
       <slot />
 
