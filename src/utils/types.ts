@@ -25,11 +25,6 @@ export interface ITranslate {
    meta_keywords?: string;
 }
 
-export interface IListImage {
-   id: number;
-   image_path: string;
-}
-
 export interface IOrderStore {
    id: number;
    order: number;

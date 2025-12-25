@@ -177,5 +177,28 @@
       "turkish": "Türkçe",
       "english": "İngilizce",
       "german": "Almanca"
+   },
+   "rules": {
+      "required": "Bu alan zorunludur",
+      "space": "Bu alan boşluk içeremez",
+      "maxlen": "En fazla {len} karakter olmalıdır",
+      "minlen": "En az {len} karakter olmalıdır",
+      "maxval": "En fazla {val} olmalıdır",
+      "minval": "En az {val} olmalıdır",
+      "fullip": "Geçerli bir IP adresi ve isteğe bağlı bir port girin",
+      "ip": "Geçerli bir IP adresi girin",
+      "port": "Geçerli bir port aralığı girin",
+      "email": "Geçerli bir e-posta adresi girin",
+      "integer": "Tamsayı olmalıdır",
+      "float": "Ondalıklı sayısal değer olmalıdır",
+      "number": "Sadece sayısal değer olmalıdır",
+      "string": "Sadece metin olmalıdır",
+      "stringNumber": "Metin veya sayısal değer olmalıdır",
+      "stringDash": "Metin veya kısa çizgi (-) içerebilir",
+      "stringNumberDash": "Metin, sayısal değer veya kısa çizgi (-) içerebilir",
+      "lowercase": "Sadece küçük harf olmalıdır",
+      "uppercase": "Sadece büyük harf olmalıdır",
+      "phone": "Geçerli bir telefon numarası girin",
+      "pattern": "İstenen formatı girin"
    }
 }

@@ -1,4 +1,3 @@
-import { IconProps } from "vuetify";
 import {
    IconAdjustments,
    IconAlertSquareRoundedFilled,
@@ -63,6 +62,7 @@ import {
    IconLink,
    IconListCheck,
    IconListDetails,
+   IconLock,
    IconLogin,
    IconLogout,
    IconMail,
@@ -130,6 +130,7 @@ import {
    IconWorldWww,
    IconX
 } from "@tabler/icons-vue";
+import { IconProps } from "vuetify";
 
 export const tablerAliases = {
    // vuetify start
@@ -267,6 +268,7 @@ export const tablerAliases = {
    phone: IconPhone,
    mail: IconMail,
    cash: IconCash,
+   lock: IconLock,
 
    // app
    home: IconHome,

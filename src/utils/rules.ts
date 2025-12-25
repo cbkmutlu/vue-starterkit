@@ -1,90 +1,218 @@
+import { i18n } from "@/plugins/i18n";
+
 export const appRules = {
-   required(msg: string | ((msg: string) => string) = "This field is required") {
-      return (v: any) => {
-         const regex = Array.isArray(v) ? v.length > 0 : v && !!v;
-         return regex || (typeof msg === "function" ? msg("rules.required") : msg);
+   required(msg?: string) {
+      return (v: any): true | string => {
+         if (Array.isArray(v)) {
+            return v.length > 0 || i18n.global.t(msg || "rules.required");
+         }
+
+         const isValid = v !== null && v !== undefined && v !== "";
+         return isValid || msg || i18n.global.t("rules.required");
       };
    },
-   space(msg: string | ((msg: string) => string) = "This field cannot contain spaces") {
-      return (v: any) => {
-         const regex = v && !/\s/.test(v);
-         return regex || (typeof msg === "function" ? msg("rules.space") : msg);
+   space(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = !/\s/.test(v);
+         return isValid || msg || i18n.global.t("rules.space");
       };
    },
-   maxlen(len: number, msg: string | ((msg: string) => string) = "This field exceeds maximum length") {
-      return (v: any) => {
-         const regex = v && v.length <= len;
-         return regex || (typeof msg === "function" ? msg("rules.maxlen") : msg);
+   maxlen(len: number, msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = v.length <= len;
+         return isValid || msg || i18n.global.t("rules.maxlen");
       };
    },
-   minlen(len: number, msg: string | ((msg: string) => string) = "This field is too short") {
-      return (v: any) => {
-         const regex = v && v.length >= len;
-         return regex || (typeof msg === "function" ? msg("rules.minlen") : msg);
+   minlen(len: number, msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = v.length >= len;
+         return isValid || msg || i18n.global.t("rules.minlen", { len });
       };
    },
-   maxval(len: number, msg: string | ((msg: string) => string) = "This field exceeds maximum value") {
-      return (v: any) => {
-         const regex = v && v <= len;
-         return regex || (typeof msg === "function" ? msg("rules.maxval") : msg);
+   maxval(val: number, msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = v <= val;
+         return isValid || msg || i18n.global.t("rules.maxval", { val });
       };
    },
-   minval(len: number, msg: string | ((msg: string) => string) = "This field is below the minimum value") {
-      return (v: any) => {
-         const regex = v && v >= len;
-         return regex || (typeof msg === "function" ? msg("rules.minval") : msg);
+   minval(val: number, msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = v >= val;
+         return isValid || msg || i18n.global.t("rules.minval", { val });
       };
    },
-   fullip(msg: string | ((msg: string) => string) = "Please enter a valid IP address and optional port") {
-      return (v: any) => {
+   fullip(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
          const ip = "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
          const port = "(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{0,3})";
-         const regex = v && v.match(new RegExp(`^${ip}\\.${ip}\\.${ip}\\.${ip}(?::${port})?$`));
-         return regex || (typeof msg === "function" ? msg("rules.fullip") : msg);
+         const regex = new RegExp(`^${ip}\\.${ip}\\.${ip}\\.${ip}(?::${port})?$`);
+
+         const isValid = regex.test(v);
+         return isValid || msg || i18n.global.t("rules.fullip");
       };
    },
-   ip(msg: string | ((msg: string) => string) = "Please enter a valid IP address") {
-      return (v: any) => {
+   ip(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
          const ip = "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
-         const regex = v && v.match(new RegExp(`^${ip}\\.${ip}\\.${ip}\\.${ip}$`));
-         return regex || (typeof msg === "function" ? msg("rules.ip") : msg);
+         const regex = new RegExp(`^${ip}\\.${ip}\\.${ip}\\.${ip}$`);
+
+         const isValid = regex.test(v);
+         return isValid || msg || i18n.global.t("rules.ip");
       };
    },
-   port(msg: string | ((msg: string) => string) = "Please enter a valid port") {
-      return (v: any) => {
+   port(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
          const port = "(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{0,3})";
-         const regex = v && v.match(new RegExp(`^${port}$`));
-         return regex || (typeof msg === "function" ? msg("rules.port") : msg);
+         const regex = new RegExp(`^${port}$`);
+
+         const isValid = regex.test(v);
+         return isValid || msg || i18n.global.t("rules.port");
       };
    },
-   email(msg: string | ((msg: string) => string) = "Please enter a valid email address") {
-      return (v: any) => {
-         const regex = v && v.match(new RegExp(/^(?!\.)[a-zA-Z0-9._%+-]+@(?!-)[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?<!-)$/));
-         return regex || (typeof msg === "function" ? msg("rules.email") : msg);
+   email(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = /^(?!\.)[a-zA-Z0-9._%+-]+@(?!-)[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?<!-)$/.test(v);
+         return isValid || msg || i18n.global.t("rules.email");
       };
    },
-   integer(msg: string | ((msg: string) => string) = "This field must be an integer") {
-      return (v: any) => {
-         const regex = v && Number.isInteger(Number(v.replace(/\.$/, "a")));
-         return regex || (typeof msg === "function" ? msg("rules.integer") : msg);
+   integer(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = Number.isInteger(Number(v)) && !String(v).includes(".");
+         return isValid || msg || i18n.global.t("rules.integer");
       };
    },
-   number(msg: string | ((msg: string) => string) = "Please enter a valid number") {
-      return (v: any) => {
-         const regex = v && !Number.isNaN(Number(v.replace(/^\.|\.$/g, "a")));
-         return regex || (typeof msg === "function" ? msg("rules.number") : msg);
+   float(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const value = String(v);
+
+         const isValid = !Number.isNaN(Number(value)) && value.includes(".") && value !== ".";
+         return isValid || msg || i18n.global.t("rules.float");
       };
    },
-   alpha(msg: string | ((msg: string) => string) = "This field must contain only letters") {
-      return (v: any) => {
-         const regex = v && /^\p{L}+$/u.test(v);
-         return regex || (typeof msg === "function" ? msg("rules.alpha") : msg);
+   number(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const value = String(v);
+
+         const isValid = !Number.isNaN(Number(value)) && value !== ".";
+         return isValid || msg || i18n.global.t("rules.number");
       };
    },
-   alphaNum(msg: string | ((msg: string) => string) = "This field must contain only letters and numbers") {
-      return (v: any) => {
-         const regex = v && /^[a-zA-Z0-9]+$/.test(v);
-         return regex || (typeof msg === "function" ? msg("rules.alphaNum") : msg);
+   string(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = /^\p{L}+$/u.test(String(v));
+         return isValid || msg || i18n.global.t("rules.string");
+      };
+   },
+   stringNumber(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = /^[a-zA-Z0-9]+$/.test(String(v));
+         return isValid || msg || i18n.global.t("rules.stringNumber");
+      };
+   },
+   stringDash(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = /^[a-zA-Z-]+$/.test(String(v));
+         return isValid || msg || i18n.global.t("rules.stringDash");
+      };
+   },
+   stringNumberDash(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = /^[a-zA-Z0-9-]+$/.test(String(v));
+         return isValid || msg || i18n.global.t("rules.stringNumberDash");
+      };
+   },
+   lowercase(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = /^[a-z]+$/.test(String(v));
+         return isValid || msg || i18n.global.t("rules.lowercase");
+      };
+   },
+   uppercase(msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = /^[A-Z]+$/.test(String(v));
+         return isValid || msg || i18n.global.t("rules.uppercase");
+      };
+   },
+   pattern(pattern: RegExp, msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const isValid = pattern.test(String(v));
+         return isValid || msg || i18n.global.t("rules.pattern");
       };
    }
 };
