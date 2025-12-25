@@ -3,17 +3,21 @@
       density="compact"
       extension-height="40">
       <template v-slot:prepend>
-         <v-app-bar-nav-icon
+         <!-- <v-app-bar-nav-icon
             density="comfortable"
             icon="$arrowleft"
-            @click="$router.back"></v-app-bar-nav-icon>
+            @click="$router.back" /> -->
+         <v-app-bar-nav-icon
+            density="comfortable"
+            icon="$menu"
+            @click="drawer = !drawer" />
       </template>
 
-      <v-toolbar-title class="ms-1">{{ title }}</v-toolbar-title>
+      <v-toolbar-title class="ms-1 text-base">{{ title }}</v-toolbar-title>
 
-      <template v-slot:extension>
-         <Breadcrumb />
-      </template>
+      <!-- <template v-slot:extension>
+         <Breadcrumb class="ms-4 text-xs" />
+      </template> -->
 
       <template
          v-slot:append
@@ -40,7 +44,6 @@
 
 <script lang="ts" setup>
 import ToggleIcon from "@/components/Form/ToggleIcon.vue";
-import Breadcrumb from "@/components/Layout/Header/Breadcrumb.vue";
 import LocaleMenu from "@/components/Layout/Header/LocaleMenu.vue";
 import MoreMenu from "@/components/Layout/Header/MoreMenu.vue";
 import ComponentLoader from "@/components/Layout/Loader/ComponentLoader.vue";
@@ -51,6 +54,7 @@ const route = useRoute();
 const { t } = useI18n();
 
 // states
+const drawer = defineModel("drawer", { type: Boolean, default: false });
 const theme = computed(() => {
    return vuetify.theme.isSystem.value ? "system" : vuetify.theme.current.value.dark ? "dark" : "light";
 });

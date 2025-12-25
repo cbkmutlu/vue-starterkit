@@ -12,13 +12,23 @@
       </template>
 
       <v-toolbar
-         v-if="$slots.prepend || $slots.append || $slots.extend"
+         v-if="$slots.title || $slots.subtitle || $slots.append || $slots.extend"
          class="overflow-hidden rounded-t-sm"
-         color="transparent">
-         <v-toolbar-title
-            v-if="$slots.prepend"
-            class="text-base">
-            <slot name="prepend" />
+         color="transparent"
+         extension-height="52">
+         <v-toolbar-title v-if="$slots.title || $slots.subtitle">
+            <div>
+               <div
+                  v-if="$slots.title"
+                  class="text-base">
+                  <slot name="title" />
+               </div>
+               <div
+                  v-if="$slots.subtitle"
+                  class="text-sm opacity-60">
+                  <slot name="subtitle" />
+               </div>
+            </div>
          </v-toolbar-title>
 
          <v-toolbar-items

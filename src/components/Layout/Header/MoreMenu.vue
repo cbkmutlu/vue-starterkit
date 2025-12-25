@@ -11,6 +11,7 @@
 
       <v-list v-bind:slim="false">
          <v-list-item
+            v-bind:to="{ path: '/user-profile' }"
             append-icon="$user"
             link>
             <v-list-item-title>{{ t("app.profile") }}</v-list-item-title>
@@ -27,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useLogoutUser } from '@/services/UserService';
+import { useLogoutUser } from "@/services/UserService";
 
 // hooks
 const { t } = useI18n();

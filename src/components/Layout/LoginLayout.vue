@@ -9,7 +9,7 @@
             offset-sm="1"
             sm="6"
             xl="3">
-            <router-view></router-view>
+            <router-view />
          </v-col>
       </v-row>
    </v-sheet>
