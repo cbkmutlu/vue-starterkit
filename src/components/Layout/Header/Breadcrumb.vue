@@ -1,5 +1,5 @@
 <template>
-   <v-breadcrumbs class="ms-4 p-0 text-xs">
+   <v-breadcrumbs class="p-0">
       <template
          v-for="(item, index) in items"
          v-bind:key="item">

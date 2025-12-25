@@ -11,7 +11,7 @@
       @end="dragEnd"
       @start="dragStart">
       <template v-slot:item="{ element, index }">
-         <div class="drag-list bg-surface border-b-vuetify border-b not-last:mb-1 last:border-b-transparent">
+         <div class="drag-list bg-theme border-emphasis border-b not-last:mb-1 last:border-b-transparent">
             <slot
                v-bind:element="{ ...(element as T) }"
                v-bind:index="index"
@@ -34,7 +34,7 @@
                         v-bind:element="{ ...(element as T) }"
                         v-bind:index="index"
                         name="append">
-                        <div class="list-action not-grabbing:[.v-list-item:hover_.list-action]:opacity-100 flex w-[90px] items-center justify-end gap-1 opacity-0 transition-opacity">
+                        <div class="list-action not-grabbing:[.v-list-item:hover_.list-action]:opacity-100 flex w-22.5 items-center justify-end gap-1 opacity-0 transition-opacity">
                            <slot
                               v-if="props.appendAction"
                               v-bind:element="{ ...(element as T) }"

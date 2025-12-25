@@ -22,7 +22,7 @@
          </template>
          <div
             v-if="props.onDelete || props.onEdit"
-            class="flex-center bg-surface/64 not-grabbing:hover:opacity-100 size-full gap-1 text-white opacity-0 transition-opacity">
+            class="flex-center not-grabbing:hover:opacity-100 size-full gap-1 bg-black/60 text-white opacity-0 transition-opacity">
             <v-btn
                v-if="props.onEdit"
                density="compact"

@@ -15,7 +15,7 @@
       <template v-slot:prepend-item>
          <div
             v-if="props.filter || props.multiple"
-            class="bg-surface sticky top-0 z-10 pt-2">
+            class="sticky top-0 z-10 pt-2">
             <v-list-item
                v-if="props.filter"
                v-bind:link="false"

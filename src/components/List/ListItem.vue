@@ -1,13 +1,13 @@
 <template>
    <v-list-subheader
       v-if="props.item.type === 'subheader' && props.item.title"
-      class="px-2 pb-2 font-semibold">
+      class="px-2 font-semibold first:mb-2">
       {{ t(props.item.title as string, 2) }}
    </v-list-subheader>
 
    <v-divider
       v-else-if="props.item.type === 'divider'"
-      class="mb-1" />
+      class="my-1" />
 
    <v-list-item
       v-else
