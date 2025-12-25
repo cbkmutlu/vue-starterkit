@@ -60,7 +60,7 @@
 }
 
 // @include elevation(1);
-@mixin elevation($level, $color: black, $opacity: 1, $important: false) {
+@mixin elevation($level, $color: black, $opacity: 1) {
    $umbraValue: map.get($umbra-shadow, $level);
    $penumbraValue: map.get($penumbra-shadow, $level);
    $ambientValue: map.get($ambient-shadow, $level);
@@ -72,7 +72,7 @@
    box-shadow:
       #{$umbraValue} #{$umbraColor},
       #{$penumbraValue} #{$penumbraColor},
-      #{$ambientValue} #{$ambientColor} if($important, !important, null);
+      #{$ambientValue} #{$ambientColor};
 }
 
 // @include screen(max, small) {...}

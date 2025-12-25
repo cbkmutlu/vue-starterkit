@@ -10,7 +10,7 @@
 
    @for $i from 1 through 24 {
       .elevation-#{$i} {
-         @include elevation($i, $important: true);
+         @include elevation($i);
       }
    }
 }
