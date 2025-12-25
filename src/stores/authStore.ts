@@ -1,6 +1,7 @@
+import { defineImmutableStore } from "@/plugins/pinia";
 import { router } from "@/plugins/router";
 
-export const useAuthStore = defineStore(
+export const useAuthStore = defineImmutableStore(
    "authStore",
    () => {
       const currentUser = ref("");
