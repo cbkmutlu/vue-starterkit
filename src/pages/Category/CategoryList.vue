@@ -1,9 +1,7 @@
 <template>
    <Container v-bind:loading="isLoading">
       <Header>
-         <template v-slot:prepend>
-            {{ t("app.categoryList") }}
-         </template>
+         <template v-slot:title>{{ t("app.categoryList") }}</template>
          <template v-slot:append>
             <SearchInput v-model="filter" />
             <v-btn

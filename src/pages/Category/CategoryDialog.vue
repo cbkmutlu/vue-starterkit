@@ -10,7 +10,9 @@
 
       <v-row no-gutters>
          <v-col md="4">
-            <v-list-subheader>{{ t("app.code") }}</v-list-subheader>
+            <ListTitle
+               v-bind:title="t('app.code')"
+               subtitle="Kod girin." />
          </v-col>
          <v-col md="8">
             <v-text-field
@@ -20,7 +22,9 @@
          </v-col>
 
          <v-col md="4">
-            <v-list-subheader>{{ t("app.title") }}</v-list-subheader>
+            <ListTitle
+               v-bind:title="t('app.title')"
+               subtitle="Başlık girin." />
          </v-col>
          <v-col md="8">
             <v-text-field
@@ -35,7 +39,9 @@
          </v-col>
 
          <v-col md="4">
-            <v-list-subheader>{{ t("app.description") }}</v-list-subheader>
+            <ListTitle
+               v-bind:title="t('app.description')"
+               subtitle="Açıklama girin." />
          </v-col>
          <v-col md="8">
             <v-textarea
@@ -47,7 +53,9 @@
          </v-col>
 
          <v-col md="4">
-            <v-list-subheader>{{ t("app.status") }}</v-list-subheader>
+            <ListTitle
+               v-bind:title="t('app.status')"
+               subtitle="Durumu seçin." />
          </v-col>
          <v-col md="8">
             <v-switch
@@ -64,7 +72,9 @@
          </v-col>
 
          <v-col md="4">
-            <v-list-subheader>{{ t("app.image") }}</v-list-subheader>
+            <ListTitle
+               v-bind:title="t('app.image')"
+               subtitle="Resim yükleyin." />
          </v-col>
          <v-col md="8">
             <ImageList
@@ -81,6 +91,7 @@ import TranslateButton from "@/components/Button/TranslateButton.vue";
 import ImageList from "@/components/Form/ImageList.vue";
 import ImageUpload from "@/components/Form/ImageUpload.vue";
 import RecordDialog from "@/components/Layout/Dialog/RecordDialog.vue";
+import ListTitle from "@/components/List/ListTitle.vue";
 import LanguageTab from "@/components/Tab/LanguageTab.vue";
 import { ICategory, ICategoryStore, useCreateCategory, useDeleteCategoryImage, useGetCategoryById, useUpdateCategory, useUploadCategoryImage } from "@/services/CategoryService";
 

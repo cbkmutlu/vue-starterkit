@@ -4,7 +4,9 @@
       @after-leave="reset">
       <v-row no-gutters>
          <v-col md="4">
-            <v-list-subheader>{{ t("app.title") }}</v-list-subheader>
+            <ListTitle
+               v-bind:title="t('app.title')"
+               subtitle="Başlık girin." />
          </v-col>
          <v-col md="8">
             <v-text-field
@@ -14,7 +16,9 @@
          </v-col>
 
          <v-col md="4">
-            <v-list-subheader>{{ t("app.description") }}</v-list-subheader>
+            <ListTitle
+               v-bind:title="t('app.description')"
+               subtitle="Açıklama girin." />
          </v-col>
          <v-col md="8">
             <v-textarea
@@ -25,7 +29,9 @@
          </v-col>
 
          <v-col md="4">
-            <v-list-subheader>{{ t("app.status") }}</v-list-subheader>
+            <ListTitle
+               v-bind:title="t('app.status')"
+               subtitle="Durumu seçin." />
          </v-col>
          <v-col md="8">
             <v-switch
@@ -46,6 +52,7 @@
 
 <script lang="ts" setup>
 import RecordDialog from "@/components/Layout/Dialog/RecordDialog.vue";
+import ListTitle from "@/components/List/ListTitle.vue";
 import { IBrand, useCreateBrand, useGetBrandById, useUpdateBrand } from "@/services/BrandService";
 
 // hooks

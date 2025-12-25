@@ -4,9 +4,8 @@
       v-bind:form="formHandler"
       v-bind:loading="isLoading && isFirst">
       <Header>
-         <template v-slot:prepend>
-            {{ t("app.productDetail") }}
-         </template>
+         <template v-slot:title>{{ t("app.productDetail") }}</template>
+         <template v-slot:subtitle>Ürün detayını buradan yönetebilirsiniz.</template>
          <template v-slot:append>
             <v-btn
                v-bind:disabled="isLoading || createPending || updatePending"
@@ -19,9 +18,7 @@
       </Header>
 
       <Content v-bind:loading="isLoading || createPending || updatePending">
-         <template v-slot:prepend>
-            {{ product.code }} - {{ (product.title) }}
-         </template>
+         <template v-slot:title>{{ product.code }} - {{ product.title }}</template>
          <template v-slot:append>
             <LanguageTab
                v-model="language"
@@ -30,19 +27,23 @@
 
          <v-card-text>
             <v-row no-gutters>
-               <v-col md="4">
-                  <v-list-subheader>{{ t("app.code") }}</v-list-subheader>
+               <v-col md="6">
+                  <ListTitle
+                     v-bind:title="t('app.code')"
+                     subtitle="Geçerli bir kod girin." />
                </v-col>
-               <v-col md="8">
+               <v-col md="6">
                   <v-text-field
                      v-model="product.code"
                      v-bind:rules="[appRules.required()]" />
                </v-col>
 
-               <v-col md="4">
-                  <v-list-subheader>{{ t("app.title") }}</v-list-subheader>
+               <v-col md="6">
+                  <ListTitle
+                     v-bind:title="t('app.title')"
+                     subtitle="Ürün adını girin." />
                </v-col>
-               <v-col md="8">
+               <v-col md="6">
                   <v-text-field
                      v-model="product.title"
                      v-bind:rules="[appRules.required()]">
@@ -54,10 +55,12 @@
                   </v-text-field>
                </v-col>
 
-               <v-col md="4">
-                  <v-list-subheader>{{ t("app.description") }}</v-list-subheader>
+               <v-col md="6">
+                  <ListTitle
+                     v-bind:title="t('app.description')"
+                     subtitle="Ürünü özelliklerini girin." />
                </v-col>
-               <v-col md="8">
+               <v-col md="6">
                   <v-textarea
                      v-model="product.content"
                      v-bind:rules="[appRules.required()]"
@@ -72,10 +75,12 @@
                   </v-textarea>
                </v-col>
 
-               <v-col md="4">
-                  <v-list-subheader>{{ t("app.price") }}</v-list-subheader>
+               <v-col md="6">
+                  <ListTitle
+                     v-bind:title="t('app.price')"
+                     subtitle="Ürün fiyatı girin." />
                </v-col>
-               <v-col md="8">
+               <v-col md="6">
                   <NumberInput
                      v-model="product.price"
                      control-variant="split"
@@ -93,10 +98,12 @@
                   </NumberInput>
                </v-col>
 
-               <v-col md="4">
-                  <v-list-subheader>{{ t("app.stock") }}</v-list-subheader>
+               <v-col md="6">
+                  <ListTitle
+                     v-bind:title="t('app.stock')"
+                     subtitle="Ürün stok sayısını girin." />
                </v-col>
-               <v-col md="8">
+               <v-col md="6">
                   <NumberInput
                      v-model="product.stock"
                      v-bind:fraction="0"
@@ -106,17 +113,21 @@
                      control-variant="default" />
                </v-col>
 
-               <v-col md="4">
-                  <v-list-subheader>{{ t("app.date") }}</v-list-subheader>
+               <v-col md="6">
+                  <ListTitle
+                     v-bind:title="t('app.date')"
+                     subtitle="Ürün tarihini girin." />
                </v-col>
-               <v-col md="8">
+               <v-col md="6">
                   <DatePicker v-model="product.date" />
                </v-col>
 
-               <v-col md="4">
-                  <v-list-subheader>{{ t("app.image", 2) }}</v-list-subheader>
+               <v-col md="6">
+                  <ListTitle
+                     v-bind:title="t('app.image', 2)"
+                     subtitle="Ürün resimlerini yükleyin." />
                </v-col>
-               <v-col md="8">
+               <v-col md="6">
                   <ImageList
                      v-bind:items="product.image_list"
                      image="image_path"
@@ -134,10 +145,10 @@
 
          <v-card-text>
             <v-row no-gutters>
-               <v-col md="4">
-                  <v-list-subheader>{{ t("app.category") }}</v-list-subheader>
+               <v-col md="6">
+                  <ListTitle v-bind:header="t('app.category')" />
                </v-col>
-               <v-col md="8">
+               <v-col md="6">
                   <SelectInput
                      v-model="product.category_list"
                      v-model:filter-raw="categoryFilter"
@@ -148,10 +159,10 @@
                      @empty="categoryDialog?.open(undefined, categoryFilter)" />
                </v-col>
 
-               <v-col md="4">
-                  <v-list-subheader>{{ t("app.brand") }}</v-list-subheader>
+               <v-col md="6">
+                  <ListTitle v-bind:header="t('app.brand')" />
                </v-col>
-               <v-col md="8">
+               <v-col md="6">
                   <SelectInput
                      v-model="product.brand"
                      v-model:filter-raw="brandFilter"
@@ -175,6 +186,7 @@ import ImageList from "@/components/Form/ImageList.vue";
 import ImageUpload from "@/components/Form/ImageUpload.vue";
 import NumberInput from "@/components/Form/NumberInput.vue";
 import SelectInput from "@/components/Form/SelectInput.vue";
+import ListTitle from "@/components/List/ListTitle.vue";
 import Container from "@/components/Page/Container.vue";
 import Content from "@/components/Page/Content.vue";
 import Header from "@/components/Page/Header.vue";
