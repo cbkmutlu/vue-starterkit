@@ -1,8 +1,28 @@
 <IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteBase /
+   Options -Indexes
+   RewriteEngine On
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.html [L]
+   # --- block dotfiles ---
+   RewriteCond %{REQUEST_URI} (^|/)\.
+   RewriteCond %{REQUEST_URI} !^/\.well-known
+   RewriteRule .* - [F,L]
+
+   # --- trailing slash ---
+   RewriteCond %{REQUEST_FILENAME} !-d
+   RewriteCond %{REQUEST_URI} ^(.+)/$
+   RewriteRule ^ %1 [L,R=301]
+
+   # --- upload dispatcher ---
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteCond %{REQUEST_FILENAME} !-d
+   RewriteRule ^upload/(.*)$ api/Public/upload/$1 [L]
+
+   # --- route dispatcher ---
+   RewriteCond %{REQUEST_URI} ^/api(/.*)?$
+   RewriteRule ^(.*)$ api/Public/$1 [L]
+
+   # --- spa fallback ---
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteCond %{REQUEST_FILENAME} !-d
+   RewriteRule ^ index.html [QSA,L]
 </IfModule>
