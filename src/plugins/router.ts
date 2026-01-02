@@ -1,9 +1,12 @@
+import DefaultLayout from "@/components/Layout/DefaultLayout.vue";
+import ErrorLayout from "@/components/Layout/ErrorLayout.vue";
+
 declare module "vue-router" {
    interface RouteMeta {
       layout?: any;
       title?: string | (() => string);
       breadcrumb?: string | (() => string);
-      auth?: boolean;
+      requiredAuth?: boolean;
       module?: string;
    }
 
@@ -17,7 +20,25 @@ declare module "vue-router" {
 const routes: RouteRecordRaw[] = [
    {
       path: "/",
-      redirect: appConfig.router.redirect
+      name: appConfig.router.name,
+      meta: {
+         layout: DefaultLayout
+      },
+      children: [
+         {
+            path: "",
+            name: "routeRedirect",
+            redirect: appConfig.router.redirect
+         }
+      ]
+   },
+   {
+      path: "/:pathMatch(.*)",
+      name: "routeNotFound",
+      meta: {
+         layout: ErrorLayout
+      },
+      component: getComponent(() => import("@/components/Layout/ErrorComponent.vue"))
    }
 ];
 
@@ -28,7 +49,7 @@ export const router = createRouter({
       if (!savedPosition) {
          return new Promise((resolve) => {
             setTimeout(() => {
-               const scroller = document.querySelector("#main");
+               const scroller = document.querySelector("#scroll-target");
                if (scroller) {
                   scroller.scrollTo({ top: 0, behavior: "instant" });
                }
@@ -54,7 +75,7 @@ router.beforeEach(async (to, from, next) => {
          return next(authStore.returnUrl || "/");
       }
    } else {
-      if (to.meta.auth !== false && to.path !== appConfig.router.login) {
+      if (to.meta.requiredAuth !== false && to.path !== appConfig.router.login) {
          authStore.setUrl(to.fullPath);
          return next(appConfig.router.login);
       }

@@ -1,10 +1,12 @@
-import { US, TR } from "country-flag-icons/string/3x2";
-import { en,tr } from "vuetify/locale";
+import { TR as trFlag, US as usFlag } from "country-flag-icons/string/3x2";
+import { en as enLocale, tr as trLocale } from "vuetify/locale";
 
 export const appConfig = {
    module: [],
    router: {
+      auth: true,
       exact: false,
+      name: "routeBase",
       redirect: "/product",
       login: "/login"
    },
@@ -13,13 +15,13 @@ export const appConfig = {
       locales: {
          "tr-TR": {
             name: "Türkçe",
-            flag: TR,
-            vuetify: tr
+            flag: trFlag,
+            vuetify: trLocale
          },
          "en-US": {
             name: "English",
-            flag: US,
-            vuetify: en
+            flag: usFlag,
+            vuetify: enLocale
          }
       }
    },

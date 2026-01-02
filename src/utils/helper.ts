@@ -1,4 +1,4 @@
-import type { I18n } from "vue-i18n";
+import type { Composer } from "vue-i18n";
 import type { ThemeInstance } from "vuetify";
 
 /**
@@ -66,7 +66,6 @@ export const safeJsonToArray = (text: string): string[] => {
       return [text];
    }
 };
-
 
 /**
  * Verilen değeri JSON formatına çevirir.
@@ -138,19 +137,15 @@ export const getTheme = (): string => {
  * @example
  * setLocale("tr-TR") => Dil Türkçe olarak değişir.
  */
-export const setLocale = (i18n: I18n, locale: string, message: Record<string, string>): void => {
+export const setLocale = (i18n: Composer, locale: string, message: Record<string, string>): void => {
    document.documentElement.setAttribute("lang", locale);
    localStorage.setItem(appConfig.key.locale, locale);
 
    if (Object.keys(message).length) {
-      i18n.global.setLocaleMessage(locale, message);
+      i18n.setLocaleMessage(locale, message);
    }
 
-   if (isRef(i18n.global.locale)) {
-      i18n.global.locale.value = locale;
-   } else {
-      i18n.global.locale = locale;
-   }
+   i18n.locale.value = locale;
 };
 
 /**
@@ -169,14 +164,14 @@ export const getLocale = (): string => {
    return appConfig.language.default;
 };
 
-const cache_locale: string[] = [];
+const cache_locale: Set<string> = new Set();
 /**
  * Verilen değere ait dil dosyalarını yükler. Yüklenen dosyalar ön belleğe alınır ve tekrar yüklenmez.
  * @example
  * loadLocale("tr-TR") => Dil dosyaları yüklenir.
  */
 export const loadLocale = async (locale: string): Promise<Record<string, any>> => {
-   if (cache_locale.includes(locale)) {
+   if (cache_locale.has(locale)) {
       return {};
    }
 
@@ -197,7 +192,7 @@ export const loadLocale = async (locale: string): Promise<Record<string, any>> =
    });
 
    const [common, ...modules] = await Promise.all([commonPromise, ...modulePromise]);
-   cache_locale.push(locale);
+   cache_locale.add(locale);
 
    return {
       ...common,

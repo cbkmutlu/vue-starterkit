@@ -1,6 +1,6 @@
 import { i18n } from "@/plugins/i18n";
-import { VFileUpload, VFileUploadItem } from "vuetify/labs/VFileUpload";
 import { createVuetify } from "vuetify";
+import { VFileUpload, VFileUploadItem } from "vuetify/labs/VFileUpload";
 import { createVueI18nAdapter } from "vuetify/locale/adapters/vue-i18n";
 // import vuetifyColors from "vuetify/util/colors";
 // import tailwindColors from "tailwindcss/colors";
