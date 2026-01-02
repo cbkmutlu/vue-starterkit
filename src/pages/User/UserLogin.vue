@@ -5,14 +5,14 @@
          v-model="validate"
          @submit.prevent="validate && loginHandler()">
          <v-card-text>
-            <v-list-subheader class="min-h-6">{{ t("app.email") }}</v-list-subheader>
+            <ListTitle v-bind:header="t('app.email')" />
             <v-text-field
                v-model="email"
                v-bind:clearable="false"
                v-bind:rules="[appRules.required()]"
                name="email"
                hide-details />
-            <v-list-subheader class="mt-2 min-h-6">{{ t("app.password") }}</v-list-subheader>
+            <ListTitle v-bind:header="t('app.password')" />
             <v-text-field
                v-model="password"
                v-bind:clearable="false"
@@ -49,6 +49,7 @@
 
 <script lang="ts" setup>
 import ToggleIcon from "@/components/Form/ToggleIcon.vue";
+import ListTitle from "@/components/List/ListTitle.vue";
 import Content from "@/components/Page/Content.vue";
 import { useLoginUser } from "@/services/UserService";
 

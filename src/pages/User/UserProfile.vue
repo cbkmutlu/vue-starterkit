@@ -46,9 +46,9 @@
             <v-spacer />
             <v-btn
                color="primary"
-               density="comfortable"
+               density="default"
                text="Kullanıcı Bilgilerini Güncelle"
-               variant="text" />
+               variant="tonal" />
          </v-card-actions>
       </Content>
    </Container>

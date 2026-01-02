@@ -11,7 +11,7 @@
                v-bind:to="{ name: 'productCreate' }"
                color="primary"
                density="default"
-               variant="tonal" />
+               variant="flat" />
          </template>
       </Header>
 
@@ -62,7 +62,7 @@ const headers = computed((): THeader<IProduct>[] => [
    { title: t("app.code"), key: "code", width: 100 },
    { title: t("app.title"), key: "title" },
    { title: t("app.price"), key: "price", width: 150, format: formatNumber, suffix: "₺" },
-   { title: t("app.category"), key: "category_list", width: 350 },
+   { title: t("app.category"), key: "category_list", width: 200 },
    { title: t("app.brand"), key: "brand.title", width: 200 },
    { key: "actions", width: 60 }
 ]);

@@ -21,7 +21,7 @@ export const useGetCategoryAll = (query?: TQuery<ICategory[]>) => {
    const options: UseQueryOptions<ICategory[]> = {
       queryKey: ["category", "categoryAll"],
       queryFn: async ({ signal }) => {
-         return (await appAxios.get("/category/", { signal })).data;
+         return (await appAxios.get("/category", { signal })).data;
 
          // await sleepDelay();
          // return (await appAxios.get("data/category.json", { signal })).data;
@@ -56,7 +56,7 @@ export const useUpdateCategory = () => {
    return useMutation({
       mutationKey: ["category", "updateCategory"],
       mutationFn: async (payload: ICategoryStore): Promise<TResponse<ICategory>> => {
-         return (await appAxios.put("/category/", payload)).data;
+         return (await appAxios.put("/category", payload)).data;
 
          // await sleepDelay();
          // return { success: true, message: payload.id?.toString(), data: payload as ICategory, error: false, meta: null, status: 200 };
@@ -73,7 +73,7 @@ export const useCreateCategory = () => {
    return useMutation({
       mutationKey: ["category", "createCategory"],
       mutationFn: async (payload: ICategoryStore): Promise<TResponse<ICategory>> => {
-         return (await appAxios.post("/category/", payload)).data;
+         return (await appAxios.post("/category", payload)).data;
 
          // await sleepDelay();
          // return { success: true, message: payload.id?.toString(), data: payload as ICategory, error: false, meta: null, status: 200 };

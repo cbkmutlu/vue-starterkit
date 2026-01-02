@@ -9,7 +9,7 @@
                v-bind:text="t('app.add')"
                color="primary"
                density="default"
-               variant="tonal"
+               variant="flat"
                @click="categoryDialog?.open()" />
          </template>
       </Header>
@@ -53,8 +53,8 @@ const headers = computed((): THeader<ICategory>[] => [
    { title: t("app.code"), key: "code", width: 100 },
    { title: t("app.title"), key: "title" },
    { title: t("app.status"), key: "is_active", width: 150 },
-   { title: t("app.createDate"), key: "created_at", width: 250, date: "fullDate" },
-   { title: t("app.updateDate"), key: "updated_at", width: 250, date: "fullDate" },
+   { title: t("app.createDate"), key: "created_at", width: 150, date: "fullDate" },
+   { title: t("app.updateDate"), key: "updated_at", width: 150, date: "fullDate" },
    { key: "actions", width: 90 }
 ]);
 const categoryDialog = ref<InstanceType<typeof CategoryDialog>>();

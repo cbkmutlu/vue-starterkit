@@ -35,7 +35,7 @@ export const useGetProductAll = (query?: TQuery<IProduct[]>) => {
    const options: UseQueryOptions<IProduct[]> = {
       queryKey: ["product", "productAll"],
       queryFn: async ({ signal }) => {
-         return (await appAxios.get("/product/", { signal })).data;
+         return (await appAxios.get("/product", { signal })).data;
 
          // await sleepDelay();
          // return (await appAxios.get("data/product.json", { signal })).data;
@@ -70,7 +70,7 @@ export const useUpdateProduct = () => {
    return useMutation({
       mutationKey: ["product", "updateProduct"],
       mutationFn: async (payload: IProductStore): Promise<TResponse<IProduct>> => {
-         return (await appAxios.put("/product/", payload)).data;
+         return (await appAxios.put("/product", payload)).data;
 
          // await sleepDelay();
          // return { success: true, message: payload.id?.toString(), data: payload as IProduct, error: false, meta: null, status: 200 };
@@ -86,7 +86,7 @@ export const useCreateProduct = () => {
    return useMutation({
       mutationKey: ["product", "createProduct"],
       mutationFn: async (payload: IProductStore): Promise<TResponse<IProduct>> => {
-         return (await appAxios.post("/product/", payload)).data;
+         return (await appAxios.post("/product", payload)).data;
 
          // await sleepDelay();
          // return { success: true, message: payload.id?.toString(), data: payload as IProduct, error: false, meta: null, status: 200 };

@@ -5,6 +5,7 @@ import autoprefixer from "autoprefixer";
 import { resolve } from "node:path";
 import autoImport from "unplugin-auto-import/vite";
 import { defineConfig, loadEnv } from "vite";
+import vueDevTools from "vite-plugin-vue-devtools";
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import webfont from "vite-plugin-webfont-dl";
 
@@ -17,6 +18,7 @@ export default defineConfig(function ({ mode }) {
          vue({
             template: { transformAssetUrls }
          }),
+         vueDevTools(),
          vuetify({
             autoImport: true,
             styles: {

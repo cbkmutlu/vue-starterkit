@@ -44,9 +44,9 @@
             <v-spacer />
             <v-btn
                color="primary"
-               density="comfortable"
+               density="default"
                text="Şifreyi Güncelle"
-               variant="text" />
+               variant="tonal" />
          </v-card-actions>
       </Content>
    </Container>

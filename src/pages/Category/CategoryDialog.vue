@@ -139,7 +139,7 @@ const open = async (item?: ICategory, name?: string) => {
       const confirm = await recordDialog.value?.open({
          width: 800,
          title: enabled.value ? t("app.categoryUpdate") : t("app.categoryCreate"),
-         loading: isLoading && isFirst
+         loading: isLoading && !isFirst
       });
 
       if (confirm) {

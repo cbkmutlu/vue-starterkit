@@ -11,9 +11,9 @@
                v-bind:disabled="isLoading || createPending || updatePending"
                v-bind:text="enabled ? t('app.update') : t('app.save')"
                type="submit"
-               color="primary"
+               color="success"
                density="default"
-               variant="tonal" />
+               variant="flat" />
          </template>
       </Header>
 

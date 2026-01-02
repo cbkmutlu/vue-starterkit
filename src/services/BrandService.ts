@@ -18,7 +18,7 @@ export const useGetBrandAll = (query?: TQuery<IBrand[]>) => {
    const options: UseQueryOptions<IBrand[]> = {
       queryKey: ["brand", "brandAll"],
       queryFn: async ({ signal }) => {
-         return (await appAxios.get("/brand/", { signal })).data;
+         return (await appAxios.get("/brand", { signal })).data;
       },
       enabled: query?.enabled
    };
@@ -43,7 +43,7 @@ export const useCreateBrand = () => {
    return useMutation({
       mutationKey: ["brand", "createBrand"],
       mutationFn: async (payload: IBrandStore): Promise<TResponse<IBrand>> => {
-         return (await appAxios.post("/brand/", payload)).data;
+         return (await appAxios.post("/brand", payload)).data;
       },
       onSuccess: () => {
          queryClient.invalidateQueries({ queryKey: ["brand"] });
@@ -56,7 +56,7 @@ export const useUpdateBrand = () => {
    return useMutation({
       mutationKey: ["brand", "updateBrand"],
       mutationFn: async (payload: IBrandStore): Promise<TResponse<IBrand>> => {
-         return (await appAxios.put("/brand/", payload)).data;
+         return (await appAxios.put("/brand", payload)).data;
       },
       onSuccess: () => {
          queryClient.invalidateQueries({ queryKey: ["brand"] });
