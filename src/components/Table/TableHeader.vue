@@ -33,26 +33,25 @@
             v-bind:class="[`v-data-table-column--align-${column.align || 'start'}`, { 'v-data-table__th--sortable': !disableSort && column.sortable }]"
             class="v-data-table__td v-data-table__th">
             <div
-               class="v-data-table-header__content"
+               class="v-data-table-header__content relative"
                @click="!disableSort && column.sortable && toggleSort(column)">
                <span
                   v-bind:class="{ 'opacity-100': isSorted(column) }"
-                  class="me-2 opacity-60">
+                  class="text-[13px] font-semibold opacity-60">
                   {{ column.title }}
                </span>
-
                <v-icon
                   v-if="!disableSort && column.sortable"
                   v-bind:class="{ 'opacity-100': isSorted(column) }"
                   v-bind:icon="getSortIcon(column)"
-                  class="v-data-table-header__sort-icon"
-                  size="x-small"></v-icon>
+                  class="v-data-table-header__sort-icon absolute -right-2"
+                  size="x-small" />
 
                <!-- <v-icon
                   v-if="column.removable"
                   color="medium-emphasis"
                   icon="$close"
-                  @click="remove(column.key)"></v-icon> -->
+                  @click="remove(column.key)" /> -->
             </div>
          </th>
       </template>

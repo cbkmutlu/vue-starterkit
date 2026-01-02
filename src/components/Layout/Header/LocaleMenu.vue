@@ -41,7 +41,7 @@ const translateHandler = async (locale: string) => {
    try {
       isLoading.value = true;
       const messages = await loadLocale(locale);
-      setLocale(i18n, locale, messages);
+      setLocale(i18n.global, locale, messages);
    } catch (error) {
       snackbarStore.error(error);
    } finally {

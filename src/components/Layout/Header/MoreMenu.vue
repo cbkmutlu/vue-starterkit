@@ -39,9 +39,14 @@ const { mutateAsync: logoutUser, isPending } = useLogoutUser();
 
 // handlers
 const logoutHandler = async () => {
-   await logoutUser({
-      token: authStore.refreshToken
-   });
-   authStore.userLogout();
+   try {
+      await logoutUser({
+         token: authStore.refreshToken
+      });
+   } catch (error) {
+      errorLog(error);
+   } finally {
+      authStore.userLogout();
+   }
 };
 </script>

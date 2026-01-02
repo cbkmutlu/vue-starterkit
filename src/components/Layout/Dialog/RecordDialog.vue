@@ -23,8 +23,8 @@
                   <slot name="append" />
                   <v-btn
                      v-bind:disabled="!!model.request"
-                     icon="$close"
                      class="ms-1"
+                     icon="$close"
                      variant="text"
                      tabindex="-1"
                      @click="close" />
