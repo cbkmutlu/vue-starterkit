@@ -11,7 +11,7 @@
 
       <v-list v-bind:slim="false">
          <v-list-item
-            v-bind:to="{ path: '/user-profile' }"
+            v-bind:to="{ name: 'user' }"
             append-icon="$user"
             link>
             <v-list-item-title>{{ t("app.profile") }}</v-list-item-title>

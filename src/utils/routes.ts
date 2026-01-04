@@ -15,26 +15,22 @@ const appRoutes: RouteRecordRaw[] = [
    // user
    {
       path: "user",
+      name: "user",
       meta: {
          title: () => i18n.global.t("app.profile"),
          breadcrumb: () => i18n.global.t("app.profile")
       },
+      redirect: () => ({ name: "user-profile" }),
       component: getComponent(() => import("@/pages/User/UserLayout.vue")),
       children: [
          {
-            path: "",
-            redirect: "/user-profile"
-         },
-         {
             path: "profile",
             name: "user-profile",
-            alias: "/user-profile",
             component: getComponent(() => import("@/pages/User/UserProfile.vue"))
          },
          {
             path: "password",
             name: "user-password",
-            alias: "/user-password",
             component: getComponent(() => import("@/pages/User/UserPassword.vue"))
          }
       ]

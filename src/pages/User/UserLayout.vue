@@ -3,8 +3,8 @@
       <v-tabs
          color="primary"
          fixed-tabs>
-         <v-tab v-bind:to="{ path: '/user-profile' }">Kullanıcı Bilgileri</v-tab>
-         <v-tab v-bind:to="{ path: '/user-password' }">Şifre Değiştir</v-tab>
+         <v-tab v-bind:to="{ name: 'user-profile' }">Kullanıcı Bilgileri</v-tab>
+         <v-tab v-bind:to="{ name: 'user-password' }">Şifre Değiştir</v-tab>
       </v-tabs>
    </Bar>
 
