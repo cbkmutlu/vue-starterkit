@@ -1,5 +1,5 @@
 <template>
-   <v-container max-width="1200">
+   <v-container max-width="960">
       <ContentLoader
          v-if="props.overlay"
          v-model="props.loading" />
@@ -20,7 +20,8 @@
             v-else
             class="container__content">
             <v-form
-               v-if="props.form"
+               v-if="props.onSubmit"
+               v-model="model"
                ref="formRef"
                @submit.prevent="submitHandler">
                <slot />
@@ -34,23 +35,29 @@
 <script lang="ts" setup>
 import ContentLoader from "@/components/Layout/Loader/ContentLoader.vue";
 import type { TContainer } from "@/utils/types";
+import type { VForm } from "vuetify/components";
+
 type TProps = {
    loading?: boolean;
    error?: boolean;
    overlay?: boolean;
    skeleton?: boolean;
-   form?: (e?: Event) => void | Promise<void>;
-   validate?: (valid: boolean) => void | boolean;
+   onSubmit?: (e?: Event) => void | Promise<void>;
+   onValidate?: (valid: boolean) => void | boolean;
 };
 
 // states
+const model = defineModel<boolean>({
+   default: true,
+   type: Boolean
+});
 const props = withDefaults(defineProps<TContainer & TProps>(), {
    loading: false,
    error: false,
    skeleton: true,
    overlay: false
 });
-const formRef = ref<any>();
+const formRef = ref<InstanceType<typeof VForm>>();
 
 // handlers
 const submitHandler = async (e?: Event) => {
@@ -61,22 +68,18 @@ const submitHandler = async (e?: Event) => {
       valid = result.valid;
    }
 
-   if (props.validate) {
-      props.validate(valid);
+   if (props.onValidate) {
+      props.onValidate(valid);
    }
 
    if (!valid) {
       return;
    }
 
-   if (props.form) {
-      await props.form(e);
+   if (props.onSubmit) {
+      await props.onSubmit(e);
    }
 };
 
-defineExpose({
-   form: formRef,
-   validate: () => formRef.value?.validate(),
-   isValid: () => formRef.value?.isValid
-});
+defineExpose({ form: formRef });
 </script>

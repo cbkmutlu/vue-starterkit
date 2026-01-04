@@ -1,5 +1,5 @@
 <template>
-   <Container max-width="900">
+   <Container>
       <Header>
          <template v-slot:title>Kullanıcı Bilgileri</template>
          <template v-slot:subtitle>Kullanıcı bilgilerinizi buradan düzenleyebilirsiniz.</template>

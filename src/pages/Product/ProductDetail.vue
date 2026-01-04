@@ -1,8 +1,8 @@
 <template>
    <Container
       v-bind:error="isError"
-      v-bind:form="formHandler"
-      v-bind:loading="isLoading && isFirst">
+      v-bind:loading="isLoading && isFirst"
+      v-bind:onSubmit="formHandler">
       <Header>
          <template v-slot:title>{{ t("app.productDetail") }}</template>
          <template v-slot:subtitle>Ürün detayını buradan yönetebilirsiniz.</template>
