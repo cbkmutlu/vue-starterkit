@@ -199,6 +199,7 @@
       "lowercase": "Sadece küçük harf olmalıdır",
       "uppercase": "Sadece büyük harf olmalıdır",
       "phone": "Geçerli bir telefon numarası girin",
-      "pattern": "İstenen formatı girin"
+      "pattern": "İstenen formatı girin",
+      "sameAs": "Değerler eşleşmelidir"
    }
 }

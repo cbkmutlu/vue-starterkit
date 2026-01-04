@@ -11,6 +11,18 @@ export const appRules = {
          return isValid || msg || i18n.global.t("rules.required");
       };
    },
+   sameAs(getTarget: () => any, msg?: string) {
+      return (v: any): true | string => {
+         if (v == null || v === "") {
+            return true;
+         }
+
+         const target = getTarget();
+         const isValid = v === target;
+
+         return isValid || msg || i18n.global.t("rules.sameAs");
+      };
+   },
    space(msg?: string) {
       return (v: any): true | string => {
          if (v == null || v === "") {
