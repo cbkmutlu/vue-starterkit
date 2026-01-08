@@ -56,6 +56,11 @@
       background-color: #fdfeff;
    }
 
+   // vChip
+   .v-field .v-chip {
+      --v-chip-height: 24px;
+   }
+
    // vBtn
    .v-btn {
       letter-spacing: 0.05em;
