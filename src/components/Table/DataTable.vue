@@ -1,5 +1,5 @@
 <template>
-   <v-data-table
+   <v-data-table-server
       v-bind:class="{
          // 'v-table--sticky-header': props.stickyHeader,
          // 'v-table--sticky-footer': props.stickyFooter,
@@ -7,6 +7,7 @@
       }"
       v-bind:headers="props.headers"
       v-bind:items="items"
+      v-bind:items-length="props.totalItems"
       v-bind:items-per-page-options="[10, 25, 50, 100, -1]"
       v-bind:loading="props.loading || optionsLoading"
       v-bind:sortBy="props.sortBy"
@@ -36,7 +37,9 @@
          <TableHeader v-bind="{ columns, isSorted, getSortIcon, toggleSort, someSelected, allSelected, selectAll, disableSort }" />
       </template>
 
-      <template v-slot:loading>
+      <template
+         v-if="props.skeleton"
+         v-slot:loading>
          <slot name="loading">
             <v-skeleton-loader
                v-bind:boilerplate="getMotionReduction()"
@@ -176,7 +179,7 @@
             </template>
          </v-fade-transition>
       </template>
-   </v-data-table>
+   </v-data-table-server>
 </template>
 
 <!--
@@ -245,13 +248,14 @@ type TProps<T> = {
    stickyFooter?: boolean;
    accentHeader?: boolean;
    accentOnExpand?: boolean;
-   skeleton?: string;
+   skeleton?: string | false;
    loading?: boolean;
    disableSort?: boolean;
    multiExpand?: boolean;
    expandOnClick?: boolean;
    noDataText?: string;
    sortBy?: any;
+   totalItems?: number;
    onRowDelete?: (item: T) => void;
    onRowEdit?: (item: T) => void;
    onRowClick?: (item: T) => void;
@@ -271,6 +275,7 @@ const props = withDefaults(defineProps<TDataTable & TProps<T>>(), {
    stickyFooter: true,
    accentHeader: false,
    accentOnExpand: true,
+   totalItems: 0,
    skeleton: "table-row-divider, list-item-three-line, list-item-two-line, list-item-two-line"
 });
 
