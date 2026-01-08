@@ -28,6 +28,11 @@ export const mockAxios = axios.create({
    validateStatus: (status) => status >= 200 && status <= 300
 });
 
+const refreshAxios = axios.create({
+   baseURL: import.meta.env.VITE_API,
+   headers: { "Content-Type": "application/json" }
+});
+
 appAxios.interceptors.request.use(
    async (config) => {
       const authStore = useAuthStore();
@@ -60,39 +65,102 @@ appAxios.interceptors.response.use(
    }
 );
 
-const authHandler = async (axiosConfig: AxiosRequestConfig): Promise<any> => {
+let isRefreshing = false;
+let refreshSubscribers: ((token: string) => void)[] = [];
+
+const onTokenRefreshed = (accessToken: string) => {
+   refreshSubscribers.map((callback) => callback(accessToken));
+   refreshSubscribers = [];
+};
+
+const authHandler = async (axiosConfig: AxiosRequestConfig): Promise<TResponse> => {
    const authStore = useAuthStore();
-   const refreshToken = authStore.refreshToken;
 
-   axiosConfig._attempt = (axiosConfig._attempt || 0) + 1;
-   const retryDelay = attemptDelay(axiosConfig._attempt - 1);
-
-   if (!axiosConfig._retry && axiosConfig._attempt <= appConfig.retry.attempt) {
-      axiosConfig._retry = true;
-
-      return new Promise((resolve, reject) => {
-         setTimeout(async () => {
-            try {
-               const { data: response } = await appAxios.post("/auth/refresh", {
-                  token: refreshToken
-               });
-
-               authStore.updateTokens({
-                  accessToken: response.data.access_token,
-                  refreshToken: response.data.refresh_token
-               });
-
-               resolve(appAxios(axiosConfig));
-            } catch (err) {
-               authStore.userLogout();
-               reject(err);
+   if (isRefreshing) {
+      return new Promise((resolve) => {
+         refreshSubscribers.push((token: string) => {
+            if (axiosConfig.headers) {
+               axiosConfig.headers.Authorization = `Bearer ${token}`;
             }
-         }, retryDelay);
+            resolve(appAxios(axiosConfig));
+         });
       });
    }
 
-   return Promise.reject(new Error("Max retry attempts exceeded"));
+   isRefreshing = true;
+   try {
+      const { data: response } = await refreshAxios.post("/auth/refresh", {
+         token: authStore.refreshToken
+      });
+
+      const accessToken = response.data.access_token;
+      const refreshToken = response.data.refresh_token;
+      authStore.updateTokens({
+         accessToken: accessToken,
+         refreshToken: refreshToken
+      });
+
+      isRefreshing = false;
+      onTokenRefreshed(accessToken);
+
+      if (axiosConfig.headers) {
+         axiosConfig.headers.Authorization = `Bearer ${accessToken}`;
+      }
+      return appAxios(axiosConfig);
+   } catch (err: any) {
+      if (err.response?.status === 409) {
+         isRefreshing = true;
+
+         return new Promise((resolve) => {
+            refreshSubscribers.push((token: string) => {
+               if (axiosConfig.headers) {
+                  axiosConfig.headers.Authorization = `Bearer ${token}`;
+               }
+               resolve(appAxios(axiosConfig));
+            });
+         });
+      }
+
+      isRefreshing = false;
+      refreshSubscribers = [];
+      authStore.userLogout();
+      return Promise.reject(err);
+   }
 };
+
+// const authHandler = async (axiosConfig: AxiosRequestConfig): Promise<any> => {
+//    const authStore = useAuthStore();
+//    const refreshToken = authStore.refreshToken;
+
+//    axiosConfig._attempt = (axiosConfig._attempt || 0) + 1;
+//    const retryDelay = attemptDelay(axiosConfig._attempt - 1);
+
+//    if (!axiosConfig._retry && axiosConfig._attempt <= appConfig.retry.attempt) {
+//       axiosConfig._retry = true;
+
+//       return new Promise((resolve, reject) => {
+//          setTimeout(async () => {
+//             try {
+//                const { data: response } = await appAxios.post("/auth/refresh", {
+//                   token: refreshToken
+//                });
+
+//                authStore.updateTokens({
+//                   accessToken: response.data.access_token,
+//                   refreshToken: response.data.refresh_token
+//                });
+
+//                resolve(appAxios(axiosConfig));
+//             } catch (err) {
+//                authStore.userLogout();
+//                reject(err);
+//             }
+//          }, retryDelay);
+//       });
+//    }
+
+//    return Promise.reject(new Error("Max retry attempts exceeded"));
+// };
 
 const errorHandler = async (error: unknown): Promise<TResponse> => {
    const result: TResponse = {
