@@ -720,54 +720,84 @@ export const generateRandomString = (length: number = 8, options: { upperCase?: 
 /**
  * İşlemler belirtilen süre içinde tekrar çağrılırsa önceki çağrıyı iptal eder ve yeni bir çağrı başlatır.
  * @example
- * debounceTimer(() => console.log("debounce"), 350)
+ * debounceTimer(() => console.log("debounce"), 350, { leading: true })
  * @link
  * https://css-tricks.com/debouncing-throttling-explained-examples/
  */
-export const debounceTimer = (callback: (...args: any[]) => void, delay: number = 350, instant: any = true): Function => {
-   let timeout: any = false;
+export const debounceTimer = (
+   callback: (...args: any[]) => void,
+   delay: number = 350,
+   options: {
+      leading?: boolean;
+      trailing?: boolean;
+   } = { trailing: true }
+): ((...args: any[]) => void) => {
+   let timeout: ReturnType<typeof setTimeout> | null = null;
 
-   return (...args: any) => {
+   const { leading = false, trailing = true } = options;
+
+   return (...args: any[]) => {
+      const callNow = leading && !timeout;
+
       if (timeout) {
          clearTimeout(timeout);
-      } else if (instant) {
-         callback(...args);
       }
 
       timeout = setTimeout(() => {
-         callback(...args);
-         timeout = false;
+         if (trailing) {
+            callback(...args);
+         }
+         timeout = null;
       }, delay);
+
+      if (callNow) {
+         callback(...args);
+      }
    };
 };
 
 /**
  * İşlemler belirtilen süre içinde tekrar çağrılırsa önceki çağrıyı iptal etmez ve belirtilen süre içinde sadece bir kez çalışır.
  * @example
- * throttleTimer(() => console.log("throttle"), 350)
+ * throttleTimer(() => console.log("throttle"), 350, { leading: true })
  * @link
  * https://css-tricks.com/debouncing-throttling-explained-examples/
  */
-export const throttleTimer = (callback: any, delay: number, instant: any = true): object => {
-   let timeout: any = false;
-   let moment: any = false;
-   return (...args: any) => {
-      if (!moment) {
-         if (timeout === false && instant) {
-            callback.apply(this, args);
+export const throttleTimer = (
+   callback: (...args: any[]) => void,
+   delay = 350,
+   options: {
+      leading?: boolean;
+      trailing?: boolean;
+   } = { leading: true }
+): ((...args: any[]) => void) => {
+   let lastCall = 0;
+   let timeout: ReturnType<typeof setTimeout> | null = null;
+
+   const { leading = true, trailing = false } = options;
+
+   return (...args: any[]) => {
+      const now = Date.now();
+
+      if (!lastCall && !leading) {
+         lastCall = now;
+      }
+
+      const remaining = delay - (now - lastCall);
+
+      if (remaining <= 0) {
+         if (timeout) {
+            clearTimeout(timeout);
+            timeout = null;
          }
-         moment = Date.now();
-      } else {
-         clearTimeout(timeout);
-         timeout = setTimeout(
-            () => {
-               if (Date.now() - moment >= delay) {
-                  callback.apply(this, args);
-                  moment = Date.now();
-               }
-            },
-            delay - (Date.now() - moment)
-         );
+         lastCall = now;
+         callback(...args);
+      } else if (trailing && !timeout) {
+         timeout = setTimeout(() => {
+            lastCall = leading ? Date.now() : 0;
+            timeout = null;
+            callback(...args);
+         }, remaining);
       }
    };
 };

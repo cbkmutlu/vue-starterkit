@@ -1,7 +1,7 @@
 <template>
    <div>
       <v-text-field
-         v-model="model"
+         v-model="filterRaw"
          v-bind="{ ...$attrs }"
          v-bind:placeholder="t('app.search')"
          append-inner-icon="$search"
@@ -16,16 +16,30 @@
 
 <script lang="ts" setup>
 import type { TField } from "@/utils/types";
+type TProps = {
+   timer?: "debounce" | "throttle";
+   delay?: number;
+   leading?: boolean;
+   trailing?: boolean;
+};
 
 // hooks
 const { t } = useI18n();
 
 // states
-withDefaults(defineProps<TField>(), {});
+const props = withDefaults(defineProps<TField & TProps>(), {
+   timer: "debounce",
+   delay: 350,
+   leading: true,
+   trailing: true
+});
+
 const model = defineModel({ type: String, default: "" });
+const filterRaw = defineModel("filterRaw", { type: String, default: "" });
 
 // handlers
 const clearHandler = () => {
+   filterRaw.value = "";
    model.value = "";
 };
 
@@ -36,7 +50,11 @@ const keydownHandler = (event: KeyboardEvent) => {
    }
 };
 
-const inputHandler = debounceTimer(async ($event) => {
-   model.value = $event.target.value;
-});
+const inputHandler = (props.timer === "throttle" ? throttleTimer : debounceTimer)(
+   async ($event: Event) => {
+      model.value = ($event.target as HTMLInputElement).value;
+   },
+   props.delay,
+   { leading: props.leading, trailing: props.trailing }
+);
 </script>
