@@ -19,7 +19,7 @@
 
       <Content v-bind:loading="isLoading || createPending || updatePending">
          <template v-slot:title>{{ product.code }} - {{ product.title }}</template>
-         <template v-slot:append>
+         <template v-slot:items>
             <LanguageTab
                v-model="language"
                v-bind:loading="isLoading" />

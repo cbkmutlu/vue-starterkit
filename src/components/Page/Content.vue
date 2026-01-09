@@ -31,10 +31,16 @@
             </div>
          </v-toolbar-title>
 
-         <v-toolbar-items
+         <template
             v-if="$slots.append"
-            class="ms-auto">
+            v-slot:append>
             <slot name="append" />
+         </template>
+
+         <v-toolbar-items
+            v-if="$slots.items"
+            class="ms-auto">
+            <slot name="items" />
          </v-toolbar-items>
 
          <template
