@@ -11,7 +11,7 @@
             <template v-slot:item="{ props: slotProps }">
                <v-file-upload-item
                   v-bind="slotProps"
-                  nav></v-file-upload-item>
+                  nav />
             </template>
 
             <template v-slot:title>

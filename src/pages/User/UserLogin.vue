@@ -1,5 +1,5 @@
 <template>
-   <Content class="bg-noise bg-white/80">
+   <Content class="bg-noise bg-white/80 dark:bg-black/80">
       <template v-slot:title>{{ t("app.userlogin") }}</template>
       <v-form
          v-model="validate"
