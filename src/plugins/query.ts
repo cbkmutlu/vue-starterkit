@@ -5,10 +5,10 @@ export const options: VueQueryPluginOptions = {
    queryClientConfig: {
       defaultOptions: {
          queries: {
-            refetchOnWindowFocus: appConfig.tanstack.refetch,
-            gcTime: 1000 * 60 * appConfig.tanstack.cache, //minutes
-            staleTime: 1000 * 60 * appConfig.tanstack.stale, //minutes
-            retry: appConfig.retry.attempt,
+            refetchOnWindowFocus: appConfig.request.refetch,
+            gcTime: 1000 * 60 * appConfig.request.cache, //minutes
+            staleTime: 1000 * 60 * appConfig.request.stale, //minutes
+            retry: appConfig.request.attempt,
             retryDelay: (attemptIndex) => attemptDelay(attemptIndex),
             select: (data: any) => data.data
          }

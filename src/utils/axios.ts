@@ -135,7 +135,7 @@ const authHandler = async (axiosConfig: AxiosRequestConfig): Promise<TResponse> 
 //    axiosConfig._attempt = (axiosConfig._attempt || 0) + 1;
 //    const retryDelay = attemptDelay(axiosConfig._attempt - 1);
 
-//    if (!axiosConfig._retry && axiosConfig._attempt <= appConfig.retry.attempt) {
+//    if (!axiosConfig._retry && axiosConfig._attempt <= appConfig.request.attempt) {
 //       axiosConfig._retry = true;
 
 //       return new Promise((resolve, reject) => {

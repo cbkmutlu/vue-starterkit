@@ -4,9 +4,7 @@ import { en as enLocale, tr as trLocale } from "vuetify/locale";
 export const appConfig = {
    module: [],
    router: {
-      auth: true,
-      exact: false,
-      name: "routeBase",
+      requiredAuth: true,
       redirect: "/product",
       login: "/login"
    },
@@ -25,15 +23,13 @@ export const appConfig = {
          }
       }
    },
-   retry: {
+   request: {
       attempt: 3,
-      delay: 1000, //ms
-      gradual: true //1000 => 2000 => 4000 => 8000
-   },
-   tanstack: {
-      cache: 30, //minutes
-      stale: 3, //minutes
-      refetch: true //refetch on window focus
+      delay: 1000, // ms
+      gradual: true, // 1000 => 2000 => 4000 => 8000
+      cache: 30, // minutes
+      stale: 3, // minutes
+      refetch: true // refetch on window focus
    },
    key: {
       locale: "app.lang",

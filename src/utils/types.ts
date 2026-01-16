@@ -85,8 +85,9 @@ export type TParams = {
    language?: Ref<string | number>;
    page?: MaybeRef<string | number>;
    query?: MaybeRef<string>;
-   sort?: MaybeRef<string>;
-   order?: MaybeRef<string>;
+   multiSort?: MaybeRef<{ key: string; order: string }[]>;
+   sortBy?: MaybeRef<string>;
+   orderBy?: MaybeRef<string>;
    filter?: MaybeRef<string>;
    limit?: MaybeRef<string | number>;
    status?: MaybeRef<string | number>;

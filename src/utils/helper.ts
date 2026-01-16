@@ -812,10 +812,10 @@ export const throttleTimer = (
  * attemptDelay(4) => 10000 (max)
  */
 export const attemptDelay = (attempt: number, max: number = 30000) => {
-   if (appConfig.retry.gradual) {
-      return Math.min(appConfig.retry.delay * 2 ** attempt, max);
+   if (appConfig.request.gradual) {
+      return Math.min(appConfig.request.delay * 2 ** attempt, max);
    } else {
-      return appConfig.retry.delay;
+      return appConfig.request.delay;
    }
 };
 
@@ -954,7 +954,7 @@ export const getComponentAsync = (component: string, error: Component): Componen
       onError(error, retry, fail, attempts) {
          const retryDelay = attemptDelay(attempts - 1);
 
-         if (error && attempts <= appConfig.retry.attempt) {
+         if (error && attempts <= appConfig.request.attempt) {
             setTimeout(() => {
                retry();
             }, retryDelay);
