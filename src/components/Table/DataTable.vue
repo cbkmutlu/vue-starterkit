@@ -1,16 +1,16 @@
 <template>
-   <v-data-table-server
+   <component
       v-bind:class="{
          // 'v-table--sticky-header': props.stickyHeader,
          // 'v-table--sticky-footer': props.stickyFooter,
          'v-table--accent-header': props.accentHeader
       }"
       v-bind:headers="props.headers"
+      v-bind:is="componentType"
       v-bind:items="items"
-      v-bind:items-length="props.totalItems"
+      v-bind:items-length="props.itemsLength"
       v-bind:items-per-page-options="[10, 25, 50, 100, -1]"
       v-bind:loading="props.loading || optionsLoading"
-      v-bind:sortBy="props.sortBy"
       density="compact"
       hover
       items-per-page="25"
@@ -37,16 +37,6 @@
          <TableHeader v-bind="{ columns, isSorted, getSortIcon, toggleSort, someSelected, allSelected, selectAll, disableSort }" />
       </template>
 
-      <template
-         v-if="props.skeleton"
-         v-slot:loading>
-         <slot name="loading">
-            <v-skeleton-loader
-               v-bind:boilerplate="getMotionReduction()"
-               v-bind:type="props.skeleton" />
-         </slot>
-      </template>
-
       <template v-slot:body.prepend>
          <slot name="body.prepend" />
       </template>
@@ -55,32 +45,46 @@
          <slot name="body.append" />
       </template>
 
-      <template
-         v-if="!props.loading"
-         v-slot:body="{ internalItems, isSelected, toggleSelect, columns }: BodySlotScope<T>">
+      <template v-slot:body="{ internalItems, isSelected, toggleSelect, columns }: BodySlotScope<T>">
          <v-fade-transition
             name="motion-row"
             group
             hide-on-leave>
-            <slot name="no-data">
-               <tr v-if="!internalItems.length">
-                  <td
-                     v-bind:colspan="columns.length"
-                     class="v-data-table__td v-data-table-column--no-padding"
-                     align="center">
+            <!-- No Data -->
+            <tr v-if="!internalItems.length">
+               <td
+                  v-bind:colspan="columns.length"
+                  class="v-data-table__td v-data-table-column--no-padding v-data-table-column--align-center">
+                  <slot name="no-data">
                      {{ props.noDataText || t("app.noData") }}
-                  </td>
-               </tr>
-            </slot>
+                  </slot>
+               </td>
+            </tr>
+            <!-- Loading -->
+            <tr
+               v-if="props.loading && props.skeleton"
+               class="v-data-table-rows-loading">
+               <td v-bind:colspan="columns.length">
+                  <slot name="loading">
+                     <v-skeleton-loader
+                        v-bind:boilerplate="getMotionReduction()"
+                        v-bind:type="props.skeleton" />
+                  </slot>
+               </td>
+            </tr>
+            <!-- Items -->
             <template
+               v-else
                v-for="(item, itemIndex) in internalItems"
                v-bind:key="itemIndex">
+               <!-- Item -->
                <tr
                   v-bind:class="[{ 'v-data-table__tr--clickable': props.onRowClick || props.expandOnClick }, { 'v-data-table__tr--sticky': isExpanded(item) && props.accentOnExpand }]"
                   v-ripple="props.ripple && (props.onRowClick || props.expandOnClick)"
                   class="v-data-table__tr"
                   @click="() => rowClickHandler(item)">
                   <template v-for="(column, index) in Object.keys(item.columns)">
+                     <!-- Select -->
                      <td
                         v-if="column === 'data-table-select'"
                         class="v-data-table__td v-data-table-column--no-padding v-data-table-column--align-start v-data-table__td--select-row">
@@ -91,7 +95,7 @@
                            class="text-base"
                            @click.stop="toggleSelect(item)" />
                      </td>
-
+                     <!-- Expand -->
                      <td
                         v-else-if="column === 'data-table-expand'"
                         class="v-data-table__td v-data-table-column--no-padding v-data-table-column--align-start v-data-table__td--expanded-row">
@@ -106,16 +110,16 @@
                                  class="transition duration-150"
                                  icon="$expand" />
                            </v-btn>
-
                            <slot name="action" />
                         </div>
                      </td>
-
+                     <!-- Content -->
                      <td
                         v-else
                         v-bind:class="`v-data-table-column--align-${columns[index].align || 'start'}`"
                         v-bind:data-label="columns[index].title"
                         class="v-data-table__td">
+                        <!-- Actions -->
                         <template v-if="column === 'actions'">
                            <div class="table-action flex justify-end gap-1 opacity-0 transition-opacity [tr:hover>td>.table-action]:opacity-100">
                               <slot
@@ -136,7 +140,7 @@
                                  @click.stop="props.onRowDelete(item.value)" />
                            </div>
                         </template>
-
+                        <!-- Content -->
                         <slot
                            v-else
                            v-bind:item="{ ...(item.value as T) }"
@@ -163,7 +167,7 @@
                      </td>
                   </template>
                </tr>
-
+               <!-- Expand -->
                <tr
                   v-if="isExpanded(item)"
                   v-bind:key="`expand-${item.value.id}`"
@@ -179,7 +183,7 @@
             </template>
          </v-fade-transition>
       </template>
-   </v-data-table-server>
+   </component>
 </template>
 
 <!--
@@ -221,6 +225,7 @@
 <script generic="T" lang="ts" setup>
 import TableHeader from "@/components/Table/TableHeader.vue";
 import type { TDataTable, THeader } from "@/utils/types";
+import { VDataTable, VDataTableServer } from "vuetify/components";
 import { SelectableItem } from "vuetify/lib/components/VDataTable/composables/select.mjs";
 import { DataTableItem, InternalDataTableHeader } from "vuetify/lib/components/VDataTable/types.mjs";
 type BodySlotScope<T> = {
@@ -239,6 +244,7 @@ type BodySlotScope<T> = {
 };
 type TProps<T> = {
    items?: T[];
+   itemsLength?: number;
    headers?: THeader<any>[];
    filter?: string;
    filterDeep?: boolean;
@@ -254,8 +260,6 @@ type TProps<T> = {
    multiExpand?: boolean;
    expandOnClick?: boolean;
    noDataText?: string;
-   sortBy?: any;
-   totalItems?: number;
    onRowDelete?: (item: T) => void;
    onRowEdit?: (item: T) => void;
    onRowClick?: (item: T) => void;
@@ -275,10 +279,9 @@ const props = withDefaults(defineProps<TDataTable & TProps<T>>(), {
    stickyFooter: true,
    accentHeader: false,
    accentOnExpand: true,
-   totalItems: 0,
-   skeleton: "table-row-divider, list-item-three-line, list-item-two-line, list-item-two-line"
+   skeleton: "list-item-three-line, list-item-two-line, list-item-two-line"
 });
-
+const componentType = computed(() => (props.itemsLength ? VDataTableServer : VDataTable));
 const items = computed(() => {
    const query = props.filter;
    if (!query) {

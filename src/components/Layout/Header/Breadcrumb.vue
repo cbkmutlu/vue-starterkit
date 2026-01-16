@@ -5,7 +5,7 @@
          v-bind:key="item">
          <v-breadcrumbs-item
             v-bind:class="{ 'font-semibold': index === items.length - 1 }"
-            v-bind:exact="appConfig.router.exact"
+            v-bind:exact="false"
             v-bind:to="!(index === items.length - 1) ? item.path : undefined">
             {{ item.breadcrumb }}
          </v-breadcrumbs-item>
