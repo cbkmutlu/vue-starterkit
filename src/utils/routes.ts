@@ -8,6 +8,7 @@ const appRoutes: RouteRecordRaw[] = [
       name: "login",
       meta: {
          requiredAuth: false,
+         guestOnly: true,
          layout: LoginLayout
       },
       component: getComponent(() => import("@/pages/User/UserLogin.vue"))

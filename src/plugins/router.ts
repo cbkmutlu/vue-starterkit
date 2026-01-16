@@ -7,6 +7,7 @@ declare module "vue-router" {
       title?: string | (() => string);
       breadcrumb?: string | (() => string);
       requiredAuth?: boolean;
+      guestOnly?: boolean;
       module?: string;
    }
 
@@ -20,7 +21,7 @@ declare module "vue-router" {
 const routes: RouteRecordRaw[] = [
    {
       path: "/",
-      name: appConfig.router.name,
+      name: "routeBase",
       meta: {
          layout: DefaultLayout
       },
@@ -44,6 +45,7 @@ const routes: RouteRecordRaw[] = [
 
 export const router = createRouter({
    history: createWebHistory(),
+   strict: true,
    routes,
    scrollBehavior(_to, _from, savedPosition) {
       if (!savedPosition) {
@@ -60,9 +62,21 @@ export const router = createRouter({
    }
 });
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from) => {
    const appStore = useAppStore();
    const authStore = useAuthStore();
+   const isAuthenticated = authStore.isAuthenticated;
+   const requiredAuth = to.meta.requiredAuth ?? appConfig.router.requiredAuth;
+   const guestOnly = to.meta.guestOnly === true;
+
+   if (to.path !== "/" && to.path.endsWith("/")) {
+      return {
+         path: to.path.slice(0, -1),
+         query: to.query,
+         hash: to.hash,
+         replace: true
+      };
+   }
 
    if (from.meta.layout !== to.meta.layout) {
       appStore.setLayoutLoading(true);
@@ -70,25 +84,30 @@ router.beforeEach(async (to, from, next) => {
 
    appStore.setModule(to.meta.module || "default");
 
-   if (authStore.isAuthenticated) {
-      if (to.path === appConfig.router.login) {
-         return next(authStore.returnUrl || "/");
-      }
-   } else {
-      if (to.meta.requiredAuth !== false && to.path !== appConfig.router.login) {
-         authStore.setUrl(to.fullPath);
-         return next(appConfig.router.login);
-      }
+   if (requiredAuth && !isAuthenticated) {
+      return {
+         path: appConfig.router.login,
+         replace: true
+      };
    }
 
-   next();
+   if (guestOnly && isAuthenticated) {
+      return {
+         path: authStore.returnUrl || "/",
+         replace: true
+      };
+   }
+
+   return true;
 });
 
 router.afterEach(async (to) => {
    const appStore = useAppStore();
    const authStore = useAuthStore();
+   const isAuthenticated = authStore.isAuthenticated;
+   const guestOnly = to.meta.guestOnly === true;
 
-   if (to.path !== appConfig.router.login) {
+   if (isAuthenticated && !guestOnly) {
       authStore.setUrl(to.fullPath);
    }
 

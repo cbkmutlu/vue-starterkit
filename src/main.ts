@@ -32,7 +32,7 @@ registerDirective(app);
    appStore.setMenu(menu);
 
    routes.forEach((route) => {
-      router.addRoute(appConfig.router.name, route);
+      router.addRoute("routeBase", route);
    });
 
    appStore.setLocaleLoading(false);
