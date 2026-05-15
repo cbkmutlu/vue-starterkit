@@ -1,18 +1,18 @@
 <template>
-   <v-row v-if="props.items?.[0] !== null && props.items?.[0] !== undefined">
-      <v-col
-         v-for="(item, index) in props.items"
-         v-bind:key="index"
-         cols="6"
-         md="3"
-         sm="4">
-         <FallbackAvatar
-            v-bind:image="typeof item === 'string' ? item : (item as any)[props.image]"
-            v-bind:on-delete="props.onDelete ? () => props.onDelete?.(item) : undefined"
-            v-bind:on-edit="props.onEdit ? () => props.onEdit?.(item) : undefined"
-            v-bind:size="props.size" />
-      </v-col>
-   </v-row>
+    <v-row v-if="props.items?.[0] !== null && props.items?.[0] !== undefined">
+        <v-col
+            v-for="(item, index) in props.items"
+            v-bind:key="index"
+            cols="6"
+            md="3"
+            sm="4">
+            <FallbackAvatar
+                v-bind:image="typeof item === 'string' ? item : (item as any)[props.image]"
+                v-bind:on-delete="props.onDelete ? () => props.onDelete?.(item) : undefined"
+                v-bind:on-edit="props.onEdit ? () => props.onEdit?.(item) : undefined"
+                v-bind:size="props.size" />
+        </v-col>
+    </v-row>
 </template>
 
 <script generic="T" lang="ts" setup>
@@ -32,16 +32,16 @@ v-bind:image="image_path"
  */
 import FallbackAvatar from "@/components/Avatar/FallbackAvatar.vue";
 type TProps = {
-   items: T[];
-   image?: string;
-   size?: string;
-   onDelete?: (item: T) => void;
-   onEdit?: (item: T) => void;
+    items: T[];
+    image?: string;
+    size?: string;
+    onDelete?: (item: T) => void;
+    onEdit?: (item: T) => void;
 };
 
 // states
 const props = withDefaults(defineProps<TProps>(), {
-   image: "image",
-   size: "100%"
+    image: "image",
+    size: "100%"
 });
 </script>

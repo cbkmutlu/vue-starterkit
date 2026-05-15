@@ -1,57 +1,57 @@
 <template>
-   <Container>
-      <Header>
-         <template v-slot:title>Kullanıcı Bilgileri</template>
-         <template v-slot:subtitle>Kullanıcı bilgilerinizi buradan düzenleyebilirsiniz.</template>
-      </Header>
+    <Container>
+        <Header>
+            <template v-slot:title>Kullanıcı Bilgileri</template>
+            <template v-slot:subtitle>Kullanıcı bilgilerinizi buradan düzenleyebilirsiniz.</template>
+        </Header>
 
-      <Content>
-         <v-card-text>
-            <v-row no-gutters>
-               <v-col md="6">
-                  <ListTitle
-                     title="İsim Soyisim"
-                     prepend-icon="$user"
-                     subtitle="İsim soyisim bilgisini yazın" />
-               </v-col>
-               <v-col md="6">
-                  <v-text-field v-bind:rules="[appRules.required()]" />
-               </v-col>
+        <Content>
+            <v-card-text>
+                <v-row no-gutters>
+                    <v-col md="6">
+                        <ListTitle
+                            title="İsim Soyisim"
+                            prepend-icon="$user"
+                            subtitle="İsim soyisim bilgisini yazın" />
+                    </v-col>
+                    <v-col md="6">
+                        <v-text-field v-bind:rules="[appRules.required()]" />
+                    </v-col>
 
-               <v-col md="6">
-                  <ListTitle
-                     title="Eposta Adresi"
-                     prepend-icon="$mail"
-                     subtitle="Eposta adresini yazın" />
-               </v-col>
-               <v-col md="6">
-                  <v-text-field v-bind:rules="[appRules.required(), appRules.email()]" />
-               </v-col>
+                    <v-col md="6">
+                        <ListTitle
+                            title="Eposta Adresi"
+                            prepend-icon="$mail"
+                            subtitle="Eposta adresini yazın" />
+                    </v-col>
+                    <v-col md="6">
+                        <v-text-field v-bind:rules="[appRules.required(), appRules.email()]" />
+                    </v-col>
 
-               <v-col md="6">
-                  <ListTitle
-                     title="Telefon Numarası"
-                     prepend-icon="$phone"
-                     subtitle="Telefon numarasını yazın" />
-               </v-col>
-               <v-col md="6">
-                  <v-text-field
-                     v-bind:rules="[appRules.required(), appRules.pattern(/^0?5\d{2}\s\d{3}\s\d{4}$/, t('rules.phone'))]"
-                     v-maska="{ mask: '0A## ### ####', tokens: { A: { pattern: /[1-9]/ } } }" />
-               </v-col>
-            </v-row>
-         </v-card-text>
+                    <v-col md="6">
+                        <ListTitle
+                            title="Telefon Numarası"
+                            prepend-icon="$phone"
+                            subtitle="Telefon numarasını yazın" />
+                    </v-col>
+                    <v-col md="6">
+                        <v-text-field
+                            v-bind:rules="[appRules.required(), appRules.pattern(/^0?5\d{2}\s\d{3}\s\d{4}$/, t('rules.phone'))]"
+                            v-maska="{ mask: '0A## ### ####', tokens: { A: { pattern: /[1-9]/ } } }" />
+                    </v-col>
+                </v-row>
+            </v-card-text>
 
-         <v-card-actions>
-            <v-spacer />
-            <v-btn
-               color="primary"
-               density="default"
-               text="Kullanıcı Bilgilerini Güncelle"
-               variant="tonal" />
-         </v-card-actions>
-      </Content>
-   </Container>
+            <v-card-actions>
+                <v-spacer />
+                <v-btn
+                    color="primary"
+                    density="default"
+                    text="Kullanıcı Bilgilerini Güncelle"
+                    variant="tonal" />
+            </v-card-actions>
+        </Content>
+    </Container>
 </template>
 
 <script lang="ts" setup>

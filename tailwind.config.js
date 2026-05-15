@@ -1,3 +1,3 @@
 export default {
-   blocklist: ["bg-transparent"]
+    blocklist: ["bg-transparent"]
 };

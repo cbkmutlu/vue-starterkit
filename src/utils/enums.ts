@@ -1,21 +1,21 @@
 export enum EButton {
-   RecordVariant = "text",
-   RecordDensity = "comfortable"
+    RecordVariant = "text",
+    RecordDensity = "comfortable"
 }
 
 export enum ENotify {
-   Success = "success",
-   Error = "error",
-   Danger = "danger",
-   Warning = "warning"
+    Success = "success",
+    Error = "error",
+    Danger = "danger",
+    Warning = "warning"
 }
 
 export enum EUser {
-   "user" = 300,
-   "admin" = 400
+    "user" = 300,
+    "admin" = 400
 }
 
 export enum ELanguage {
-   "tr-TR" = 1,
-   "en-US" = 2
+    "tr-TR" = 1,
+    "en-US" = 2
 }

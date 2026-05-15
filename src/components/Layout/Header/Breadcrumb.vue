@@ -1,21 +1,21 @@
 <template>
-   <v-breadcrumbs class="p-0">
-      <template
-         v-for="(item, index) in items"
-         v-bind:key="item">
-         <v-breadcrumbs-item
-            v-bind:class="{ 'font-semibold': index === items.length - 1 }"
-            v-bind:exact="false"
-            v-bind:to="!(index === items.length - 1) ? item.path : undefined">
-            {{ item.breadcrumb }}
-         </v-breadcrumbs-item>
+    <v-breadcrumbs class="p-0">
+        <template
+            v-for="(item, index) in items"
+            v-bind:key="item">
+            <v-breadcrumbs-item
+                v-bind:class="{ 'font-semibold': index === items.length - 1 }"
+                v-bind:exact="false"
+                v-bind:to="!(index === items.length - 1) ? item.path : undefined">
+                {{ item.breadcrumb }}
+            </v-breadcrumbs-item>
 
-         <v-icon
-            v-if="index < items.length - 1"
-            icon="$next"
-            size="x-small" />
-      </template>
-   </v-breadcrumbs>
+            <v-icon
+                v-if="index < items.length - 1"
+                icon="$next"
+                size="x-small" />
+        </template>
+    </v-breadcrumbs>
 </template>
 
 <script lang="ts" setup>
@@ -25,15 +25,15 @@ const route = useRoute();
 
 // states
 const items = computed(() => {
-   return route.matched
-      .filter((item) => {
-         return item.meta?.breadcrumb;
-      })
-      .map((item) => {
-         return {
-            breadcrumb: typeof item.meta.breadcrumb === "function" ? item.meta.breadcrumb() : t(item.meta.breadcrumb as string),
-            path: item.path
-         };
-      });
+    return route.matched
+        .filter((item) => {
+            return item.meta?.breadcrumb;
+        })
+        .map((item) => {
+            return {
+                breadcrumb: typeof item.meta.breadcrumb === "function" ? item.meta.breadcrumb() : t(item.meta.breadcrumb as string),
+                path: item.path
+            };
+        });
 });
 </script>

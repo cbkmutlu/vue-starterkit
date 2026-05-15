@@ -1,12 +1,12 @@
 <template>
-   <v-btn
-      v-bind:loading="isLoading"
-      v-bind:ripple="false"
-      density="compact"
-      icon="$copy"
-      size="small"
-      variant="plain"
-      @click="copyHandler" />
+    <v-btn
+        v-bind:loading="isLoading"
+        v-bind:ripple="false"
+        density="compact"
+        icon="$copy"
+        size="small"
+        variant="plain"
+        @click="copyHandler" />
 </template>
 
 <script lang="ts" setup>
@@ -19,14 +19,14 @@ const isLoading = ref(false);
 
 // handlers
 const copyHandler = async () => {
-   isLoading.value = true;
-   try {
-      await navigator.clipboard.writeText(model.value);
-      snackbarStore.success();
-   } catch (error) {
-      snackbarStore.error(error);
-   } finally {
-      isLoading.value = false;
-   }
+    isLoading.value = true;
+    try {
+        await navigator.clipboard.writeText(model.value);
+        snackbarStore.success();
+    } catch (error) {
+        snackbarStore.error(error);
+    } finally {
+        isLoading.value = false;
+    }
 };
 </script>

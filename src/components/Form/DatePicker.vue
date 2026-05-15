@@ -1,134 +1,134 @@
 <template>
-   <v-menu
-      v-model="menu"
-      v-bind:close-on-content-click="false"
-      v-bind:offset="props.hideDetails ? [0, 0] : [-22, 0]"
-      class="overlay-content:min-w-min!"
-      transition="dialog-transition"
-      @update:model-value="viewMode = 'month'">
-      <template v-slot:activator="{ props: slotProps }">
-         <v-text-field
-            v-bind="{ ...slotProps, ...$attrs }"
-            v-bind:active="menu"
-            v-bind:hide-details="props.hideDetails"
-            v-bind:model-value="display"
-            v-bind:readonly="props.readonly"
-            v-bind:title="props.title"
-            class="field-input:caret-transparent"
-            @click:clear="menu = !!props.openOnClear"
-            @update:model-value="model = null!" />
-      </template>
+    <v-menu
+        v-model="menu"
+        v-bind:close-on-content-click="false"
+        v-bind:offset="props.hideDetails ? [0, 0] : [-22, 0]"
+        class="overlay-content:min-w-min!"
+        transition="dialog-transition"
+        @update:model-value="viewMode = 'month'">
+        <template v-slot:activator="{ props: slotProps }">
+            <v-text-field
+                v-bind="{ ...slotProps, ...$attrs }"
+                v-bind:active="menu"
+                v-bind:hide-details="props.hideDetails"
+                v-bind:model-value="display"
+                v-bind:readonly="props.readonly"
+                v-bind:title="props.title"
+                class="field-input:caret-transparent"
+                @click:clear="menu = !!props.openOnClear"
+                @update:model-value="model = null!" />
+        </template>
 
-      <v-card class="overflow-x-hidden">
-         <div class="year-content:grid-cols-2 flex [&_.v-picker\_\_body]:flex-col">
-            <slot
-               v-bind:date-handler="dateHandler"
-               name="prepend" />
-            <v-divider
-               v-if="$slots.prepend"
-               vertical />
-            <div>
-               <v-card-title
-                  v-if="props.title || $slots.title"
-                  class="pb-0 text-base">
-                  <slot
-                     v-bind:model
-                     name="title">
-                     <template v-if="props.title === true">
-                        {{ date.format(model, props.format) || t("app.noDate") }}
-                     </template>
+        <v-card class="overflow-x-hidden">
+            <div class="year-content:grid-cols-2 flex [&_.v-picker\_\_body]:flex-col">
+                <slot
+                    v-bind:date-handler="dateHandler"
+                    name="prepend" />
+                <v-divider
+                    v-if="$slots.prepend"
+                    vertical />
+                <div>
+                    <v-card-title
+                        v-if="props.title || $slots.title"
+                        class="pb-0 text-base">
+                        <slot
+                            v-bind:model
+                            name="title">
+                            <template v-if="props.title === true">
+                                {{ date.format(model, props.format) || t("app.noDate") }}
+                            </template>
 
-                     <template v-else-if="props.title">
-                        {{ props.title }}
-                     </template>
-                  </slot>
-               </v-card-title>
-               <v-date-picker
-                  v-model="model"
-                  v-bind="{ ...$attrs }"
-                  v-bind:first-day-of-week="props.firstDayOfWeek"
-                  v-bind:show-adjacent-months="props.showAdjacentMonths"
-                  class="button-default:text-xs button-default:font-normal button-month:min-w-32"
-                  color="primary"
-                  control-variant="modal"
-                  hide-header
-                  @update:model-value="dateHandler($event)"
-                  @update:view-mode="viewModeHandler($event)">
-                  <template v-slot:controls="{ monthText, yearText, openMonths, openYears, prevMonth, nextMonth }">
-                     <v-btn
-                        density="compact"
-                        icon="$prev"
-                        variant="plain"
-                        @click.stop="prevMonth" />
-                     <v-spacer />
-                     <v-btn
-                        v-bind:text="monthText"
-                        class="bg-surface px-2"
-                        append-icon="$dropdown"
-                        @click.stop="openMonths" />
-                     <v-btn
-                        v-bind:text="yearText"
-                        class="bg-surface px-2"
-                        append-icon="$dropdown"
-                        @click.stop="openYears" />
-                     <v-spacer />
-                     <v-btn
-                        density="compact"
-                        icon="$next"
-                        variant="plain"
-                        @click.stop="nextMonth" />
-                  </template>
-                  <template
-                     v-if="props.actions && viewMode === 'month'"
-                     v-slot:actions>
-                     <v-btn
-                        color="error"
-                        rounded
-                        size="small"
-                        variant="tonal"
-                        @click="menu = false">
-                        {{ t("app.cancel") }}
-                     </v-btn>
-                     <v-spacer></v-spacer>
-                     <v-btn
-                        rounded
-                        size="small"
-                        variant="text"
-                        @click="dateHandler(new Date(), 0)">
-                        {{ t("app.today") }}
-                     </v-btn>
-                     <v-btn
-                        rounded
-                        size="small"
-                        variant="text"
-                        @click="dateHandler(new Date(), 1)">
-                        {{ t("app.tomorrow") }}
-                     </v-btn>
-                  </template>
-               </v-date-picker>
+                            <template v-else-if="props.title">
+                                {{ props.title }}
+                            </template>
+                        </slot>
+                    </v-card-title>
+                    <v-date-picker
+                        v-model="model"
+                        v-bind="{ ...$attrs }"
+                        v-bind:first-day-of-week="props.firstDayOfWeek"
+                        v-bind:show-adjacent-months="props.showAdjacentMonths"
+                        class="button-default:text-xs button-default:font-normal button-month:min-w-32"
+                        color="primary"
+                        control-variant="modal"
+                        hide-header
+                        @update:model-value="dateHandler($event)"
+                        @update:view-mode="viewModeHandler($event)">
+                        <template v-slot:controls="{ monthText, yearText, openMonths, openYears, prevMonth, nextMonth }">
+                            <v-btn
+                                density="compact"
+                                icon="$prev"
+                                variant="plain"
+                                @click.stop="prevMonth" />
+                            <v-spacer />
+                            <v-btn
+                                v-bind:text="monthText"
+                                class="bg-surface px-2"
+                                append-icon="$dropdown"
+                                @click.stop="openMonths" />
+                            <v-btn
+                                v-bind:text="yearText"
+                                class="bg-surface px-2"
+                                append-icon="$dropdown"
+                                @click.stop="openYears" />
+                            <v-spacer />
+                            <v-btn
+                                density="compact"
+                                icon="$next"
+                                variant="plain"
+                                @click.stop="nextMonth" />
+                        </template>
+                        <template
+                            v-if="props.actions && viewMode === 'month'"
+                            v-slot:actions>
+                            <v-btn
+                                color="error"
+                                rounded
+                                size="small"
+                                variant="tonal"
+                                @click="menu = false">
+                                {{ t("app.cancel") }}
+                            </v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                rounded
+                                size="small"
+                                variant="text"
+                                @click="dateHandler(new Date(), 0)">
+                                {{ t("app.today") }}
+                            </v-btn>
+                            <v-btn
+                                rounded
+                                size="small"
+                                variant="text"
+                                @click="dateHandler(new Date(), 1)">
+                                {{ t("app.tomorrow") }}
+                            </v-btn>
+                        </template>
+                    </v-date-picker>
+                </div>
             </div>
-         </div>
-      </v-card>
-   </v-menu>
+        </v-card>
+    </v-menu>
 </template>
 
 <script lang="ts" setup>
 import type { TDateField } from "@/utils/types";
 type TProps = {
-   title?: boolean | string;
-   readonly?: boolean;
-   actions?: boolean;
-   hideDetails?: boolean;
-   firstDayOfWeek?: number;
-   showAdjacentMonths?: boolean;
-   closeOnPickerClick?: boolean;
-   openOnClear?: boolean;
-   color?: string;
-   endOfDay?: boolean;
-   /**
-    * https://vuetifyjs.com/en/features/dates/#format-options
-    */
-   format?: string;
+    title?: boolean | string;
+    readonly?: boolean;
+    actions?: boolean;
+    hideDetails?: boolean;
+    firstDayOfWeek?: number;
+    showAdjacentMonths?: boolean;
+    closeOnPickerClick?: boolean;
+    openOnClear?: boolean;
+    color?: string;
+    endOfDay?: boolean;
+    /**
+     * https://vuetifyjs.com/en/features/dates/#format-options
+     */
+    format?: string;
 };
 
 // hooks
@@ -138,50 +138,50 @@ const date = useDate();
 // states
 const model = defineModel({ type: [Object, String, null], default: null });
 const props = withDefaults(defineProps<Omit<TDateField, "title"> & TProps>(), {
-   readonly: true,
-   actions: true,
-   hideDetails: false,
-   closeOnPickerClick: true,
-   showAdjacentMonths: true,
-   firstDayOfWeek: 1,
-   openOnClear: true,
-   endOfDay: true, // end of day 23:59:59:999
-   format: "fullDate"
+    readonly: true,
+    actions: true,
+    hideDetails: false,
+    closeOnPickerClick: true,
+    showAdjacentMonths: true,
+    firstDayOfWeek: 1,
+    openOnClear: true,
+    endOfDay: true, // end of day 23:59:59:999
+    format: "fullDate"
 });
 const menu = ref(false);
 const display = computed(() => {
-   if (!model.value || !date.isValid(model.value)) {
-      return null;
-   }
-   return date.format(model.value, props.format);
+    if (!model.value || !date.isValid(model.value)) {
+        return null;
+    }
+    return date.format(model.value, props.format);
 });
 
 const viewMode = ref("month");
 
 // handlers
 const viewModeHandler = (mode: string) => {
-   viewMode.value = mode;
+    viewMode.value = mode;
 };
 
 const dateHandler = (value: Date, day?: number) => {
-   if (typeof day === "number") {
-      // ALTER
-      // value = date.addDays(value, day) as Date;
-      value.setDate(value.getDate() + day);
-   }
+    if (typeof day === "number") {
+        // ALTER
+        // value = date.addDays(value, day) as Date;
+        value.setDate(value.getDate() + day);
+    }
 
-   if (props.endOfDay) {
-      model.value = date.endOfDay(value);
-   } else {
-      const now = new Date();
-      value.setHours(now.getHours());
-      value.setMinutes(now.getMinutes());
-      value.setSeconds(now.getSeconds());
-      value.setMilliseconds(now.getMilliseconds());
-      model.value = value;
-   }
+    if (props.endOfDay) {
+        model.value = date.endOfDay(value);
+    } else {
+        const now = new Date();
+        value.setHours(now.getHours());
+        value.setMinutes(now.getMinutes());
+        value.setSeconds(now.getSeconds());
+        value.setMilliseconds(now.getMilliseconds());
+        model.value = value;
+    }
 
-   menu.value = !props.closeOnPickerClick;
+    menu.value = !props.closeOnPickerClick;
 };
 
 defineOptions({ inheritAttrs: false });

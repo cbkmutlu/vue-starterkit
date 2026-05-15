@@ -2,49 +2,49 @@ import { TR as trFlag, US as usFlag } from "country-flag-icons/string/3x2";
 import { en as enLocale, tr as trLocale } from "vuetify/locale";
 
 export const appConfig = {
-   module: [],
-   router: {
-      requiredAuth: true,
-      redirect: "/product",
-      login: "/login"
-   },
-   language: {
-      default: "tr-TR",
-      locales: {
-         "tr-TR": {
-            name: "Türkçe",
-            flag: trFlag,
-            vuetify: trLocale
-         },
-         "en-US": {
-            name: "English",
-            flag: usFlag,
-            vuetify: enLocale
-         }
-      }
-   },
-   request: {
-      attempt: 3,
-      delay: 1000, // ms
-      gradual: true, // 1000 => 2000 => 4000 => 8000
-      cache: 30, // minutes
-      stale: 3, // minutes
-      refetch: true // refetch on window focus
-   },
-   key: {
-      locale: "app.lang",
-      theme: "app.theme",
-      auth: "app.auth"
-   },
-   format: {
-      date: {
-         year: "numeric",
-         month: "short",
-         day: "2-digit"
-      },
-      time: {
-         hour: "2-digit",
-         minute: "2-digit"
-      }
-   }
+    module: [],
+    router: {
+        requiredAuth: true,
+        redirect: "/product",
+        login: "/login"
+    },
+    language: {
+        default: "tr-TR",
+        locales: {
+            "tr-TR": {
+                name: "Türkçe",
+                flag: trFlag,
+                vuetify: trLocale
+            },
+            "en-US": {
+                name: "English",
+                flag: usFlag,
+                vuetify: enLocale
+            }
+        }
+    },
+    request: {
+        attempt: 3,
+        delay: 1000, // ms
+        gradual: true, // 1000 => 2000 => 4000 => 8000
+        cache: 30, // minutes
+        stale: 3, // minutes
+        refetch: true // refetch on window focus
+    },
+    key: {
+        locale: "app.lang",
+        theme: "app.theme",
+        auth: "app.auth"
+    },
+    format: {
+        date: {
+            year: "numeric",
+            month: "short",
+            day: "2-digit"
+        },
+        time: {
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    }
 };

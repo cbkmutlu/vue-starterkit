@@ -1,22 +1,22 @@
 <template>
-   <v-app class="bg-noise h-full">
-      <!-- <DrawerBar /> -->
-      <DrawerMenu v-model="drawer" />
-      <Appbar v-model:drawer="drawer" />
+    <v-app class="bg-noise h-full">
+        <!-- <DrawerBar /> -->
+        <DrawerMenu v-model="drawer" />
+        <Appbar v-model:drawer="drawer" />
 
-      <v-main class="h-full">
-         <div
-            class="v-main__content h-full overflow-y-scroll scroll-smooth"
-            id="scroll-target">
-            <router-view v-slot="{ Component }">
-               <component v-bind:is="Component" />
-            </router-view>
-         </div>
-      </v-main>
+        <v-main class="h-full">
+            <div
+                class="v-main__content h-full overflow-y-scroll scroll-smooth"
+                id="scroll-target">
+                <router-view v-slot="{ Component }">
+                    <component v-bind:is="Component" />
+                </router-view>
+            </div>
+        </v-main>
 
-      <ConfirmDialog />
-      <PromptDialog />
-   </v-app>
+        <ConfirmDialog />
+        <PromptDialog />
+    </v-app>
 </template>
 
 <script lang="ts" setup>

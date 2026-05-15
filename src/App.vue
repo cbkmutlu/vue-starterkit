@@ -1,34 +1,34 @@
 <template>
-   <v-fade-transition leave-absolute>
-      <LayoutLoader v-if="loading" />
+    <v-fade-transition leave-absolute>
+        <LayoutLoader v-if="loading" />
 
-      <component
-         v-else
-         v-bind:is="$route.meta.layout" />
-   </v-fade-transition>
+        <component
+            v-else
+            v-bind:is="$route.meta.layout" />
+    </v-fade-transition>
 
-   <v-snackbar-queue
-      v-model="snackbarStore.queue"
-      closable>
-      <template v-slot:actions="{ props: slotProps }">
-         <v-btn
-            v-ripple
-            density="compact"
-            icon="$close"
-            variant="text"
-            @click="slotProps.onClick" />
-      </template>
+    <v-snackbar-queue
+        v-model="snackbarStore.queue"
+        closable>
+        <template v-slot:actions="{ props: slotProps }">
+            <v-btn
+                v-ripple
+                density="compact"
+                icon="$close"
+                variant="text"
+                @click="slotProps.onClick" />
+        </template>
 
-      <template v-slot:text="slotProps">
-         <div
-            v-for="item in safeJsonToArray(slotProps.item.text)"
-            v-bind:key="item">
-            - {{ item }}
-         </div>
-      </template>
-   </v-snackbar-queue>
+        <template v-slot:text="slotProps">
+            <div
+                v-for="item in safeJsonToArray(slotProps.item.text)"
+                v-bind:key="item">
+                - {{ item }}
+            </div>
+        </template>
+    </v-snackbar-queue>
 
-   <VueQueryDevtools />
+    <VueQueryDevtools />
 </template>
 
 <script lang="ts" setup>

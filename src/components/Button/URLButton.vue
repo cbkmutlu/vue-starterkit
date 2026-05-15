@@ -1,12 +1,12 @@
 <template>
-   <v-btn
-      v-bind:loading="isLoading"
-      v-bind:ripple="false"
-      density="compact"
-      icon="$link"
-      size="small"
-      variant="plain"
-      @click="urlHandler" />
+    <v-btn
+        v-bind:loading="isLoading"
+        v-bind:ripple="false"
+        density="compact"
+        icon="$link"
+        size="small"
+        variant="plain"
+        @click="urlHandler" />
 </template>
 
 <script lang="ts" setup>
@@ -16,8 +16,8 @@ const isLoading = ref(false);
 
 // handlers
 const urlHandler = () => {
-   isLoading.value = true;
-   model.value = createSlug(model.value || "");
-   isLoading.value = false;
+    isLoading.value = true;
+    model.value = createSlug(model.value || "");
+    isLoading.value = false;
 };
 </script>

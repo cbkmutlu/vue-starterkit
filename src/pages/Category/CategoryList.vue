@@ -1,36 +1,36 @@
 <template>
-   <Container v-bind:loading="isLoading">
-      <Header>
-         <template v-slot:title>{{ t("app.categoryList") }}</template>
-         <template v-slot:append>
-            <SearchInput v-model="filter" />
-            <v-btn
-               v-bind:disabled="isLoading"
-               v-bind:text="t('app.add')"
-               color="primary"
-               density="default"
-               variant="flat"
-               @click="categoryDialog?.open()" />
-         </template>
-      </Header>
-
-      <Content>
-         <DataTable
-            v-bind:filter="filter"
-            v-bind:headers="headers"
-            v-bind:items="categoryAll"
-            @row-delete="deleteHandler"
-            @row-edit="categoryDialog?.open($event)">
-            <template v-slot:item.is_active="{ item }">
-               <v-chip v-bind:color="item.is_active ? 'success' : undefined">
-                  {{ item.is_active ? t("app.active") : t("app.passive") }}
-               </v-chip>
+    <Container v-bind:loading="isLoading">
+        <Header>
+            <template v-slot:title>{{ t("app.categoryList") }}</template>
+            <template v-slot:append>
+                <SearchInput v-model="filter" />
+                <v-btn
+                    v-bind:disabled="isLoading"
+                    v-bind:text="t('app.add')"
+                    color="primary"
+                    density="default"
+                    variant="flat"
+                    @click="categoryDialog?.open()" />
             </template>
-         </DataTable>
-      </Content>
+        </Header>
 
-      <CategoryDialog ref="categoryDialog" />
-   </Container>
+        <Content>
+            <DataTable
+                v-bind:filter="filter"
+                v-bind:headers="headers"
+                v-bind:items="categoryAll"
+                @row-delete="deleteHandler"
+                @row-edit="categoryDialog?.open($event)">
+                <template v-slot:item.is_active="{ item }">
+                    <v-chip v-bind:color="item.is_active ? 'success' : undefined">
+                        {{ item.is_active ? t("app.active") : t("app.passive") }}
+                    </v-chip>
+                </template>
+            </DataTable>
+        </Content>
+
+        <CategoryDialog ref="categoryDialog" />
+    </Container>
 </template>
 
 <script lang="ts" setup>
@@ -50,12 +50,12 @@ const confirmStore = useConfirmStore();
 // states
 const filter = ref();
 const headers = computed((): THeader<ICategory>[] => [
-   { title: t("app.code"), key: "code", width: 100 },
-   { title: t("app.title"), key: "title" },
-   { title: t("app.status"), key: "is_active", width: 150 },
-   { title: t("app.createDate"), key: "created_at", width: 150, date: "fullDate" },
-   { title: t("app.updateDate"), key: "updated_at", width: 150, date: "fullDate" },
-   { key: "actions", width: 90 }
+    { title: t("app.code"), key: "code", width: 100 },
+    { title: t("app.title"), key: "title" },
+    { title: t("app.status"), key: "is_active", width: 150 },
+    { title: t("app.createDate"), key: "created_at", width: 150, date: "fullDate" },
+    { title: t("app.updateDate"), key: "updated_at", width: 150, date: "fullDate" },
+    { key: "actions", width: 90 }
 ]);
 const categoryDialog = ref<InstanceType<typeof CategoryDialog>>();
 
@@ -65,20 +65,20 @@ const { mutateAsync: deleteCategory } = useDeleteCategory();
 
 // handlers
 const deleteHandler = async (item: ICategory) => {
-   try {
-      const confirm = await confirmStore.open({
-         title: t("app.confirm"),
-         content: t("app.deleteRecord")
-      });
+    try {
+        const confirm = await confirmStore.open({
+            title: t("app.confirm"),
+            content: t("app.deleteRecord")
+        });
 
-      if (confirm) {
-         await deleteCategory({ category_id: item.id });
-         snackbarStore.success(t("app.recordDeleted"));
-      }
-   } catch (error) {
-      snackbarStore.error(error);
-   } finally {
-      confirmStore.close();
-   }
+        if (confirm) {
+            await deleteCategory({ category_id: item.id });
+            snackbarStore.success(t("app.recordDeleted"));
+        }
+    } catch (error) {
+        snackbarStore.error(error);
+    } finally {
+        confirmStore.close();
+    }
 };
 </script>

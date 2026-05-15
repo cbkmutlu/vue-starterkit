@@ -9,155 +9,155 @@ import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import webfont from "vite-plugin-webfont-dl";
 
 export default defineConfig(function ({ mode }) {
-   const env: any = loadEnv(mode, process.cwd());
+    const env: any = loadEnv(mode, process.cwd());
 
-   return {
-      base: "/",
-      plugins: [
-         vue({
-            template: { transformAssetUrls }
-         }),
-         vuetify({
-            autoImport: true,
-            styles: {
-               configFile: "src/assets/style/settings.scss"
+    return {
+        base: "/",
+        plugins: [
+            vue({
+                template: { transformAssetUrls }
+            }),
+            vuetify({
+                autoImport: true,
+                styles: {
+                    configFile: "src/assets/style/settings.scss"
+                }
+            }),
+            vuei18n({
+                runtimeOnly: false,
+                compositionOnly: true,
+                fullInstall: true,
+                include: [resolve(__dirname, "src/locales/**"), resolve(__dirname, "src/modules/**/locales/**")]
+            }),
+            webfont(),
+            autoImport({
+                dirs: ["src/utils/", "src/stores/"],
+                imports: [
+                    "vue",
+                    "vue-router",
+                    "vue-i18n",
+                    "pinia",
+                    {
+                        from: "vue-router",
+                        imports: ["createRouter", "createWebHistory"]
+                    },
+                    {
+                        from: "vue-router",
+                        imports: ["RouteLocation", "RouteRecordRaw", "Router", "RouteMeta", "RouteLocationNormalizedLoaded"],
+                        type: true
+                    },
+                    {
+                        from: "vue-i18n",
+                        imports: ["createI18n"]
+                    },
+                    {
+                        from: "pinia-plugin-persistedstate",
+                        imports: [["default", "persistedstate"]]
+                    },
+                    {
+                        from: "axios",
+                        imports: [["default", "axios"]]
+                    },
+                    {
+                        from: "@tanstack/vue-query",
+                        imports: ["useMutation", "useQuery", "useQueryClient", "VueQueryPlugin"]
+                    },
+                    {
+                        from: "@tanstack/vue-query",
+                        imports: ["VueQueryPluginOptions", "UseQueryReturnType", "UseQueryOptions"],
+                        type: true
+                    },
+                    {
+                        from: "vuetify",
+                        imports: ["useTheme", "useDate"]
+                    }
+                ],
+                dts: "./vite-imports.d.ts",
+                vueTemplate: true,
+                viteOptimizeDeps: true
+            })
+        ],
+        css: {
+            postcss: {
+                plugins: [autoprefixer, tailwindcss]
             }
-         }),
-         vuei18n({
-            runtimeOnly: false,
-            compositionOnly: true,
-            fullInstall: true,
-            include: [resolve(__dirname, "src/locales/**"), resolve(__dirname, "src/modules/**/locales/**")]
-         }),
-         webfont(),
-         autoImport({
-            dirs: ["src/utils/", "src/stores/"],
-            imports: [
-               "vue",
-               "vue-router",
-               "vue-i18n",
-               "pinia",
-               {
-                  from: "vue-router",
-                  imports: ["createRouter", "createWebHistory"]
-               },
-               {
-                  from: "vue-router",
-                  imports: ["RouteLocation", "RouteRecordRaw", "Router", "RouteMeta", "RouteLocationNormalizedLoaded"],
-                  type: true
-               },
-               {
-                  from: "vue-i18n",
-                  imports: ["createI18n"]
-               },
-               {
-                  from: "pinia-plugin-persistedstate",
-                  imports: [["default", "persistedstate"]]
-               },
-               {
-                  from: "axios",
-                  imports: [["default", "axios"]]
-               },
-               {
-                  from: "@tanstack/vue-query",
-                  imports: ["useMutation", "useQuery", "useQueryClient", "VueQueryPlugin"]
-               },
-               {
-                  from: "@tanstack/vue-query",
-                  imports: ["VueQueryPluginOptions", "UseQueryReturnType", "UseQueryOptions"],
-                  type: true
-               },
-               {
-                  from: "vuetify",
-                  imports: ["useTheme", "useDate"]
-               }
-            ],
-            dts: "./vite-imports.d.ts",
-            vueTemplate: true,
-            viteOptimizeDeps: true
-         })
-      ],
-      css: {
-         postcss: {
-            plugins: [autoprefixer, tailwindcss]
-         }
-      },
-      server: {
-         port: env.VITE_PORT,
-         proxy: {
-            "/api": {
-               target: env.VITE_API,
-               changeOrigin: true,
-               secure: false,
-               ws: true,
-               rewrite: (path: string) => path.replace(/^\/api/, "/api")
-            }
-         },
-         cors: {
-            origin: "*",
-            methods: "GET, PUT, POST, DELETE",
-            allowedHeaders: "*",
-            exposedHeaders: "*",
-            preflightContinue: true,
-            optionsSuccessStatus: 204,
-            credentials: true
-         }
-      },
-      resolve: {
-         alias: {
-            "@": resolve(__dirname, "./src")
-         },
-         extensions: [".js", ".ts", ".vue", ".json"]
-      },
-      optimizeDeps: {
-         exclude: ["vuetify", "vue-router"],
-         extensions: [".scss", ".sass"],
-         entries: ["./src/**/*.vue"]
-      },
-      build: {
-         cssCodeSplit: false,
-         minify: "oxc",
-         chunkSizeWarningLimit: 1024,
-         rollupOptions: {
-            checks: {
-               pluginTimings: false
+        },
+        server: {
+            port: env.VITE_PORT,
+            proxy: {
+                "/api": {
+                    target: env.VITE_API,
+                    changeOrigin: true,
+                    secure: false,
+                    ws: true,
+                    rewrite: (path: string) => path.replace(/^\/api/, "/api")
+                }
             },
-            output: {
-               chunkFileNames: "assets/[name]-[hash].js",
-               codeSplitting: {
-                  groups: [
-                     {
-                        name: "vue",
-                        test: /node_modules[\\/]vue[\\/]/,
-                        priority: 30
-                     },
-                     {
-                        name: "vuetify",
-                        test: /node_modules[\\/]vuetify[\\/]/,
-                        priority: 25
-                     },
-                     {
-                        name: "http",
-                        test: /node_modules[\\/](axios|@tanstack\/vue-query)[\\/]/,
-                        priority: 20
-                     },
-                     {
-                        name: "icons",
-                        test: /node_modules[\\/](@mdi\/js|@tabler\/icons-vue|@phosphor-icons\/vue|country-flag-icons)[\\/]/,
-                        priority: 15
-                     },
-                     {
-                        name: "utils",
-                        test: /node_modules[\\/](vue-router|vue-i18n|pinia|pinia-plugin-persistedstate|maska)[\\/]/,
-                        priority: 10
-                     }
-                  ]
-               }
+            cors: {
+                origin: "*",
+                methods: "GET, PUT, POST, DELETE",
+                allowedHeaders: "*",
+                exposedHeaders: "*",
+                preflightContinue: true,
+                optionsSuccessStatus: 204,
+                credentials: true
             }
-         }
-      },
-      define: {
-         global: "window"
-      }
-   };
+        },
+        resolve: {
+            alias: {
+                "@": resolve(__dirname, "./src")
+            },
+            extensions: [".js", ".ts", ".vue", ".json"]
+        },
+        optimizeDeps: {
+            exclude: ["vuetify", "vue-router"],
+            extensions: [".scss", ".sass"],
+            entries: ["./src/**/*.vue"]
+        },
+        build: {
+            cssCodeSplit: false,
+            minify: "oxc",
+            chunkSizeWarningLimit: 1024,
+            rollupOptions: {
+                checks: {
+                    pluginTimings: false
+                },
+                output: {
+                    chunkFileNames: "assets/[name]-[hash].js",
+                    codeSplitting: {
+                        groups: [
+                            {
+                                name: "vue",
+                                test: /node_modules[\\/]vue[\\/]/,
+                                priority: 30
+                            },
+                            {
+                                name: "vuetify",
+                                test: /node_modules[\\/]vuetify[\\/]/,
+                                priority: 25
+                            },
+                            {
+                                name: "http",
+                                test: /node_modules[\\/](axios|@tanstack\/vue-query)[\\/]/,
+                                priority: 20
+                            },
+                            {
+                                name: "icons",
+                                test: /node_modules[\\/](@mdi\/js|@tabler\/icons-vue|@phosphor-icons\/vue|country-flag-icons)[\\/]/,
+                                priority: 15
+                            },
+                            {
+                                name: "utils",
+                                test: /node_modules[\\/](vue-router|vue-i18n|pinia|pinia-plugin-persistedstate|maska)[\\/]/,
+                                priority: 10
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        define: {
+            global: "window"
+        }
+    };
 });

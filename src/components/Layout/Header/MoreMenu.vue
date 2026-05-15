@@ -1,29 +1,29 @@
 <template>
-   <v-menu
-      offset="3, 0"
-      transition="dialog-transition">
-      <template v-slot:activator="{ props: slotProps }">
-         <v-btn
-            v-bind="slotProps"
-            v-bind:loading="isPending"
-            icon="$dots" />
-      </template>
+    <v-menu
+        offset="3, 0"
+        transition="dialog-transition">
+        <template v-slot:activator="{ props: slotProps }">
+            <v-btn
+                v-bind="slotProps"
+                v-bind:loading="isPending"
+                icon="$dots" />
+        </template>
 
-      <v-list v-bind:slim="false">
-         <v-list-item
-            v-bind:to="{ name: 'user' }"
-            append-icon="$user">
-            <v-list-item-title>{{ t("app.profile") }}</v-list-item-title>
-         </v-list-item>
+        <v-list v-bind:slim="false">
+            <v-list-item
+                v-bind:to="{ name: 'user' }"
+                append-icon="$user">
+                <v-list-item-title>{{ t("app.profile") }}</v-list-item-title>
+            </v-list-item>
 
-         <v-list-item
-            append-icon="$logout"
-            link
-            @click="logoutHandler">
-            <v-list-item-title>{{ t("app.logout") }}</v-list-item-title>
-         </v-list-item>
-      </v-list>
-   </v-menu>
+            <v-list-item
+                append-icon="$logout"
+                link
+                @click="logoutHandler">
+                <v-list-item-title>{{ t("app.logout") }}</v-list-item-title>
+            </v-list-item>
+        </v-list>
+    </v-menu>
 </template>
 
 <script lang="ts" setup>
@@ -38,14 +38,14 @@ const { mutateAsync: logoutUser, isPending } = useLogoutUser();
 
 // handlers
 const logoutHandler = async () => {
-   try {
-      await logoutUser({
-         token: authStore.refreshToken
-      });
-   } catch (error) {
-      errorLog(error);
-   } finally {
-      authStore.userLogout();
-   }
+    try {
+        await logoutUser({
+            token: authStore.refreshToken
+        });
+    } catch (error) {
+        errorLog(error);
+    } finally {
+        authStore.userLogout();
+    }
 };
 </script>

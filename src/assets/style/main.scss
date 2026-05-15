@@ -4,337 +4,337 @@
 // @import url("tailwind.css");
 
 @layer vuetify-final {
-   .rounded-0 {
-      border-radius: 0;
-   }
-   .rounded-sm {
-      border-radius: 2px;
-   }
-   .rounded {
-      border-radius: 4px;
-   }
-   .rounded-lg {
-      border-radius: 8px;
-   }
-   .rounded-xl {
-      border-radius: 24px;
-   }
-   .rounded-pill {
-      border-radius: 9999px;
-   }
-   .rounded-circle {
-      border-radius: 50%;
-   }
-   .rounded-shaped {
-      border-radius: 24px 0;
-   }
+    .rounded-0 {
+        border-radius: 0;
+    }
+    .rounded-sm {
+        border-radius: 2px;
+    }
+    .rounded {
+        border-radius: 4px;
+    }
+    .rounded-lg {
+        border-radius: 8px;
+    }
+    .rounded-xl {
+        border-radius: 24px;
+    }
+    .rounded-pill {
+        border-radius: 9999px;
+    }
+    .rounded-circle {
+        border-radius: 50%;
+    }
+    .rounded-shaped {
+        border-radius: 24px 0;
+    }
 
-   .bg-transparent {
-      background-color: transparent;
-      color: currentColor;
-   }
+    .bg-transparent {
+        background-color: transparent;
+        color: currentColor;
+    }
 
-   .tabler-icon {
-      width: 1em;
-      height: 1em;
-   }
+    .tabler-icon {
+        width: 1em;
+        height: 1em;
+    }
 
-   $scroll: rgba(var(--v-theme-on-surface), 0.3);
-   $background: rgba(var(--v-theme-on-surface), 0);
-   * {
-      // firefox
-      @supports not selector(::-webkit-scrollbar) {
-         scrollbar-color: $scroll $background;
-         scrollbar-width: thin;
-      }
-   }
-   :root {
-      @include scrollbar(8px, $background, $scroll);
-      // --bg-light: url("@/assets/image/light.png");
-      // --bg-dark: url("@/assets/image/dark.png");
-      --bg-noise: url("@/assets/image/noise.png");
-   }
+    $scroll: rgba(var(--v-theme-on-surface), 0.3);
+    $background: rgba(var(--v-theme-on-surface), 0);
+    * {
+        // firefox
+        @supports not selector(::-webkit-scrollbar) {
+            scrollbar-color: $scroll $background;
+            scrollbar-width: thin;
+        }
+    }
+    :root {
+        @include scrollbar(8px, $background, $scroll);
+        // --bg-light: url("@/assets/image/light.png");
+        // --bg-dark: url("@/assets/image/dark.png");
+        --bg-noise: url("@/assets/image/noise.png");
+    }
 
-   // main scroller
-   html,
-   body,
-   #app {
-      overflow: hidden;
-      height: 100%;
-   }
+    // main scroller
+    html,
+    body,
+    #app {
+        overflow: hidden;
+        height: 100%;
+    }
 
-   // vue-draggable
-   html.grabbing * {
-      cursor: grab !important;
-   }
-   .sortable-fallback {
-      opacity: 1 !important;
-   }
-   .sortable-chosen {
-      border-radius: 4px;
-      border-bottom-color: transparent;
-      @include elevation(2);
-   }
+    // vue-draggable
+    html.grabbing * {
+        cursor: grab !important;
+    }
+    .sortable-fallback {
+        opacity: 1 !important;
+    }
+    .sortable-chosen {
+        border-radius: 4px;
+        border-bottom-color: transparent;
+        @include elevation(2);
+    }
 
-   .motion-row {
-      &-enter-from,
-      &-leave-to {
-         opacity: 0;
-      }
+    .motion-row {
+        &-enter-from,
+        &-leave-to {
+            opacity: 0;
+        }
 
-      &-enter-to,
-      &-leave-from {
-         opacity: 1;
-      }
+        &-enter-to,
+        &-leave-from {
+            opacity: 1;
+        }
 
-      &-enter-active,
-      &-leave-active {
-         transition: all 195ms cubic-bezier(0.4, 0, 0.6, 1);
-      }
-   }
+        &-enter-active,
+        &-leave-active {
+            transition: all 195ms cubic-bezier(0.4, 0, 0.6, 1);
+        }
+    }
 
-   .motion-fade {
-      @include transition-default();
+    .motion-fade {
+        @include transition-default();
 
-      &-enter-from,
-      &-leave-to {
-         opacity: 0;
-      }
+        &-enter-from,
+        &-leave-to {
+            opacity: 0;
+        }
 
-      &-enter-to,
-      &-leave-from {
-         opacity: 1;
-      }
+        &-enter-to,
+        &-leave-from {
+            opacity: 1;
+        }
 
-      &-enter-active,
-      &-leave-active {
-         transition-property: opacity !important;
-      }
-   }
+        &-enter-active,
+        &-leave-active {
+            transition-property: opacity !important;
+        }
+    }
 
-   .motion-slidex {
-      @include transition-default();
+    .motion-slidex {
+        @include transition-default();
 
-      &-enter-from,
-      &-leave-to {
-         opacity: 0;
-         transform: translateX(-15px);
-      }
+        &-enter-from,
+        &-leave-to {
+            opacity: 0;
+            transform: translateX(-15px);
+        }
 
-      &-enter-active,
-      &-leave-active {
-         transition-property: transform, opacity !important;
-      }
-   }
+        &-enter-active,
+        &-leave-active {
+            transition-property: transform, opacity !important;
+        }
+    }
 
-   // elevation
-   @for $i from 1 through 24 {
-      .elevation-#{$i} {
-         @include elevation($i);
-      }
-   }
+    // elevation
+    @for $i from 1 through 24 {
+        .elevation-#{$i} {
+            @include elevation($i);
+        }
+    }
 }
 
 @layer vuetify-overrides {
-   // vApp
-   .v-application.v-theme--light {
-      background-color: #fdfeff;
-   }
+    // vApp
+    .v-application.v-theme--light {
+        background-color: #fdfeff;
+    }
 
-   // vChip
-   .v-field .v-chip {
-      --v-chip-height: 24px;
-   }
+    // vChip
+    .v-field .v-chip {
+        --v-chip-height: 24px;
+    }
 
-   // vBtn
-   .v-btn {
-      letter-spacing: 0.05em;
-      text-indent: unset;
-      text-transform: unset;
-      transition-property: border, color, box-shadow, transform, opacity, background;
+    // vBtn
+    .v-btn {
+        letter-spacing: 0.05em;
+        text-indent: unset;
+        text-transform: unset;
+        transition-property: border, color, box-shadow, transform, opacity, background;
 
-      &.v-date-picker-month__day-btn:active {
-         background-color: rgba(var(--v-theme-surface-variant), var(--v-disabled-opacity));
-      }
-   }
+        &.v-date-picker-month__day-btn:active {
+            background-color: rgba(var(--v-theme-surface-variant), var(--v-disabled-opacity));
+        }
+    }
 
-   // vSnackbar
-   .v-snackbar--variant-tonal,
-   .v-chip--variant-tonal {
-      @apply border border-current/20 bg-[rgb(var(--v-theme-surface))];
-   }
+    // vSnackbar
+    .v-snackbar--variant-tonal,
+    .v-chip--variant-tonal {
+        @apply border border-current/20 bg-[rgb(var(--v-theme-surface))];
+    }
 
-   // vProgressCircular
-   .v-progress-circular--indeterminate svg {
-      animation: rotateProgress 1.2s linear infinite;
-      transition: none !important;
-   }
+    // vProgressCircular
+    .v-progress-circular--indeterminate svg {
+        animation: rotateProgress 1.2s linear infinite;
+        transition: none !important;
+    }
 
-   .v-progress-circular--indeterminate .v-progress-circular__overlay {
-      stroke-dasharray: 150, 200;
-      stroke-dashoffset: -10;
-      stroke-width: 3;
-      stroke-linecap: round;
-      animation: dashProgress 1.2s ease-in-out infinite;
-   }
+    .v-progress-circular--indeterminate .v-progress-circular__overlay {
+        stroke-dasharray: 150, 200;
+        stroke-dashoffset: -10;
+        stroke-width: 3;
+        stroke-linecap: round;
+        animation: dashProgress 1.2s ease-in-out infinite;
+    }
 
-   @keyframes rotateProgress {
-      100% {
-         transform: rotate(270deg);
-      }
-   }
-   @keyframes dashProgress {
-      0% {
-         stroke-dasharray: 1, 200;
-         stroke-dashoffset: 0;
-      }
-      50% {
-         stroke-dasharray: 89, 200;
-         stroke-dashoffset: -35;
-      }
-      100% {
-         stroke-dasharray: 89, 200;
-         stroke-dashoffset: -124;
-      }
-   }
+    @keyframes rotateProgress {
+        100% {
+            transform: rotate(270deg);
+        }
+    }
+    @keyframes dashProgress {
+        0% {
+            stroke-dasharray: 1, 200;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 89, 200;
+            stroke-dashoffset: -35;
+        }
+        100% {
+            stroke-dasharray: 89, 200;
+            stroke-dashoffset: -124;
+        }
+    }
 
-   // vTextField
-   .v-text-field {
-      .v-field--variant-outlined > .v-field__outline {
-         --v-field-border-width: 1px;
-      }
-      .v-input__details {
-         padding: 3px;
-      }
+    // vTextField
+    .v-text-field {
+        .v-field--variant-outlined > .v-field__outline {
+            --v-field-border-width: 1px;
+        }
+        .v-input__details {
+            padding: 3px;
+        }
 
-      &:not(.v-input--error) {
-         .v-field--variant-outlined > .v-field__outline {
-            --v-field-border-opacity: calc(var(--v-border-opacity) * var(--v-theme-overlay-multiplier));
-         }
-
-         .v-field--variant-outlined.v-field--focused > .v-field__outline {
-            --v-field-border-opacity: calc((var(--v-border-opacity) + var(--v-activated-opacity)) * var(--v-theme-overlay-multiplier));
-         }
-      }
-   }
-
-   // vMenu
-   .v-menu {
-      > .v-select__content {
-         overflow: visible;
-      }
-   }
-
-   .v-input--density-compact {
-      .v-field--variant-filled {
-         --v-field-padding-bottom: 2px;
-      }
-
-      .v-field--variant-underlined {
-         --v-field-padding-bottom: 2px;
-      }
-   }
-
-   // vList
-   .v-list .v-list-item--nav:last-child {
-      margin-bottom: 0;
-   }
-
-   // vTable
-   .v-table {
-      > .v-table__wrapper {
-         overflow-x: auto;
-         // max-height: 640px;
-
-         > table {
-            // table-layout: fixed;
-            border-collapse: separate;
-
-            > tbody > tr:last-child {
-               > td,
-               > th {
-                  border-bottom: thin solid transparent;
-               }
+        &:not(.v-input--error) {
+            .v-field--variant-outlined > .v-field__outline {
+                --v-field-border-opacity: calc(var(--v-border-opacity) * var(--v-theme-overlay-multiplier));
             }
-         }
-      }
 
-      &.v-table--hover {
-         > .v-table__wrapper > table > tbody > tr.v-data-table__tr--expand > td::after {
-            background: transparent;
-         }
+            .v-field--variant-outlined.v-field--focused > .v-field__outline {
+                --v-field-border-opacity: calc((var(--v-border-opacity) + var(--v-activated-opacity)) * var(--v-theme-overlay-multiplier));
+            }
+        }
+    }
 
-         > .v-table__wrapper > table > tbody > tr:last-child:hover > td,
-         > .v-table__wrapper > table > tbody > tr:last-child:hover > th {
-            border-bottom-color: rgba(var(--v-border-color), var(--v-hover-opacity));
-         }
-      }
+    // vMenu
+    .v-menu {
+        > .v-select__content {
+            overflow: visible;
+        }
+    }
 
-      tr.v-data-table__tr--clickable > td::after {
-         transition: all 195ms cubic-bezier(0.4, 0, 0.6, 1);
-      }
-      tr.v-data-table__tr--clickable:active > td::after {
-         background: rgba(var(--v-border-color), var(--v-selected-opacity));
-      }
+    .v-input--density-compact {
+        .v-field--variant-filled {
+            --v-field-padding-bottom: 2px;
+        }
 
-      tr.v-data-table__tr--sticky {
-         position: sticky;
-         top: 2.5rem;
-         z-index: 2;
-         background-color: rgb(var(--v-theme-surface));
+        .v-field--variant-underlined {
+            --v-field-padding-bottom: 2px;
+        }
+    }
 
-         > td::after {
-            position: absolute;
-            content: "";
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            background: rgba(var(--v-border-color), var(--v-hover-opacity));
-         }
-      }
+    // vList
+    .v-list .v-list-item--nav:last-child {
+        margin-bottom: 0;
+    }
 
-      .v-data-table-footer {
-         margin-top: -1px;
-         overflow: hidden;
-         border-bottom-right-radius: var(--radius-sm);
-         border-bottom-left-radius: var(--radius-sm);
-      }
+    // vTable
+    .v-table {
+        > .v-table__wrapper {
+            overflow-x: auto;
+            // max-height: 640px;
 
-      &.v-table--hover td:has(.v-skeleton-loader)::after {
-         display: none;
-      }
+            > table {
+                // table-layout: fixed;
+                border-collapse: separate;
 
-      // table header color
-      &.v-table--accent-header {
-         > .v-table__wrapper > table > thead > tr {
-            background-color: rgba(var(--v-theme-surface-light), var(--v-disabled-opacity));
-         }
-      }
+                > tbody > tr:last-child {
+                    > td,
+                    > th {
+                        border-bottom: thin solid transparent;
+                    }
+                }
+            }
+        }
 
-      // table sticky header
-      &.v-table--sticky-header {
-         > .v-table__wrapper > table > thead {
+        &.v-table--hover {
+            > .v-table__wrapper > table > tbody > tr.v-data-table__tr--expand > td::after {
+                background: transparent;
+            }
+
+            > .v-table__wrapper > table > tbody > tr:last-child:hover > td,
+            > .v-table__wrapper > table > tbody > tr:last-child:hover > th {
+                border-bottom-color: rgba(var(--v-border-color), var(--v-hover-opacity));
+            }
+        }
+
+        tr.v-data-table__tr--clickable > td::after {
+            transition: all 195ms cubic-bezier(0.4, 0, 0.6, 1);
+        }
+        tr.v-data-table__tr--clickable:active > td::after {
+            background: rgba(var(--v-border-color), var(--v-selected-opacity));
+        }
+
+        tr.v-data-table__tr--sticky {
             position: sticky;
-            top: 0rem;
+            top: 2.5rem;
             z-index: 2;
             background-color: rgb(var(--v-theme-surface));
-         }
-      }
 
-      // table sticky footer
-      &.v-table--sticky-footer {
-         > .v-divider {
+            > td::after {
+                position: absolute;
+                content: "";
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                background: rgba(var(--v-border-color), var(--v-hover-opacity));
+            }
+        }
+
+        .v-data-table-footer {
+            margin-top: -1px;
+            overflow: hidden;
+            border-bottom-right-radius: var(--radius-sm);
+            border-bottom-left-radius: var(--radius-sm);
+        }
+
+        &.v-table--hover td:has(.v-skeleton-loader)::after {
             display: none;
-         }
-         > .v-data-table-footer {
-            position: sticky;
-            bottom: 0rem;
-            z-index: 2;
-            background-color: rgb(var(--v-theme-surface));
-            border-top: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
-         }
-      }
-   }
+        }
+
+        // table header color
+        &.v-table--accent-header {
+            > .v-table__wrapper > table > thead > tr {
+                background-color: rgba(var(--v-theme-surface-light), var(--v-disabled-opacity));
+            }
+        }
+
+        // table sticky header
+        &.v-table--sticky-header {
+            > .v-table__wrapper > table > thead {
+                position: sticky;
+                top: 0rem;
+                z-index: 2;
+                background-color: rgb(var(--v-theme-surface));
+            }
+        }
+
+        // table sticky footer
+        &.v-table--sticky-footer {
+            > .v-divider {
+                display: none;
+            }
+            > .v-data-table-footer {
+                position: sticky;
+                bottom: 0rem;
+                z-index: 2;
+                background-color: rgb(var(--v-theme-surface));
+                border-top: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+            }
+        }
+    }
 }

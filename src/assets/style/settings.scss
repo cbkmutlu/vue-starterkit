@@ -2,83 +2,83 @@
 // https://vuetifyjs.com/en/features/sass-variables/#component-specific-variables
 // https://vuetifyjs.com/en/features/sass-variables/#duplicated-css
 @use "vuetify/settings" with (
-   $utilities: false,
-   $color-pack: false,
-   $dialog-card-text-letter-spacing: normal,
-   $dialog-card-text-padding: 1rem,
-   $table-column-padding: 0 12px,
-   $table-density: (
-      "default": 0,
-      "comfortable": -2,
-      "compact": -4
-   ),
-   $field-font-size: 14px,
-   $field-label-floating-scale: 0.9285714285714286,
-   $label-font-size: 1em,
-   // $list-item-nav-title-line-height: 1.5,
-   $list-item-subtitle-opacity: var(--v-list-item-subtitle-opacity, var(--v-high-emphasis-opacity)),
-   $list-indent-size: 0px,
-   $list-subheader-min-height: 36px,
-   $card-transition-property: (
-      box-shadow,
-      opacity
-   ),
-   $table-transition-property: (
-      box-shadow,
-      opacity,
-      height
-   ),
-   $button-transition-property: (
-      box-shadow,
-      opacity
-   ),
-   $date-picker-month-day-size: 34px,
-   $date-picker-month-btn-height: 18px,
-   $date-picker-month-font-size: 0.75rem,
-   $date-picker-month-padding: 0 8px 8px,
-   $date-picker-controls-height: var(--v-date-picker-controls-height, 44px),
-   $date-picker-controls-padding: 4px 8px,
-   $date-picker-width: 300px,
-   $date-picker-years-height: 286px,
-   $date-picker-months-height: 286px,
-   // $date-picker-years-height: 246px,
-   // $date-picker-months-height: 246px,
-   $switch-inset-track-height: 24px,
-   $switch-inset-thumb-height: 20px,
-   $switch-inset-thumb-width: 20px,
-   $data-table-footer-select-width: 120px,
-   $data-table-footer-info-min-width: 300px,
-   $pagination-item-margin: 0 0.3rem,
-   $field-control-padding-start: 12px,
-   $field-control-padding-end: 12px,
-   $field-control-affixed-padding: 6px,
-   $field-letter-spacing: 0.0178571429em,
-   $input-density: (
-      "default": 0,
-      "comfortable": -3,
-      "compact": -5
-   ),
-   $grid-breakpoints: (
-      "xs": 0,
-      "sm": 400px,
-      "md": 840px,
-      "lg": 1145px,
-      "xl": 1545px,
-      "xxl": 2138px
-   ),
-   $body-font-family: (
-      "Inter",
-      "Roboto",
-      "Segoe UI",
-      "Calibri",
-      "Verdana",
-      "sans-serif"
-   ),
-   $icon-sizes: (
-      "x-small": 1em,
-      "small": 1.125em,
-      "default": 1.375em,
-      "large": 1.625em,
-      "x-large": 1.875em
-   )
+    $utilities: false,
+    $color-pack: false,
+    $dialog-card-text-letter-spacing: normal,
+    $dialog-card-text-padding: 1rem,
+    $table-column-padding: 0 12px,
+    $table-density: (
+        "default": 0,
+        "comfortable": -2,
+        "compact": -4
+    ),
+    $field-font-size: 14px,
+    $field-label-floating-scale: 0.9285714285714286,
+    $label-font-size: 1em,
+    // $list-item-nav-title-line-height: 1.5,
+    $list-item-subtitle-opacity: var(--v-list-item-subtitle-opacity, var(--v-high-emphasis-opacity)),
+    $list-indent-size: 0px,
+    $list-subheader-min-height: 36px,
+    $card-transition-property: (
+        box-shadow,
+        opacity
+    ),
+    $table-transition-property: (
+        box-shadow,
+        opacity,
+        height
+    ),
+    $button-transition-property: (
+        box-shadow,
+        opacity
+    ),
+    $date-picker-month-day-size: 34px,
+    $date-picker-month-btn-height: 18px,
+    $date-picker-month-font-size: 0.75rem,
+    $date-picker-month-padding: 0 8px 8px,
+    $date-picker-controls-height: var(--v-date-picker-controls-height, 44px),
+    $date-picker-controls-padding: 4px 8px,
+    $date-picker-width: 300px,
+    $date-picker-years-height: 286px,
+    $date-picker-months-height: 286px,
+    // $date-picker-years-height: 246px,
+    // $date-picker-months-height: 246px,
+    $switch-inset-track-height: 24px,
+    $switch-inset-thumb-height: 20px,
+    $switch-inset-thumb-width: 20px,
+    $data-table-footer-select-width: 120px,
+    $data-table-footer-info-min-width: 300px,
+    $pagination-item-margin: 0 0.3rem,
+    $field-control-padding-start: 12px,
+    $field-control-padding-end: 12px,
+    $field-control-affixed-padding: 6px,
+    $field-letter-spacing: 0.0178571429em,
+    $input-density: (
+        "default": 0,
+        "comfortable": -3,
+        "compact": -5
+    ),
+    $grid-breakpoints: (
+        "xs": 0,
+        "sm": 400px,
+        "md": 840px,
+        "lg": 1145px,
+        "xl": 1545px,
+        "xxl": 2138px
+    ),
+    $body-font-family: (
+        "Inter",
+        "Roboto",
+        "Segoe UI",
+        "Calibri",
+        "Verdana",
+        "sans-serif"
+    ),
+    $icon-sizes: (
+        "x-small": 1em,
+        "small": 1.125em,
+        "default": 1.375em,
+        "large": 1.625em,
+        "x-large": 1.875em
+    )
 );

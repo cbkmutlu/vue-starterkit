@@ -7,9 +7,9 @@ import type { ThemeInstance } from "vuetify";
  * errorLog("Hello World") => "Hello World"
  */
 export const errorLog = (message: any, ...optionalParams: any[]) => {
-   if (process.env.NODE_ENV === "development") {
-      console.error(message, ...optionalParams);
-   }
+    if (process.env.NODE_ENV === "development") {
+        console.error(message, ...optionalParams);
+    }
 };
 
 /**
@@ -18,21 +18,21 @@ export const errorLog = (message: any, ...optionalParams: any[]) => {
  * getMedia("image.png") => "http://localhost:3000/image.png"
  */
 export const getMedia = (path: string | Blob): string => {
-   if (path instanceof Blob) {
-      return URL.createObjectURL(path);
-   }
+    if (path instanceof Blob) {
+        return URL.createObjectURL(path);
+    }
 
-   if (!path || typeof path !== "string") {
-      errorLog("[getMedia] path is not string or empty");
-      return "";
-   }
+    if (!path || typeof path !== "string") {
+        errorLog("[getMedia] path is not string or empty");
+        return "";
+    }
 
-   if (typeof path === "string" && path.startsWith("blob:")) {
-      return path;
-   }
+    if (typeof path === "string" && path.startsWith("blob:")) {
+        return path;
+    }
 
-   path = path.replace(/^\/+/, "");
-   return import.meta.env.VITE_MEDIA.replace(/\/+$/, "") + "/" + path;
+    path = path.replace(/^\/+/, "");
+    return import.meta.env.VITE_MEDIA.replace(/\/+$/, "") + "/" + path;
 };
 
 /**
@@ -41,43 +41,43 @@ export const getMedia = (path: string | Blob): string => {
  * safeUrl("https://example.com") => "https://example.com"
  */
 export const safeUrl = (url: string) => {
-   try {
-      const u = new URL(url, window.location.origin);
-      if (["http:", "https:"].includes(u.protocol)) {
-         return u.href;
-      }
-   } catch (e) {}
-   return "#";
+    try {
+        const u = new URL(url, window.location.origin);
+        if (["http:", "https:"].includes(u.protocol)) {
+            return u.href;
+        }
+    } catch (e) {}
+    return "#";
 };
 
 /**
  * Verilen değeri JSON formatına çevirir.
  */
 export const safeJsonToArray = (text: string): string[] => {
-   if (!text) return [];
+    if (!text) return [];
 
-   try {
-      const parsed = JSON.parse(text);
-      if (Array.isArray(parsed)) {
-         return parsed;
-      }
-      return [parsed];
-   } catch (e) {
-      return [text];
-   }
+    try {
+        const parsed = JSON.parse(text);
+        if (Array.isArray(parsed)) {
+            return parsed;
+        }
+        return [parsed];
+    } catch (e) {
+        return [text];
+    }
 };
 
 /**
  * Verilen değeri JSON formatına çevirir.
  */
 export const safeJson = (text: string): any => {
-   if (!text) return "";
+    if (!text) return "";
 
-   try {
-      return JSON.parse(text);
-   } catch (e) {
-      return text;
-   }
+    try {
+        return JSON.parse(text);
+    } catch (e) {
+        return text;
+    }
 };
 
 /**
@@ -86,7 +86,7 @@ export const safeJson = (text: string): any => {
  * getMotionReduction() => true
  */
 export const getMotionReduction = () => {
-   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 };
 
 /**
@@ -95,8 +95,8 @@ export const getMotionReduction = () => {
  * setTheme("dark") => Tema dark olarak değişir.
  */
 export const setTheme = (theme: ThemeInstance, value: "light" | "dark" | "system"): void => {
-   theme.change(value);
-   localStorage.setItem(appConfig.key.theme, value);
+    theme.change(value);
+    localStorage.setItem(appConfig.key.theme, value);
 };
 
 /**
@@ -105,17 +105,17 @@ export const setTheme = (theme: ThemeInstance, value: "light" | "dark" | "system
  * toggleTheme() => Mevcut tema light ise dark, dark ise system, system ise light olarak değişir.
  */
 export const toggleTheme = (theme: ThemeInstance): void => {
-   const current = getTheme();
-   let next: any;
-   if (current === "light") {
-      next = "dark";
-   } else if (current === "dark") {
-      next = "system";
-   } else {
-      next = "light";
-   }
+    const current = getTheme();
+    let next: any;
+    if (current === "light") {
+        next = "dark";
+    } else if (current === "dark") {
+        next = "system";
+    } else {
+        next = "light";
+    }
 
-   setTheme(theme, next);
+    setTheme(theme, next);
 };
 
 /**
@@ -123,13 +123,13 @@ export const toggleTheme = (theme: ThemeInstance): void => {
  * Değer `light` veya `dark` değilse varsayılan olarak `system` döndürür.
  */
 export const getTheme = (): string => {
-   const theme = localStorage.getItem(appConfig.key.theme);
+    const theme = localStorage.getItem(appConfig.key.theme);
 
-   if (theme && ["light", "dark"].includes(theme)) {
-      return theme;
-   }
+    if (theme && ["light", "dark"].includes(theme)) {
+        return theme;
+    }
 
-   return "system";
+    return "system";
 };
 
 /**
@@ -138,14 +138,14 @@ export const getTheme = (): string => {
  * setLocale("tr-TR") => Dil Türkçe olarak değişir.
  */
 export const setLocale = (i18n: Composer, locale: string, message: Record<string, string>): void => {
-   document.documentElement.setAttribute("lang", locale);
-   localStorage.setItem(appConfig.key.locale, locale);
+    document.documentElement.setAttribute("lang", locale);
+    localStorage.setItem(appConfig.key.locale, locale);
 
-   if (Object.keys(message).length) {
-      i18n.setLocaleMessage(locale, message);
-   }
+    if (Object.keys(message).length) {
+        i18n.setLocaleMessage(locale, message);
+    }
 
-   i18n.locale.value = locale;
+    i18n.locale.value = locale;
 };
 
 /**
@@ -155,13 +155,13 @@ export const setLocale = (i18n: Composer, locale: string, message: Record<string
  * getLocale() => "tr-TR"
  */
 export const getLocale = (): string => {
-   const locale = localStorage.getItem(appConfig.key.locale);
+    const locale = localStorage.getItem(appConfig.key.locale);
 
-   if (locale && Object.keys(appConfig.language.locales).includes(locale)) {
-      return locale;
-   }
+    if (locale && Object.keys(appConfig.language.locales).includes(locale)) {
+        return locale;
+    }
 
-   return appConfig.language.default;
+    return appConfig.language.default;
 };
 
 const cache_locale: Set<string> = new Set();
@@ -171,34 +171,34 @@ const cache_locale: Set<string> = new Set();
  * loadLocale("tr-TR") => Dil dosyaları yüklenir.
  */
 export const loadLocale = async (locale: string): Promise<Record<string, any>> => {
-   if (cache_locale.has(locale)) {
-      return {};
-   }
+    if (cache_locale.has(locale)) {
+        return {};
+    }
 
-   const commonPromise = import(`@/locales/${locale}.json`)
-      .then((mod) => mod.default)
-      .catch(() => {
-         errorLog(`[loadLocale] ${locale} not found`);
-         return {};
-      });
-
-   const modulePromise = appConfig.module.map(async (module: string) => {
-      return import(`@/modules/${module}/locales/${locale}.json`)
-         .then((mod) => mod.default)
-         .catch(() => {
-            errorLog(`[loadLocale] ${module} module locales not found`);
+    const commonPromise = import(`@/locales/${locale}.json`)
+        .then((mod) => mod.default)
+        .catch(() => {
+            errorLog(`[loadLocale] ${locale} not found`);
             return {};
-         });
-   });
+        });
 
-   const [common, ...modules] = await Promise.all([commonPromise, ...modulePromise]);
-   cache_locale.add(locale);
+    const modulePromise = appConfig.module.map(async (module: string) => {
+        return import(`@/modules/${module}/locales/${locale}.json`)
+            .then((mod) => mod.default)
+            .catch(() => {
+                errorLog(`[loadLocale] ${module} module locales not found`);
+                return {};
+            });
+    });
 
-   return {
-      ...common,
-      ...Object.assign({}, ...modules),
-      $vuetify: appConfig.language.locales[locale as keyof typeof appConfig.language.locales]?.vuetify
-   };
+    const [common, ...modules] = await Promise.all([commonPromise, ...modulePromise]);
+    cache_locale.add(locale);
+
+    return {
+        ...common,
+        ...Object.assign({}, ...modules),
+        $vuetify: appConfig.language.locales[locale as keyof typeof appConfig.language.locales]?.vuetify
+    };
 };
 
 /**
@@ -207,32 +207,32 @@ export const loadLocale = async (locale: string): Promise<Record<string, any>> =
  * loadRoute() => Route dosyaları yüklenir.
  */
 export const loadRoute = async (): Promise<RouteRecordRaw[]> => {
-   const commonPromise = import("@/utils/routes.ts")
-      .then((mod) => {
-         return Object.values(mod)
-            .filter((res) => Array.isArray(res))
-            .flat();
-      })
-      .catch(() => {
-         errorLog("[loadRoute] routes not found");
-         return [];
-      });
-
-   const modulePromise = appConfig.module.map((module: string) =>
-      import(`@/modules/${module}/utils/routes.ts`)
-         .then((mod) => {
+    const commonPromise = import("@/utils/routes.ts")
+        .then((mod) => {
             return Object.values(mod)
-               .filter((res) => Array.isArray(res))
-               .flat();
-         })
-         .catch(() => {
-            errorLog(`[loadRoute] ${module} module routes not found`);
+                .filter((res) => Array.isArray(res))
+                .flat();
+        })
+        .catch(() => {
+            errorLog("[loadRoute] routes not found");
             return [];
-         })
-   );
+        });
 
-   const [common, ...modules] = await Promise.all([commonPromise, ...modulePromise]);
-   return [...common, ...modules.flat()];
+    const modulePromise = appConfig.module.map((module: string) =>
+        import(`@/modules/${module}/utils/routes.ts`)
+            .then((mod) => {
+                return Object.values(mod)
+                    .filter((res) => Array.isArray(res))
+                    .flat();
+            })
+            .catch(() => {
+                errorLog(`[loadRoute] ${module} module routes not found`);
+                return [];
+            })
+    );
+
+    const [common, ...modules] = await Promise.all([commonPromise, ...modulePromise]);
+    return [...common, ...modules.flat()];
 };
 
 /**
@@ -241,39 +241,39 @@ export const loadRoute = async (): Promise<RouteRecordRaw[]> => {
  * loadMenu() => Menü dosyaları yüklenir.
  */
 export const loadMenu = async (): Promise<Record<string, TList[]>> => {
-   const commonPromise = import("@/utils/menu.ts")
-      .then((mod) => {
-         return {
-            default: Object.values(mod)
-               .filter((res) => Array.isArray(res))
-               .flat()
-         };
-      })
-      .catch(() => {
-         errorLog("[loadMenu] menu not found");
-         return { default: [] };
-      });
-
-   const modulePromise = appConfig.module.map((module: string) =>
-      import(`@/modules/${module}/utils/menu.ts`)
-         .then((mod) => {
+    const commonPromise = import("@/utils/menu.ts")
+        .then((mod) => {
             return {
-               [module.toLowerCase()]: Object.values(mod)
-                  .filter((res) => Array.isArray(res))
-                  .flat()
+                default: Object.values(mod)
+                    .filter((res) => Array.isArray(res))
+                    .flat()
             };
-         })
-         .catch(() => {
-            errorLog(`[loadMenu] ${module} module menu not found`);
-            return { [module.toLowerCase()]: [] };
-         })
-   );
+        })
+        .catch(() => {
+            errorLog("[loadMenu] menu not found");
+            return { default: [] };
+        });
 
-   const [common, ...modules] = await Promise.all([commonPromise, ...modulePromise]);
-   return {
-      ...common,
-      ...Object.assign({}, ...modules)
-   };
+    const modulePromise = appConfig.module.map((module: string) =>
+        import(`@/modules/${module}/utils/menu.ts`)
+            .then((mod) => {
+                return {
+                    [module.toLowerCase()]: Object.values(mod)
+                        .filter((res) => Array.isArray(res))
+                        .flat()
+                };
+            })
+            .catch(() => {
+                errorLog(`[loadMenu] ${module} module menu not found`);
+                return { [module.toLowerCase()]: [] };
+            })
+    );
+
+    const [common, ...modules] = await Promise.all([commonPromise, ...modulePromise]);
+    return {
+        ...common,
+        ...Object.assign({}, ...modules)
+    };
 };
 
 /**
@@ -285,27 +285,27 @@ export const loadMenu = async (): Promise<Record<string, TList[]>> => {
  * createSlug("København & Århus", "da-DK") => "kobenhavn-og-arhus"
  */
 export const createSlug = (input: any, locale: string = getLocale()): string => {
-   if (!input) {
-      return "";
-   }
+    if (!input) {
+        return "";
+    }
 
-   const locales: Record<string, Record<string, string>> = {
-      "de-DE": { ä: "ae", ö: "oe", ü: "ue" },
-      "fr-FR": { œ: "oe", æ: "ae" },
-      "da-DK": { ø: "o", æ: "ae", å: "a" },
-      "tr-TR": { ı: "i", ß: "b", "&": "-ve-" },
-      fallback: { œ: "oe", æ: "ae", ß: "ss", ø: "o", ı: "i", "&": "-and-" }
-   };
-   const chars = Object.assign({}, locales[locale] || {}, locales["fallback"] || {});
+    const locales: Record<string, Record<string, string>> = {
+        "de-DE": { ä: "ae", ö: "oe", ü: "ue" },
+        "fr-FR": { œ: "oe", æ: "ae" },
+        "da-DK": { ø: "o", æ: "ae", å: "a" },
+        "tr-TR": { ı: "i", ß: "b", "&": "-ve-" },
+        fallback: { œ: "oe", æ: "ae", ß: "ss", ø: "o", ı: "i", "&": "-and-" }
+    };
+    const chars = Object.assign({}, locales[locale] || {}, locales["fallback"] || {});
 
-   return String(input)
-      .normalize("NFD")
-      .toLocaleLowerCase(locale)
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/./g, (ch: string) => chars[ch] ?? ch)
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/-+/g, "-")
-      .replace(/^-|-$/g, "");
+    return String(input)
+        .normalize("NFD")
+        .toLocaleLowerCase(locale)
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/./g, (ch: string) => chars[ch] ?? ch)
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
 };
 
 /**
@@ -316,15 +316,15 @@ export const createSlug = (input: any, locale: string = getLocale()): string => 
  * replaceString("Merhaba {0,0} {1}", [["dünya", "venus"], ["selamlar"]]) => "Merhaba dünya selamlar"
  */
 export const replaceString = (format: string, args: any[]): string => {
-   return format.replace(/{(\d+)(?:,(\d+))?}/g, (match, index, sub) => {
-      let value = args[index];
+    return format.replace(/{(\d+)(?:,(\d+))?}/g, (match, index, sub) => {
+        let value = args[index];
 
-      if (typeof sub !== "undefined" && Array.isArray(value)) {
-         value = value[sub];
-      }
+        if (typeof sub !== "undefined" && Array.isArray(value)) {
+            value = value[sub];
+        }
 
-      return typeof value !== "undefined" ? value : match;
-   });
+        return typeof value !== "undefined" ? value : match;
+    });
 };
 
 /**
@@ -333,28 +333,28 @@ export const replaceString = (format: string, args: any[]): string => {
  * searchString("hello", "hello world") => true
  */
 export const searchString = (query: string, data: string, locale: string = getLocale()) => {
-   if (!query || !data) {
-      return true;
-   }
+    if (!query || !data) {
+        return true;
+    }
 
-   const locales: Record<string, string[]> = {
-      "tr-TR": ["üÜuU", "ğĞgG", "şŞsS", "çÇcC", "öÖoO"],
-      fallback: ["iİıI", "üÜuU", "ğĞgG", "şŞsS", "çÇcC", "öÖoO"]
-   };
+    const locales: Record<string, string[]> = {
+        "tr-TR": ["üÜuU", "ğĞgG", "şŞsS", "çÇcC", "öÖoO"],
+        fallback: ["iİıI", "üÜuU", "ğĞgG", "şŞsS", "çÇcC", "öÖoO"]
+    };
 
-   // const chars = locales[locale] || locales["fallback"] || [];
-   const chars = [...new Set([...(locales[locale] || []), ...(locales.fallback || [])])];
-   query = lowerCase(query)
-      .replace(/[.+?^${}()|[\]\\]/g, "\\$&")
-      .replace(/[\*\s]/g, ".*");
+    // const chars = locales[locale] || locales["fallback"] || [];
+    const chars = [...new Set([...(locales[locale] || []), ...(locales.fallback || [])])];
+    query = lowerCase(query)
+        .replace(/[.+?^${}()|[\]\\]/g, "\\$&")
+        .replace(/[\*\s]/g, ".*");
 
-   for (const char of chars) {
-      const regex = new RegExp(`[${char}]`, "g");
-      query = query.replace(regex, `[${char}]`);
-   }
+    for (const char of chars) {
+        const regex = new RegExp(`[${char}]`, "g");
+        query = query.replace(regex, `[${char}]`);
+    }
 
-   const filter = new RegExp(query, "i");
-   return data.search(filter) !== -1;
+    const filter = new RegExp(query, "i");
+    return data.search(filter) !== -1;
 };
 
 const cache_number: Record<string, { group: string; decimal: string }> = {};
@@ -364,16 +364,16 @@ const cache_number: Record<string, { group: string; decimal: string }> = {};
  * decimalSeparator("tr-TR") => { group: ".", decimal: "," }
  */
 export const decimalSeparator = (locale: string) => {
-   if (!cache_number[locale]) {
-      const sample = 123456.7;
-      const format = new Intl.NumberFormat(locale).format(sample);
+    if (!cache_number[locale]) {
+        const sample = 123456.7;
+        const format = new Intl.NumberFormat(locale).format(sample);
 
-      const group = format.match(/(\D+)/)?.[0] ?? ",";
-      const decimal = format.match(/(\D+)(\d+)$/)?.[1] ?? ".";
+        const group = format.match(/(\D+)/)?.[0] ?? ",";
+        const decimal = format.match(/(\D+)(\d+)$/)?.[1] ?? ".";
 
-      cache_number[locale] = { group, decimal };
-   }
-   return cache_number[locale];
+        cache_number[locale] = { group, decimal };
+    }
+    return cache_number[locale];
 };
 
 /**
@@ -382,11 +382,11 @@ export const decimalSeparator = (locale: string) => {
  * currencySymbol("TRY") => "₺"
  */
 export const currencySymbol = (currency: string = "TRY", locale: string = getLocale()): string => {
-   const format = new Intl.NumberFormat(locale, { style: "currency", currency, currencyDisplay: "narrowSymbol" });
-   const parts = format.formatToParts(0);
-   const symbol = parts.find((p) => p.type === "currency");
+    const format = new Intl.NumberFormat(locale, { style: "currency", currency, currencyDisplay: "narrowSymbol" });
+    const parts = format.formatToParts(0);
+    const symbol = parts.find((p) => p.type === "currency");
 
-   return symbol?.value ?? currency;
+    return symbol?.value ?? currency;
 };
 
 /**
@@ -395,7 +395,7 @@ export const currencySymbol = (currency: string = "TRY", locale: string = getLoc
  * formatPhone("05321234567") => "0532 123 4567"
  */
 export const formatPhone = (value: string) => {
-   return value.replace(/(\d{4})(\d{3})(\d{4})/, "$1 $2 $3");
+    return value.replace(/(\d{4})(\d{3})(\d{4})/, "$1 $2 $3");
 };
 
 /**
@@ -406,15 +406,15 @@ export const formatPhone = (value: string) => {
  * formatNumber(2155.00) => "2.155,00"
  */
 export const formatNumber = (value: number, min: number = 2, max: number = 2, locale: string = getLocale()): string => {
-   if (!value) {
-      value = 0;
-   }
+    if (!value) {
+        value = 0;
+    }
 
-   if (isNaN(value)) {
-      value = 0;
-   }
+    if (isNaN(value)) {
+        value = 0;
+    }
 
-   return value.toLocaleString(locale, { minimumFractionDigits: min, maximumFractionDigits: max });
+    return value.toLocaleString(locale, { minimumFractionDigits: min, maximumFractionDigits: max });
 };
 
 /**
@@ -426,28 +426,28 @@ export const formatNumber = (value: number, min: number = 2, max: number = 2, lo
  * parseNumber("2.155,10") => 2155.1
  */
 export const parseNumber = (value: string, locale: string = getLocale()): number => {
-   if (!cache_number[locale]) {
-      cache_number[locale] = decimalSeparator(locale);
-   }
+    if (!cache_number[locale]) {
+        cache_number[locale] = decimalSeparator(locale);
+    }
 
-   const { group, decimal } = cache_number[locale];
-   if (!value) {
-      return 0;
-   }
+    const { group, decimal } = cache_number[locale];
+    if (!value) {
+        return 0;
+    }
 
-   const parse = value
-      .replace(new RegExp(`\\${group}`, "g"), "")
-      .replace(new RegExp(`\\${decimal}`), ".")
-      .replace(/\p{Nd}/gu, (char) => {
-         const code = char.codePointAt(0)!;
-         if (code >= 48 && code <= 57) {
-            return char;
-         }
-         return String.fromCharCode("0".charCodeAt(0) + (code % 10));
-      });
+    const parse = value
+        .replace(new RegExp(`\\${group}`, "g"), "")
+        .replace(new RegExp(`\\${decimal}`), ".")
+        .replace(/\p{Nd}/gu, (char) => {
+            const code = char.codePointAt(0)!;
+            if (code >= 48 && code <= 57) {
+                return char;
+            }
+            return String.fromCharCode("0".charCodeAt(0) + (code % 10));
+        });
 
-   const result = Number(parse);
-   return isNaN(result) ? 0 : result;
+    const result = Number(parse);
+    return isNaN(result) ? 0 : result;
 };
 
 /**
@@ -458,12 +458,12 @@ export const parseNumber = (value: string, locale: string = getLocale()): number
  * prefixNumber(9, 3) => "009"
  */
 export const prefixNumber = (value: number, pad: number = 2): string => {
-   if (isNaN(value)) {
-      value = 0;
-   }
+    if (isNaN(value)) {
+        value = 0;
+    }
 
-   const result = String(Math.abs(value)).padStart(pad, "0");
-   return value < 0 ? "-" + result : result;
+    const result = String(Math.abs(value)).padStart(pad, "0");
+    return value < 0 ? "-" + result : result;
 };
 
 /**
@@ -474,17 +474,17 @@ export const prefixNumber = (value: number, pad: number = 2): string => {
  * suffixNumber("2.155,1")  => "2.155,10"
  */
 export const suffixNumber = (value: string, pad: number = 2, locale: string = getLocale()): string => {
-   if (!cache_number[locale]) {
-      cache_number[locale] = decimalSeparator(locale);
-   }
+    if (!cache_number[locale]) {
+        cache_number[locale] = decimalSeparator(locale);
+    }
 
-   const { decimal } = cache_number[locale];
-   if (!value) {
-      return `0${decimal}00`;
-   }
+    const { decimal } = cache_number[locale];
+    if (!value) {
+        return `0${decimal}00`;
+    }
 
-   const [integer, fraction = ""] = value.split(decimal);
-   return `${integer}${decimal}${fraction.padEnd(pad, "0")}`;
+    const [integer, fraction = ""] = value.split(decimal);
+    return `${integer}${decimal}${fraction.padEnd(pad, "0")}`;
 };
 
 /**
@@ -495,18 +495,18 @@ export const suffixNumber = (value: string, pad: number = 2, locale: string = ge
  * formatCounter(1000000) => 1m
  */
 export const formatCounter = (num: number): string => {
-   if (isNaN(num)) {
-      num = 0;
-   }
+    if (isNaN(num)) {
+        num = 0;
+    }
 
-   if (num < 1000) {
-      return num.toString();
-   }
+    if (num < 1000) {
+        return num.toString();
+    }
 
-   const units = ["k", "m", "b", "t"];
-   const exp = Math.floor(Math.log(num) / Math.log(1000));
+    const units = ["k", "m", "b", "t"];
+    const exp = Math.floor(Math.log(num) / Math.log(1000));
 
-   return num / Math.pow(1000, exp) + units[exp - 1];
+    return num / Math.pow(1000, exp) + units[exp - 1];
 };
 
 /**
@@ -517,14 +517,14 @@ export const formatCounter = (num: number): string => {
  * formatSize(1024 * 1024 * 1024) => 1GB
  */
 export const formatSize = (bytes: number): string => {
-   if (isNaN(bytes)) {
-      bytes = 0;
-   }
+    if (isNaN(bytes)) {
+        bytes = 0;
+    }
 
-   const units = ["B", "KB", "MB", "GB", "TB", "PB"];
-   const exp = Math.floor(Math.log(bytes) / Math.log(1024));
+    const units = ["B", "KB", "MB", "GB", "TB", "PB"];
+    const exp = Math.floor(Math.log(bytes) / Math.log(1024));
 
-   return parseFloat((bytes / Math.pow(1024, exp)).toFixed(3)) + units[exp];
+    return parseFloat((bytes / Math.pow(1024, exp)).toFixed(3)) + units[exp];
 };
 
 /**
@@ -536,25 +536,25 @@ export const formatSize = (bytes: number): string => {
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
  */
 export const formatDate = (date: Date | string, options: Intl.DateTimeFormatOptions = {}, locale: string = getLocale()): string | null => {
-   const { dateStyle, timeStyle } = options;
-   const defaultOptions = {
-      ...(appConfig.format.date as Intl.DateTimeFormatOptions),
-      ...options
-   };
+    const { dateStyle, timeStyle } = options;
+    const defaultOptions = {
+        ...(appConfig.format.date as Intl.DateTimeFormatOptions),
+        ...options
+    };
 
-   if (!date) {
-      return null;
-   }
+    if (!date) {
+        return null;
+    }
 
-   if (date instanceof Date === false) {
-      date = new Date(date);
-   }
+    if (date instanceof Date === false) {
+        date = new Date(date);
+    }
 
-   if (isNaN(date.getTime())) {
-      return null;
-   }
+    if (isNaN(date.getTime())) {
+        return null;
+    }
 
-   return new Intl.DateTimeFormat(locale, dateStyle || timeStyle ? options : defaultOptions).format(date);
+    return new Intl.DateTimeFormat(locale, dateStyle || timeStyle ? options : defaultOptions).format(date);
 };
 
 /**
@@ -564,15 +564,15 @@ export const formatDate = (date: Date | string, options: Intl.DateTimeFormatOpti
  * endOfDay(new Date()) => 1986-04-25 23:59:59:999 (00:00:00:000 => 23:59:59:999)
  */
 export const endOfDay = (value: Date | string): Date => {
-   const date = new Date(value);
-   if (date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() === 0 && date.getMilliseconds() === 0) {
-      date.setHours(23);
-      date.setMinutes(59);
-      date.setSeconds(59);
-      date.setMilliseconds(999);
-   }
+    const date = new Date(value);
+    if (date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() === 0 && date.getMilliseconds() === 0) {
+        date.setHours(23);
+        date.setMinutes(59);
+        date.setSeconds(59);
+        date.setMilliseconds(999);
+    }
 
-   return date;
+    return date;
 };
 
 /**
@@ -581,36 +581,36 @@ export const endOfDay = (value: Date | string): Date => {
  * deepValue({ a: 1, b: ref(2), c: { d: 3, e: ref(4) } }) => { a: 1, b: ref(2), c: { d: 3, e: ref(4) } }
  */
 export const deepValue = <T>(source: T): T => {
-   const traverse = (input: any): any => {
-      if (input instanceof Date) {
-         return input;
-      }
-      if (Array.isArray(input)) {
-         return input.map(traverse);
-      }
-      if (isRef(input)) {
-         return traverse(input.value);
-      }
-      if (isReactive(input)) {
-         return traverse(toRaw(input));
-      }
-      if (input instanceof File) {
-         return input;
-      }
-      if (input && typeof input === "object") {
-         return Object.keys(input).reduce((acc, key) => {
-            acc[key as keyof typeof acc] = traverse(input[key]);
-            return acc;
-         }, {} as T);
-      }
-      if (isProxy(input)) {
-         return traverse(toRaw(input));
-      }
+    const traverse = (input: any): any => {
+        if (input instanceof Date) {
+            return input;
+        }
+        if (Array.isArray(input)) {
+            return input.map(traverse);
+        }
+        if (isRef(input)) {
+            return traverse(input.value);
+        }
+        if (isReactive(input)) {
+            return traverse(toRaw(input));
+        }
+        if (input instanceof File) {
+            return input;
+        }
+        if (input && typeof input === "object") {
+            return Object.keys(input).reduce((acc, key) => {
+                acc[key as keyof typeof acc] = traverse(input[key]);
+                return acc;
+            }, {} as T);
+        }
+        if (isProxy(input)) {
+            return traverse(toRaw(input));
+        }
 
-      return input;
-   };
+        return input;
+    };
 
-   return traverse(source);
+    return traverse(source);
 };
 
 /**
@@ -619,43 +619,43 @@ export const deepValue = <T>(source: T): T => {
  * flattenDeep({ a: 1, b: ref(2), c: { d: 3, e: ref(4) } }) => [1, 2, 3, 4]
  */
 export const flattenDeep = (source: any): (string | number)[] => {
-   const values: (string | number)[] = [];
+    const values: (string | number)[] = [];
 
-   const traverse = (input: any): void => {
-      if (input == null) return;
+    const traverse = (input: any): void => {
+        if (input == null) return;
 
-      if (typeof input === "string" || typeof input === "number") {
-         values.push(input);
-         return;
-      }
+        if (typeof input === "string" || typeof input === "number") {
+            values.push(input);
+            return;
+        }
 
-      if (input instanceof Date) {
-         values.push(input.toISOString());
-         return;
-      }
+        if (input instanceof Date) {
+            values.push(input.toISOString());
+            return;
+        }
 
-      if (Array.isArray(input)) {
-         input.forEach(traverse);
-         return;
-      }
+        if (Array.isArray(input)) {
+            input.forEach(traverse);
+            return;
+        }
 
-      if (isRef(input)) {
-         traverse(input.value);
-         return;
-      }
+        if (isRef(input)) {
+            traverse(input.value);
+            return;
+        }
 
-      if (isReactive(input)) {
-         traverse(toRaw(input));
-         return;
-      }
+        if (isReactive(input)) {
+            traverse(toRaw(input));
+            return;
+        }
 
-      if (typeof input === "object") {
-         Object.values(input).forEach(traverse);
-      }
-   };
+        if (typeof input === "object") {
+            Object.values(input).forEach(traverse);
+        }
+    };
 
-   traverse(source);
-   return values;
+    traverse(source);
+    return values;
 };
 
 /**
@@ -665,18 +665,18 @@ export const flattenDeep = (source: any): (string | number)[] => {
  * generateRandomGuid() => "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
  */
 export const generateRandomGuid = (haystack?: string[]): string => {
-   const timestamp = Date.now().toString(16).slice(-8);
-   const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char: string) => {
-      let rand = ((Math.random() * 16) % 16) | 0;
-      let result = char === "x" ? rand : (rand & 0x3) | 0x8;
-      return result.toString(16);
-   });
+    const timestamp = Date.now().toString(16).slice(-8);
+    const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char: string) => {
+        let rand = ((Math.random() * 16) % 16) | 0;
+        let result = char === "x" ? rand : (rand & 0x3) | 0x8;
+        return result.toString(16);
+    });
 
-   if (haystack?.includes(uuid)) {
-      return generateRandomGuid(haystack);
-   }
+    if (haystack?.includes(uuid)) {
+        return generateRandomGuid(haystack);
+    }
 
-   return uuid.slice(0, -8) + timestamp;
+    return uuid.slice(0, -8) + timestamp;
 };
 
 /**
@@ -686,35 +686,35 @@ export const generateRandomGuid = (haystack?: string[]): string => {
  * generateRandomString(8, { upperCase: false, lowerCase: true, numbers: false }) => "abcdefgh"
  */
 export const generateRandomString = (length: number = 8, options: { upperCase?: boolean; lowerCase?: boolean; numbers?: boolean } = {}): string => {
-   const defaultOptions = {
-      upperCase: true,
-      lowerCase: true,
-      numbers: true,
-      ...options
-   };
-   const { upperCase, lowerCase, numbers } = defaultOptions;
-   const characters = {
-      upperCase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-      lowerCase: "abcdefghijklmnopqrstuvwxyz",
-      numbers: "0123456789"
-   };
+    const defaultOptions = {
+        upperCase: true,
+        lowerCase: true,
+        numbers: true,
+        ...options
+    };
+    const { upperCase, lowerCase, numbers } = defaultOptions;
+    const characters = {
+        upperCase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        lowerCase: "abcdefghijklmnopqrstuvwxyz",
+        numbers: "0123456789"
+    };
 
-   let result = "";
-   if (numbers) {
-      result = result.concat(characters.numbers);
-   }
+    let result = "";
+    if (numbers) {
+        result = result.concat(characters.numbers);
+    }
 
-   if (upperCase) {
-      result = result.concat(characters.upperCase);
-   }
+    if (upperCase) {
+        result = result.concat(characters.upperCase);
+    }
 
-   if (lowerCase) {
-      result = result.concat(characters.lowerCase);
-   }
+    if (lowerCase) {
+        result = result.concat(characters.lowerCase);
+    }
 
-   return Array.from({ length }, () => result.charAt(Math.floor(Math.random() * result.length)))
-      .sort(() => 0.5 - Math.random())
-      .join("");
+    return Array.from({ length }, () => result.charAt(Math.floor(Math.random() * result.length)))
+        .sort(() => 0.5 - Math.random())
+        .join("");
 };
 
 /**
@@ -725,35 +725,35 @@ export const generateRandomString = (length: number = 8, options: { upperCase?: 
  * https://css-tricks.com/debouncing-throttling-explained-examples/
  */
 export const debounceTimer = (
-   callback: (...args: any[]) => void,
-   delay: number = 350,
-   options: {
-      leading?: boolean;
-      trailing?: boolean;
-   } = { trailing: true }
+    callback: (...args: any[]) => void,
+    delay: number = 350,
+    options: {
+        leading?: boolean;
+        trailing?: boolean;
+    } = { trailing: true }
 ): ((...args: any[]) => void) => {
-   let timeout: ReturnType<typeof setTimeout> | null = null;
+    let timeout: ReturnType<typeof setTimeout> | null = null;
 
-   const { leading = false, trailing = true } = options;
+    const { leading = false, trailing = true } = options;
 
-   return (...args: any[]) => {
-      const callNow = leading && !timeout;
+    return (...args: any[]) => {
+        const callNow = leading && !timeout;
 
-      if (timeout) {
-         clearTimeout(timeout);
-      }
+        if (timeout) {
+            clearTimeout(timeout);
+        }
 
-      timeout = setTimeout(() => {
-         if (trailing) {
+        timeout = setTimeout(() => {
+            if (trailing) {
+                callback(...args);
+            }
+            timeout = null;
+        }, delay);
+
+        if (callNow) {
             callback(...args);
-         }
-         timeout = null;
-      }, delay);
-
-      if (callNow) {
-         callback(...args);
-      }
-   };
+        }
+    };
 };
 
 /**
@@ -764,42 +764,42 @@ export const debounceTimer = (
  * https://css-tricks.com/debouncing-throttling-explained-examples/
  */
 export const throttleTimer = (
-   callback: (...args: any[]) => void,
-   delay = 350,
-   options: {
-      leading?: boolean;
-      trailing?: boolean;
-   } = { leading: true }
+    callback: (...args: any[]) => void,
+    delay = 350,
+    options: {
+        leading?: boolean;
+        trailing?: boolean;
+    } = { leading: true }
 ): ((...args: any[]) => void) => {
-   let lastCall = 0;
-   let timeout: ReturnType<typeof setTimeout> | null = null;
+    let lastCall = 0;
+    let timeout: ReturnType<typeof setTimeout> | null = null;
 
-   const { leading = true, trailing = false } = options;
+    const { leading = true, trailing = false } = options;
 
-   return (...args: any[]) => {
-      const now = Date.now();
+    return (...args: any[]) => {
+        const now = Date.now();
 
-      if (!lastCall && !leading) {
-         lastCall = now;
-      }
+        if (!lastCall && !leading) {
+            lastCall = now;
+        }
 
-      const remaining = delay - (now - lastCall);
+        const remaining = delay - (now - lastCall);
 
-      if (remaining <= 0) {
-         if (timeout) {
-            clearTimeout(timeout);
-            timeout = null;
-         }
-         lastCall = now;
-         callback(...args);
-      } else if (trailing && !timeout) {
-         timeout = setTimeout(() => {
-            lastCall = leading ? Date.now() : 0;
-            timeout = null;
+        if (remaining <= 0) {
+            if (timeout) {
+                clearTimeout(timeout);
+                timeout = null;
+            }
+            lastCall = now;
             callback(...args);
-         }, remaining);
-      }
-   };
+        } else if (trailing && !timeout) {
+            timeout = setTimeout(() => {
+                lastCall = leading ? Date.now() : 0;
+                timeout = null;
+                callback(...args);
+            }, remaining);
+        }
+    };
 };
 
 /**
@@ -812,11 +812,11 @@ export const throttleTimer = (
  * attemptDelay(4) => 10000 (max)
  */
 export const attemptDelay = (attempt: number, max: number = 30000) => {
-   if (appConfig.request.gradual) {
-      return Math.min(appConfig.request.delay * 2 ** attempt, max);
-   } else {
-      return appConfig.request.delay;
-   }
+    if (appConfig.request.gradual) {
+        return Math.min(appConfig.request.delay * 2 ** attempt, max);
+    } else {
+        return appConfig.request.delay;
+    }
 };
 
 /**
@@ -825,7 +825,7 @@ export const attemptDelay = (attempt: number, max: number = 30000) => {
  * sleepDelay(1000) => 1000ms sonra resolve eder.
  */
 export const sleepDelay = (delay: number = 500): Promise<void> => {
-   return new Promise((resolve) => (delay ? setTimeout(resolve, delay) : resolve()));
+    return new Promise((resolve) => (delay ? setTimeout(resolve, delay) : resolve()));
 };
 
 /**
@@ -835,45 +835,45 @@ export const sleepDelay = (delay: number = 500): Promise<void> => {
  * createFormData({ name: "John", age: 30, email: "john@example.com" }, { files: [file1, file2] })
  */
 export const createFormData = <T extends Record<string, any>>(form: T, additional: Record<string, any> = {}): FormData => {
-   const formData = new FormData();
+    const formData = new FormData();
 
-   const appendValue = (formData: FormData, key: string, value: any) => {
-      if (!value) {
-         return;
-      }
-
-      if (Array.isArray(value)) {
-         if (value.length === 0) {
+    const appendValue = (formData: FormData, key: string, value: any) => {
+        if (!value) {
             return;
-         }
+        }
 
-         if (value.every((item) => item instanceof File)) {
-            value.forEach((file: File) => formData.append(`${key}[]`, file));
-         } else if (value.every((item) => typeof item === "object")) {
+        if (Array.isArray(value)) {
+            if (value.length === 0) {
+                return;
+            }
+
+            if (value.every((item) => item instanceof File)) {
+                value.forEach((file: File) => formData.append(`${key}[]`, file));
+            } else if (value.every((item) => typeof item === "object")) {
+                formData.append(key, JSON.stringify(value));
+            } else {
+                value.forEach((item) => formData.append(`${key}[]`, String(item)));
+            }
+        } else if (value instanceof File || value instanceof Blob) {
+            formData.append(key, value);
+        } else if (value instanceof Date) {
+            formData.append(key, value.toISOString());
+        } else if (typeof value === "object") {
             formData.append(key, JSON.stringify(value));
-         } else {
-            value.forEach((item) => formData.append(`${key}[]`, String(item)));
-         }
-      } else if (value instanceof File || value instanceof Blob) {
-         formData.append(key, value);
-      } else if (value instanceof Date) {
-         formData.append(key, value.toISOString());
-      } else if (typeof value === "object") {
-         formData.append(key, JSON.stringify(value));
-      } else {
-         formData.append(key, String(value));
-      }
-   };
+        } else {
+            formData.append(key, String(value));
+        }
+    };
 
-   for (const key in form) {
-      appendValue(formData, key, form[key]);
-   }
+    for (const key in form) {
+        appendValue(formData, key, form[key]);
+    }
 
-   for (const key in additional) {
-      appendValue(formData, key, additional[key]);
-   }
+    for (const key in additional) {
+        appendValue(formData, key, additional[key]);
+    }
 
-   return formData;
+    return formData;
 };
 
 /**
@@ -882,9 +882,9 @@ export const createFormData = <T extends Record<string, any>>(form: T, additiona
  * setInitialData([{ id: 1, name: "John", default: "John" }, { id: 2, name: "Doe", default: "Doe" }], "name", "Doe")
  */
 export const setInitialData = (items: any, key: string, value: any) => {
-   const initialData: { [key: string]: any } = {};
-   items.forEach((item: any) => (initialData[item[key]] = item.default || value));
-   return initialData;
+    const initialData: { [key: string]: any } = {};
+    items.forEach((item: any) => (initialData[item[key]] = item.default || value));
+    return initialData;
 };
 
 /**
@@ -893,79 +893,79 @@ export const setInitialData = (items: any, key: string, value: any) => {
  * https://vuejsdevelopers.com/2020/10/05/composition-api-vuex/
  */
 export const setProvider = (provider: { [key: string]: any }) => {
-   const state = ref(provider.state);
+    const state = ref(provider.state);
 
-   const methods = Object.keys(provider.methods).reduce(
-      (acc, methodName) => {
-         acc[methodName] = function (...args: any) {
-            const callback = args.findIndex((arg: any) => typeof arg === "function");
-            if (callback > -1) {
-               return provider.methods[methodName](state, ...args.slice(0, callback), args[callback].bind(this));
-            }
-            return provider.methods[methodName](state, ...args);
-         };
-         return acc;
-      },
-      {} as { [key: string]: Function }
-   );
+    const methods = Object.keys(provider.methods).reduce(
+        (acc, methodName) => {
+            acc[methodName] = function (...args: any) {
+                const callback = args.findIndex((arg: any) => typeof arg === "function");
+                if (callback > -1) {
+                    return provider.methods[methodName](state, ...args.slice(0, callback), args[callback].bind(this));
+                }
+                return provider.methods[methodName](state, ...args);
+            };
+            return acc;
+        },
+        {} as { [key: string]: Function }
+    );
 
-   return {
-      state: typeof state,
-      ...methods
-   };
+    return {
+        state: typeof state,
+        ...methods
+    };
 };
 
 /**
  * Provider okuma
  */
 export const getProvider = (provider: string) => {
-   return inject(provider);
+    return inject(provider);
 };
 
 /**
  * Component loader
  */
 export const getComponent = (promise: () => Promise<Component>): (() => Promise<Component>) => {
-   return async () => {
-      const appStore = useAppStore();
+    return async () => {
+        const appStore = useAppStore();
 
-      appStore.setComponentLoading(true);
-      return await promise()
-         .then((mod) => mod)
-         .finally(() => {
-            appStore.setComponentLoading(false);
-         });
-   };
+        appStore.setComponentLoading(true);
+        return await promise()
+            .then((mod) => mod)
+            .finally(() => {
+                appStore.setComponentLoading(false);
+            });
+    };
 };
 
 /**
  * Component loader
  */
 export const getComponentAsync = (component: string, error: Component): Component => {
-   const appStore = useAppStore();
+    const appStore = useAppStore();
 
-   return defineAsyncComponent({
-      loader: async () => {
-         return await import(`@/components/layouts/${component}/Layout.vue`).then((mod) => {
-            appStore.setLayoutLoading(false);
-            return mod.default;
-         });
-      },
-      onError(error, retry, fail, attempts) {
-         const retryDelay = attemptDelay(attempts - 1);
+    return defineAsyncComponent({
+        loader: async () => {
+            return await import(`@/components/layouts/${component}/Layout.vue`).then((mod) => {
+                appStore.setLayoutLoading(false);
+                return mod.default;
+            });
+        },
+        onError(error, retry, fail, attempts) {
+            const retryDelay = attemptDelay(attempts - 1);
 
-         if (error && attempts <= appConfig.request.attempt) {
-            setTimeout(() => {
-               retry();
-            }, retryDelay);
-         } else {
-            appStore.setLayoutLoading(false);
-            fail();
-         }
-      },
-      delay: 0,
-      errorComponent: error
-   });
+            if (error && attempts <= appConfig.request.attempt) {
+                setTimeout(() => {
+                    retry();
+                }, retryDelay);
+            } else {
+                appStore.setLayoutLoading(false);
+                fail();
+            }
+        },
+        delay: 0,
+        errorComponent: error
+    });
 };
 
 /**
@@ -974,37 +974,37 @@ export const getComponentAsync = (component: string, error: Component): Componen
  * useGoogleTranslate().translate("Merhaba dünya", "tr", "en") => "Hello world"
  */
 export const useGoogleTranslate = () => {
-   const isLoading = ref(false);
-   const isError = ref(false);
-   const data = ref<string | null>("");
+    const isLoading = ref(false);
+    const isError = ref(false);
+    const data = ref<string | null>("");
 
-   const translate = async (text: string, from = "tr", to = "en"): Promise<any> => {
-      isLoading.value = true;
-      isError.value = false;
-      data.value = "";
+    const translate = async (text: string, from = "tr", to = "en"): Promise<any> => {
+        isLoading.value = true;
+        isError.value = false;
+        data.value = "";
 
-      try {
-         const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`);
-         const json = await response.json();
-         for (const item of json[0]) {
-            data.value += item[0];
-         }
-         return data.value;
-      } catch {
-         isError.value = true;
-         data.value = text;
-         return text;
-      } finally {
-         isLoading.value = false;
-      }
-   };
+        try {
+            const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`);
+            const json = await response.json();
+            for (const item of json[0]) {
+                data.value += item[0];
+            }
+            return data.value;
+        } catch {
+            isError.value = true;
+            data.value = text;
+            return text;
+        } finally {
+            isLoading.value = false;
+        }
+    };
 
-   return {
-      translate,
-      isLoading: computed(() => isLoading.value),
-      isError: computed(() => isError.value),
-      data: computed(() => data.value)
-   };
+    return {
+        translate,
+        isLoading: computed(() => isLoading.value),
+        isError: computed(() => isError.value),
+        data: computed(() => data.value)
+    };
 };
 
 /**
@@ -1015,17 +1015,17 @@ export const useGoogleTranslate = () => {
  * useParam("id", false) => ["1", "2", "3"]
  */
 export const useParam = (param: string, useFirstIfArray = true): ComputedRef<any> => {
-   const route = useRoute();
+    const route = useRoute();
 
-   return computed(() => {
-      let paramValue = route.params[param as keyof typeof route.params];
+    return computed(() => {
+        let paramValue = route.params[param as keyof typeof route.params];
 
-      if (useFirstIfArray && Array.isArray(paramValue) && paramValue.length) {
-         [paramValue] = paramValue;
-      }
+        if (useFirstIfArray && Array.isArray(paramValue) && paramValue.length) {
+            [paramValue] = paramValue;
+        }
 
-      return paramValue;
-   });
+        return paramValue;
+    });
 };
 
 /**
@@ -1035,110 +1035,110 @@ export const useParam = (param: string, useFirstIfArray = true): ComputedRef<any
  * await load("image.jpg") => { width: 1920, height: 1080 }
  */
 export const useImageDimensions = () => {
-   const width = ref<number | null>(null);
-   const height = ref<number | null>(null);
-   const isLoading = ref(false);
-   const error = ref<Error | null>(null);
+    const width = ref<number | null>(null);
+    const height = ref<number | null>(null);
+    const isLoading = ref(false);
+    const error = ref<Error | null>(null);
 
-   async function load(src: string) {
-      isLoading.value = true;
-      error.value = null;
-      width.value = null;
-      height.value = null;
+    async function load(src: string) {
+        isLoading.value = true;
+        error.value = null;
+        width.value = null;
+        height.value = null;
 
-      return new Promise<{ width: number; height: number }>((resolve, reject) => {
-         const img = new Image();
-         img.onload = () => {
-            width.value = img.naturalWidth;
-            height.value = img.naturalHeight;
-            isLoading.value = false;
-            resolve({
-               width: img.naturalWidth,
-               height: img.naturalHeight
-            });
-         };
-         img.onerror = (err) => {
-            error.value = err as unknown as Error;
-            isLoading.value = false;
-            reject(err);
-         };
-         img.src = src;
-      });
-   }
+        return new Promise<{ width: number; height: number }>((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+                width.value = img.naturalWidth;
+                height.value = img.naturalHeight;
+                isLoading.value = false;
+                resolve({
+                    width: img.naturalWidth,
+                    height: img.naturalHeight
+                });
+            };
+            img.onerror = (err) => {
+                error.value = err as unknown as Error;
+                isLoading.value = false;
+                reject(err);
+            };
+            img.src = src;
+        });
+    }
 
-   return { width, height, isLoading, error, load };
+    return { width, height, isLoading, error, load };
 };
 
 /**
  * useDataRender({ chunkSize: 12, delay: 100 }) => { render: (source: Ref<T[]>) => Ref<T[]> }
  */
 export const useDataRender = (options: { chunkSize?: number; delay?: number } = {}) => {
-   const { chunkSize = 15, delay = 0 } = options;
+    const { chunkSize = 15, delay = 0 } = options;
 
-   function render<T>(source: Ref<T[]>) {
-      const displayCount = ref(0);
-      const data = ref<T[]>([]);
-      const lastLength = ref(0);
+    function render<T>(source: Ref<T[]>) {
+        const displayCount = ref(0);
+        const data = ref<T[]>([]);
+        const lastLength = ref(0);
 
-      watch(
-         () => source.value.map((item: any) => item.id ?? item),
-         async () => {
-            const newLength = source.value.length;
-            const oldLength = lastLength.value;
+        watch(
+            () => source.value.map((item: any) => item.id ?? item),
+            async () => {
+                const newLength = source.value.length;
+                const oldLength = lastLength.value;
 
-            if (newLength < (oldLength ?? 0)) {
-               displayCount.value = 0;
-               data.value = [];
-               lastLength.value = 0;
-            }
+                if (newLength < (oldLength ?? 0)) {
+                    displayCount.value = 0;
+                    data.value = [];
+                    lastLength.value = 0;
+                }
 
-            if (newLength <= chunkSize) {
-               displayCount.value = newLength;
-               data.value = source.value.slice(0, newLength);
-               lastLength.value = newLength;
-               return;
-            }
+                if (newLength <= chunkSize) {
+                    displayCount.value = newLength;
+                    data.value = source.value.slice(0, newLength);
+                    lastLength.value = newLength;
+                    return;
+                }
 
-            for (let i = oldLength; i <= newLength; i += chunkSize) {
-               displayCount.value = i;
-               data.value = source.value.slice(0, i);
-               await nextTick();
-               if (delay > 0) {
-                  await new Promise((r) => setTimeout(r, delay));
-               } else {
-                  await new Promise((r) => setTimeout(r));
-               }
-            }
+                for (let i = oldLength; i <= newLength; i += chunkSize) {
+                    displayCount.value = i;
+                    data.value = source.value.slice(0, i);
+                    await nextTick();
+                    if (delay > 0) {
+                        await new Promise((r) => setTimeout(r, delay));
+                    } else {
+                        await new Promise((r) => setTimeout(r));
+                    }
+                }
 
-            displayCount.value = newLength;
-            data.value = [...source.value];
-            lastLength.value = newLength;
-         },
-         { immediate: true }
-      );
+                displayCount.value = newLength;
+                data.value = [...source.value];
+                lastLength.value = newLength;
+            },
+            { immediate: true }
+        );
 
-      return data;
-   }
+        return data;
+    }
 
-   return { render };
+    return { render };
 };
 
 /**
  * useEnumDisplay() => { resolve: (enumObj: any, labelFn: (key: any) => string) => ComputedRef<any> }
  */
 export const useEnumDisplay = () => {
-   const resolve = <T extends Record<string, any>>(enumObj: T, labelFn: (key: keyof T) => string) => {
-      return computed(() =>
-         Object.values(enumObj)
-            .filter((key) => !isNaN(Number(key)))
-            .map((key: any) => ({
-               code: key,
-               name: labelFn(key)
-            }))
-      );
-   };
+    const resolve = <T extends Record<string, any>>(enumObj: T, labelFn: (key: keyof T) => string) => {
+        return computed(() =>
+            Object.values(enumObj)
+                .filter((key) => !isNaN(Number(key)))
+                .map((key: any) => ({
+                    code: key,
+                    name: labelFn(key)
+                }))
+        );
+    };
 
-   return { resolve };
+    return { resolve };
 };
 
 /**
@@ -1147,56 +1147,56 @@ export const useEnumDisplay = () => {
  * https://tanstack.com/query/latest/docs/framework/vue/reference/useQuery
  */
 export const useQueryWrapper = <T>(options: UseQueryOptions<T>, payload?: TQuery<any>) => {
-   const query = <UseQueryReturnType<T, Error>>useQuery<T>(toValue(options));
-   const isFirst = ref(true);
-   const raw = ref<T>(null as unknown as T);
+    const query = <UseQueryReturnType<T, Error>>useQuery<T>(toValue(options));
+    const isFirst = ref(true);
+    const raw = ref<T>(null as unknown as T);
 
-   watch(
-      () => query.data.value,
-      () => {
-         if (query.isSuccess.value && query.data.value) {
-            isFirst.value = false;
-            raw.value = query.data.value;
-            payload?.onSuccess?.(query.data.value);
-         }
-      },
-      { immediate: true }
-   );
+    watch(
+        () => query.data.value,
+        () => {
+            if (query.isSuccess.value && query.data.value) {
+                isFirst.value = false;
+                raw.value = query.data.value;
+                payload?.onSuccess?.(query.data.value);
+            }
+        },
+        { immediate: true }
+    );
 
-   watch(
-      () => query.isError.value,
-      () => {
-         if (query.isError.value && query.error.value) {
-            payload?.onError?.(query.error.value);
-         }
-      },
-      { immediate: true }
-   );
+    watch(
+        () => query.isError.value,
+        () => {
+            if (query.isError.value && query.error.value) {
+                payload?.onError?.(query.error.value);
+            }
+        },
+        { immediate: true }
+    );
 
-   return {
-      ...query,
-      raw,
-      isFirst
-   };
+    return {
+        ...query,
+        raw,
+        isFirst
+    };
 };
 
 /**
  * Tanstack Query data
  */
 export const queryData = (key: any): { [key: string]: any } => {
-   const queryClient = useQueryClient();
-   return queryClient.getQueryData([key]) || [];
+    const queryClient = useQueryClient();
+    return queryClient.getQueryData([key]) || [];
 };
 
 /**
  * Tanstack Query prefetch
  */
 export const queryPrefetch = async (key: string, callback: Function) => {
-   const queryClient = useQueryClient();
-   await queryClient.prefetchQuery({
-      queryKey: [key],
-      queryFn: callback.call(this)
-   });
+    const queryClient = useQueryClient();
+    await queryClient.prefetchQuery({
+        queryKey: [key],
+        queryFn: callback.call(this)
+    });
 };
 
 /**
@@ -1205,21 +1205,21 @@ export const queryPrefetch = async (key: string, callback: Function) => {
  * fileInfo(blob) => "jpg"
  */
 export const fileInfo = (blob: Blob | File) => {
-   const isFile = blob instanceof File;
-   const name = isFile ? blob.name : null;
-   const type = blob.type || null;
-   const size = blob.size;
-   let extension;
+    const isFile = blob instanceof File;
+    const name = isFile ? blob.name : null;
+    const type = blob.type || null;
+    const size = blob.size;
+    let extension;
 
-   if (isFile) {
-      const parts = blob.name.split(".");
-      extension = parts.length > 1 ? parts.pop()!.toLowerCase() : "";
-   } else if (type) {
-      const parts = type.split("/");
-      extension = parts.length > 1 ? parts[1].toLowerCase() : "";
-   }
+    if (isFile) {
+        const parts = blob.name.split(".");
+        extension = parts.length > 1 ? parts.pop()!.toLowerCase() : "";
+    } else if (type) {
+        const parts = type.split("/");
+        extension = parts.length > 1 ? parts[1].toLowerCase() : "";
+    }
 
-   return { name, extension, type, size, isFile };
+    return { name, extension, type, size, isFile };
 };
 
 /**
@@ -1228,17 +1228,17 @@ export const fileInfo = (blob: Blob | File) => {
  * base64ToBlob("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAA...") => Blob
  */
 export const base64ToBlob = (uri: string) => {
-   const byteString = atob(uri.split(",")[1]);
-   const mimeString = uri.split(",")[0].split(":")[1].split(";")[0];
+    const byteString = atob(uri.split(",")[1]);
+    const mimeString = uri.split(",")[0].split(":")[1].split(";")[0];
 
-   const ab = new ArrayBuffer(byteString.length);
-   const ia = new Uint8Array(ab);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
 
-   for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-   }
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
 
-   return new Blob([ab], { type: mimeString });
+    return new Blob([ab], { type: mimeString });
 };
 
 /**
@@ -1249,7 +1249,7 @@ export const base64ToBlob = (uri: string) => {
  * clamp(110, 0, 100) => 100
  */
 export const clamp = (val: number, min: number, max: number) => {
-   return Math.min(Math.max(val, min), max);
+    return Math.min(Math.max(val, min), max);
 };
 
 /**
@@ -1258,7 +1258,7 @@ export const clamp = (val: number, min: number, max: number) => {
  * upperCase("hello world") => "HELLO WORLD"
  */
 export const upperCase = (value: any, locale: string = getLocale()): string => {
-   return value.toLocaleUpperCase(locale);
+    return value.toLocaleUpperCase(locale);
 };
 
 /**
@@ -1267,7 +1267,7 @@ export const upperCase = (value: any, locale: string = getLocale()): string => {
  * lowerCase("HELLO WORLD") => "hello world"
  */
 export const lowerCase = (value: any, locale: string = getLocale()): string => {
-   return value.toLocaleLowerCase(locale);
+    return value.toLocaleLowerCase(locale);
 };
 
 /**
@@ -1276,9 +1276,9 @@ export const lowerCase = (value: any, locale: string = getLocale()): string => {
  * ucWords("hello world") => "Hello World"
  */
 export const ucWords = (value: any): string => {
-   return lowerCase(value).replace(/(^\p{L})|(\s+\p{L})/gu, (char) => {
-      return upperCase(char);
-   });
+    return lowerCase(value).replace(/(^\p{L})|(\s+\p{L})/gu, (char) => {
+        return upperCase(char);
+    });
 };
 
 /**
@@ -1287,7 +1287,7 @@ export const ucWords = (value: any): string => {
  * ucFirst("hello world") => "Hello world"
  */
 export const ucFirst = (value: any): string => {
-   return upperCase(value.charAt(0)) + lowerCase(value.slice(1));
+    return upperCase(value.charAt(0)) + lowerCase(value.slice(1));
 };
 
 /**
@@ -1299,8 +1299,8 @@ export const ucFirst = (value: any): string => {
  * escapeUrl("hello world")  => "hello%20world"
  */
 export const escapeUrl = (url: any): string => {
-   url = url.replace(/\\/g, "/");
-   return encodeURI(url);
+    url = url.replace(/\\/g, "/");
+    return encodeURI(url);
 };
 
 /**
@@ -1309,11 +1309,11 @@ export const escapeUrl = (url: any): string => {
  * dragHide(event)
  */
 export const dragHide = (e: any): void => {
-   let crt = e.target.cloneNode(true);
-   crt.style.display = "none";
-   e.dataTransfer.dropEffect = "none";
-   e.dataTransfer.effectAllowed = "none";
-   e.dataTransfer.setDragImage(crt, 0, 0);
+    let crt = e.target.cloneNode(true);
+    crt.style.display = "none";
+    e.dataTransfer.dropEffect = "none";
+    e.dataTransfer.effectAllowed = "none";
+    e.dataTransfer.setDragImage(crt, 0, 0);
 };
 
 /**
@@ -1325,53 +1325,53 @@ export const dragHide = (e: any): void => {
  * position.rect(node)   => { x: 0, y: 0, top: 0, right: 0, bottom: 0, left: 0, width: 0, height: 0 }
  */
 export const position = {
-   offset: function (node: HTMLElement, view = true) {
-      let rect: any = node.getBoundingClientRect();
-      let owner: any = node.ownerDocument.defaultView;
+    offset: function (node: HTMLElement, view = true) {
+        let rect: any = node.getBoundingClientRect();
+        let owner: any = node.ownerDocument.defaultView;
 
-      return {
-         top: view === false ? node.offsetTop : Math.round(rect.top + owner.pageYOffset),
-         left: view === false ? node.offsetLeft : Math.round(rect.left + owner.pageXOffset),
-         width: node.offsetWidth,
-         height: node.offsetHeight
-      };
-   },
+        return {
+            top: view === false ? node.offsetTop : Math.round(rect.top + owner.pageYOffset),
+            left: view === false ? node.offsetLeft : Math.round(rect.left + owner.pageXOffset),
+            width: node.offsetWidth,
+            height: node.offsetHeight
+        };
+    },
 
-   client: function (node: HTMLElement) {
-      return {
-         top: node.clientTop,
-         left: node.clientLeft,
-         width: node.clientWidth,
-         height: node.clientHeight
-      };
-   },
+    client: function (node: HTMLElement) {
+        return {
+            top: node.clientTop,
+            left: node.clientLeft,
+            width: node.clientWidth,
+            height: node.clientHeight
+        };
+    },
 
-   scroll: function (node: HTMLElement) {
-      let win: any = window;
-      let doc: any = document.documentElement;
+    scroll: function (node: HTMLElement) {
+        let win: any = window;
+        let doc: any = document.documentElement;
 
-      return {
-         top: node === win ? (win.scrollY || doc.scrollTop) - (doc.clientTop || 0) || win.scrollY : node.scrollTop,
-         left: node === win ? (win.scrollX || doc.scrollLeft) - (doc.clientLeft || 0) || win.scrollX : node.scrollLeft,
-         width: node.scrollWidth,
-         height: node.scrollHeight
-      };
-   },
+        return {
+            top: node === win ? (win.scrollY || doc.scrollTop) - (doc.clientTop || 0) || win.scrollY : node.scrollTop,
+            left: node === win ? (win.scrollX || doc.scrollLeft) - (doc.clientLeft || 0) || win.scrollX : node.scrollLeft,
+            width: node.scrollWidth,
+            height: node.scrollHeight
+        };
+    },
 
-   rect: function (node: HTMLElement) {
-      let rect = node.getBoundingClientRect();
-      let ie = navigator.userAgent.indexOf("MSIE") !== -1;
-      let top = ie && node.tagName === "HTML" ? -node.scrollTop : rect.top;
+    rect: function (node: HTMLElement) {
+        let rect = node.getBoundingClientRect();
+        let ie = navigator.userAgent.indexOf("MSIE") !== -1;
+        let top = ie && node.tagName === "HTML" ? -node.scrollTop : rect.top;
 
-      return {
-         x: Math.round(rect.x),
-         y: Math.round(rect.y),
-         top: Math.round(top),
-         right: Math.round(rect.right),
-         bottom: Math.round(rect.bottom),
-         left: Math.round(rect.left),
-         width: Math.round(rect.width),
-         height: Math.round(rect.height)
-      };
-   }
+        return {
+            x: Math.round(rect.x),
+            y: Math.round(rect.y),
+            top: Math.round(top),
+            right: Math.round(rect.right),
+            bottom: Math.round(rect.bottom),
+            left: Math.round(rect.left),
+            width: Math.round(rect.width),
+            height: Math.round(rect.height)
+        };
+    }
 };

@@ -1,21 +1,21 @@
 <template>
-   <v-navigation-drawer
-      class="select-none not-dark:bg-[#f8fafc]"
-      width="224">
-      <v-list>
-         <template
-            v-for="item in menu"
-            v-bind:key="item">
-            <ListGroup
-               v-if="item.children"
-               v-bind:item="item" />
+    <v-navigation-drawer
+        class="select-none not-dark:bg-[#f8fafc]"
+        width="224">
+        <v-list>
+            <template
+                v-for="item in menu"
+                v-bind:key="item">
+                <ListGroup
+                    v-if="item.children"
+                    v-bind:item="item" />
 
-            <ListItem
-               v-else
-               v-bind:item="item" />
-         </template>
-      </v-list>
-   </v-navigation-drawer>
+                <ListItem
+                    v-else
+                    v-bind:item="item" />
+            </template>
+        </v-list>
+    </v-navigation-drawer>
 </template>
 
 <script lang="ts" setup>

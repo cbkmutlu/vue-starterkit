@@ -1,73 +1,73 @@
 <template>
-   <ContentLoader v-model="model.loading" />
-   <v-dialog
-      v-if="!model.loading"
-      v-model="model.show"
-      v-bind="{ ...$attrs }"
-      v-bind:max-width="model?.width"
-      class="items-start"
-      @after-leave="reset"
-      @keydown.escape="close">
-      <v-form
-         v-model="model.validate"
-         @submit.prevent="submit">
-         <v-card>
-            <v-toolbar
-               v-if="model?.title"
-               v-bind:color="model.titleColor">
-               <v-toolbar-title class="text-base">
-                  {{ model?.title }}
-               </v-toolbar-title>
+    <ContentLoader v-model="model.loading" />
+    <v-dialog
+        v-if="!model.loading"
+        v-model="model.show"
+        v-bind="{ ...$attrs }"
+        v-bind:max-width="model?.width"
+        class="items-start"
+        @after-leave="reset"
+        @keydown.escape="close">
+        <v-form
+            v-model="model.validate"
+            @submit.prevent="submit">
+            <v-card>
+                <v-toolbar
+                    v-if="model?.title"
+                    v-bind:color="model.titleColor">
+                    <v-toolbar-title class="text-base">
+                        {{ model?.title }}
+                    </v-toolbar-title>
 
-               <template v-slot:append>
-                  <slot name="append" />
-                  <v-btn
-                     v-bind:disabled="!!model.request"
-                     class="ms-1"
-                     icon="$close"
-                     variant="text"
-                     tabindex="-1"
-                     @click="close" />
-               </template>
+                    <template v-slot:append>
+                        <slot name="append" />
+                        <v-btn
+                            v-bind:disabled="!!model.request"
+                            class="ms-1"
+                            icon="$close"
+                            variant="text"
+                            tabindex="-1"
+                            @click="close" />
+                    </template>
 
-               <template
-                  v-if="$slots.extend"
-                  v-slot:extension>
-                  <slot name="extend" />
-               </template>
-            </v-toolbar>
+                    <template
+                        v-if="$slots.extend"
+                        v-slot:extension>
+                        <slot name="extend" />
+                    </template>
+                </v-toolbar>
 
-            <v-card-text>
-               <slot />
-            </v-card-text>
+                <v-card-text>
+                    <slot />
+                </v-card-text>
 
-            <v-divider></v-divider>
+                <v-divider></v-divider>
 
-            <v-card-actions>
-               <slot name="actions">
-                  <v-btn
-                     v-bind:color="model.cancelColor"
-                     v-bind:disabled="!!model.request"
-                     v-bind:text="model.cancelText || t('app.cancel')"
-                     v-bind:variant="model.cancelVariant"
-                     density="default"
-                     tabindex="-1"
-                     @click="close" />
-                  <v-btn
-                     v-bind:color="model.acceptColor"
-                     v-bind:disabled="!model.validate"
-                     v-bind:loading="model.request"
-                     v-bind:text="model.acceptText || t('app.save')"
-                     v-bind:variant="model.acceptVariant"
-                     v-focus
-                     type="submit"
-                     density="default"
-                     tabindex="0" />
-               </slot>
-            </v-card-actions>
-         </v-card>
-      </v-form>
-   </v-dialog>
+                <v-card-actions>
+                    <slot name="actions">
+                        <v-btn
+                            v-bind:color="model.cancelColor"
+                            v-bind:disabled="!!model.request"
+                            v-bind:text="model.cancelText || t('app.cancel')"
+                            v-bind:variant="model.cancelVariant"
+                            density="default"
+                            tabindex="-1"
+                            @click="close" />
+                        <v-btn
+                            v-bind:color="model.acceptColor"
+                            v-bind:disabled="!model.validate"
+                            v-bind:loading="model.request"
+                            v-bind:text="model.acceptText || t('app.save')"
+                            v-bind:variant="model.acceptVariant"
+                            v-focus
+                            type="submit"
+                            density="default"
+                            tabindex="0" />
+                    </slot>
+                </v-card-actions>
+            </v-card>
+        </v-form>
+    </v-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -81,34 +81,34 @@ const model = ref({ ...TDialog });
 
 // handlers
 const reset = () => {
-   model.value = { ...TDialog };
+    model.value = { ...TDialog };
 };
 
 const accept = () => {
-   model.value.request = true;
-   model.value.resolve(true);
+    model.value.request = true;
+    model.value.resolve(true);
 };
 
 const close = () => {
-   model.value.show = false;
-   model.value.resolve(false);
+    model.value.show = false;
+    model.value.resolve(false);
 };
 
 const submit = (e: Event) => {
-   e.preventDefault();
-   if (!model.value.validate) {
-      return;
-   }
-   accept();
+    e.preventDefault();
+    if (!model.value.validate) {
+        return;
+    }
+    accept();
 };
 
 const open = (payload?: { [K in keyof typeof TDialog]?: (typeof TDialog)[K] }) => {
-   model.value = { ...model.value, ...payload, show: true };
+    model.value = { ...model.value, ...payload, show: true };
 
-   return new Promise<boolean>((resolve, reject) => {
-      model.value.resolve = resolve;
-      model.value.reject = reject;
-   });
+    return new Promise<boolean>((resolve, reject) => {
+        model.value.resolve = resolve;
+        model.value.reject = reject;
+    });
 };
 
 defineOptions({ inheritAttrs: false });

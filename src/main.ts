@@ -25,27 +25,27 @@ registerProvider(app);
 registerDirective(app);
 
 (async () => {
-   const appStore = useAppStore();
+    const appStore = useAppStore();
 
-   appStore.setLocaleLoading(true);
-   appStore.setMenuLoading(true);
+    appStore.setLocaleLoading(true);
+    appStore.setMenuLoading(true);
 
-   const [messages, menu, routes] = await Promise.all([loadLocale(getLocale()), loadMenu(), loadRoute()]);
+    const [messages, menu, routes] = await Promise.all([loadLocale(getLocale()), loadMenu(), loadRoute()]);
 
-   setLocale(i18n.global, getLocale(), messages);
-   appStore.setMenu(menu);
+    setLocale(i18n.global, getLocale(), messages);
+    appStore.setMenu(menu);
 
-   routes.forEach((route) => {
-      router.addRoute("routeBase", route);
-   });
+    routes.forEach((route) => {
+        router.addRoute("routeBase", route);
+    });
 
-   appStore.setLocaleLoading(false);
-   appStore.setMenuLoading(false);
+    appStore.setLocaleLoading(false);
+    appStore.setMenuLoading(false);
 
-   app.use(router);
-   router.isReady().then(() => {
-      app.mount("#app");
-   });
+    app.use(router);
+    router.isReady().then(() => {
+        app.mount("#app");
+    });
 })().catch((error) => {
-   console.error("Bootstrap failed", error);
+    console.error("Bootstrap failed", error);
 });
