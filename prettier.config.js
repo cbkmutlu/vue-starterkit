@@ -1,0 +1,14 @@
+export default {
+   plugins: ["prettier-plugin-organize-attributes", "prettier-plugin-tailwindcss"],
+   semi: true,
+   tabWidth: 3,
+   singleQuote: false,
+   trailingComma: "none",
+   printWidth: 200,
+   singleAttributePerLine: true,
+   bracketSameLine: true,
+   attributeGroups: ["^v-if", "^v-else-if", "^v-else", "^v-for", "^v-model", "^:model-value", "^v-bind:is", "^v-", "$CODE_GUIDE", "^:", "$DEFAULT", "^tabindex", "^@"],
+   attributeSort: "ASC",
+   useTabs: false,
+   htmlWhitespaceSensitivity: "ignore"
+};
