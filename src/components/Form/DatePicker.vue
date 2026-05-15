@@ -3,8 +3,9 @@
       v-model="menu"
       v-bind:close-on-content-click="false"
       v-bind:offset="props.hideDetails ? [0, 0] : [-22, 0]"
-      class="[&_.v-overlay\_\_content]:min-w-min!"
-      transition="dialog-transition">
+      class="overlay-content:min-w-min!"
+      transition="dialog-transition"
+      @update:model-value="viewMode = 'month'">
       <template v-slot:activator="{ props: slotProps }">
          <v-text-field
             v-bind="{ ...slotProps, ...$attrs }"
@@ -13,7 +14,7 @@
             v-bind:model-value="display"
             v-bind:readonly="props.readonly"
             v-bind:title="props.title"
-            class="[&_.v-field\_\_input]:caret-transparent"
+            class="field-input:caret-transparent"
             @click:clear="menu = !!props.openOnClear"
             @update:model-value="model = null!" />
       </template>
@@ -47,12 +48,38 @@
                   v-bind="{ ...$attrs }"
                   v-bind:first-day-of-week="props.firstDayOfWeek"
                   v-bind:show-adjacent-months="props.showAdjacentMonths"
-                  class="button-default:text-xs button-default:font-normal button-month:min-w-32 w-auto"
+                  class="button-default:text-xs button-default:font-normal button-month:min-w-32"
                   color="primary"
+                  control-variant="modal"
                   hide-header
-                  @update:model-value="dateHandler($event)">
+                  @update:model-value="dateHandler($event)"
+                  @update:view-mode="viewModeHandler($event)">
+                  <template v-slot:controls="{ monthText, yearText, openMonths, openYears, prevMonth, nextMonth }">
+                     <v-btn
+                        density="compact"
+                        icon="$prev"
+                        variant="plain"
+                        @click.stop="prevMonth" />
+                     <v-spacer />
+                     <v-btn
+                        v-bind:text="monthText"
+                        class="bg-surface px-2"
+                        append-icon="$dropdown"
+                        @click.stop="openMonths" />
+                     <v-btn
+                        v-bind:text="yearText"
+                        class="bg-surface px-2"
+                        append-icon="$dropdown"
+                        @click.stop="openYears" />
+                     <v-spacer />
+                     <v-btn
+                        density="compact"
+                        icon="$next"
+                        variant="plain"
+                        @click.stop="nextMonth" />
+                  </template>
                   <template
-                     v-if="props.actions"
+                     v-if="props.actions && viewMode === 'month'"
                      v-slot:actions>
                      <v-btn
                         color="error"
@@ -62,9 +89,7 @@
                         @click="menu = false">
                         {{ t("app.cancel") }}
                      </v-btn>
-
                      <v-spacer></v-spacer>
-
                      <v-btn
                         rounded
                         size="small"
@@ -72,7 +97,6 @@
                         @click="dateHandler(new Date(), 0)">
                         {{ t("app.today") }}
                      </v-btn>
-
                      <v-btn
                         rounded
                         size="small"
@@ -132,7 +156,13 @@ const display = computed(() => {
    return date.format(model.value, props.format);
 });
 
+const viewMode = ref("month");
+
 // handlers
+const viewModeHandler = (mode: string) => {
+   viewMode.value = mode;
+};
+
 const dateHandler = (value: Date, day?: number) => {
    if (typeof day === "number") {
       // ALTER
