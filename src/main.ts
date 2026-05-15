@@ -1,6 +1,10 @@
-// #must be first
+// styles
+import "@/assets/style/layers.css";
 import "@/assets/style/main.scss";
-// #rest
+import "@/assets/style/tailwind.css";
+import "vuetify/styles";
+
+// app
 import App from "@/App.vue";
 import { registerDirective } from "@/plugins/directive";
 import { i18n } from "@/plugins/i18n";

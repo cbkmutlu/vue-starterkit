@@ -5,7 +5,6 @@ import autoprefixer from "autoprefixer";
 import { resolve } from "node:path";
 import autoImport from "unplugin-auto-import/vite";
 import { defineConfig, loadEnv } from "vite";
-import vueDevTools from "vite-plugin-vue-devtools";
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import webfont from "vite-plugin-webfont-dl";
 
@@ -18,7 +17,6 @@ export default defineConfig(function ({ mode }) {
          vue({
             template: { transformAssetUrls }
          }),
-         vueDevTools(),
          vuetify({
             autoImport: true,
             styles: {
@@ -114,26 +112,46 @@ export default defineConfig(function ({ mode }) {
       optimizeDeps: {
          exclude: ["vuetify", "vue-router"],
          extensions: [".scss", ".sass"],
-         entries: ["./src/**/*.vue"],
-         esbuildOptions: {
-            define: {
-               global: "globalThis"
-            }
-         }
+         entries: ["./src/**/*.vue"]
       },
       build: {
          cssCodeSplit: false,
-         minify: "esbuild",
+         minify: "oxc",
          chunkSizeWarningLimit: 1024,
          rollupOptions: {
+            checks: {
+               pluginTimings: false
+            },
             output: {
                chunkFileNames: "assets/[name]-[hash].js",
-               manualChunks: {
-                  http: ["axios", "@tanstack/vue-query"],
-                  icons: ["@mdi/js", "@tabler/icons-vue", "@phosphor-icons/vue", "country-flag-icons"],
-                  utils: ["vue-router", "vue-i18n", "pinia", "pinia-plugin-persistedstate", "maska"],
-                  vuetify: ["vuetify"],
-                  vue: ["vue"]
+               codeSplitting: {
+                  groups: [
+                     {
+                        name: "vue",
+                        test: /node_modules[\\/]vue[\\/]/,
+                        priority: 30
+                     },
+                     {
+                        name: "vuetify",
+                        test: /node_modules[\\/]vuetify[\\/]/,
+                        priority: 25
+                     },
+                     {
+                        name: "http",
+                        test: /node_modules[\\/](axios|@tanstack\/vue-query)[\\/]/,
+                        priority: 20
+                     },
+                     {
+                        name: "icons",
+                        test: /node_modules[\\/](@mdi\/js|@tabler\/icons-vue|@phosphor-icons\/vue|country-flag-icons)[\\/]/,
+                        priority: 15
+                     },
+                     {
+                        name: "utils",
+                        test: /node_modules[\\/](vue-router|vue-i18n|pinia|pinia-plugin-persistedstate|maska)[\\/]/,
+                        priority: 10
+                     }
+                  ]
                }
             }
          }

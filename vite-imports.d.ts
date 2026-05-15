@@ -14,6 +14,7 @@ declare global {
   const TDialog: typeof import('./src/utils/types').TDialog
   const VueQueryPlugin: typeof import('@tanstack/vue-query').VueQueryPlugin
   const acceptHMRUpdate: typeof import('pinia').acceptHMRUpdate
+  const any: typeof import('./src/utils/helper').any
   const appAxios: typeof import('./src/utils/axios').appAxios
   const appConfig: typeof import('./src/utils/config').appConfig
   const appRules: typeof import('./src/utils/rules').appRules
@@ -210,6 +211,7 @@ declare module 'vue' {
     readonly TDialog: UnwrapRef<typeof import('./src/utils/types')['TDialog']>
     readonly VueQueryPlugin: UnwrapRef<typeof import('@tanstack/vue-query')['VueQueryPlugin']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
+    readonly any: UnwrapRef<typeof import('./src/utils/helper')['any']>
     readonly appAxios: UnwrapRef<typeof import('./src/utils/axios')['appAxios']>
     readonly appConfig: UnwrapRef<typeof import('./src/utils/config')['appConfig']>
     readonly appRules: UnwrapRef<typeof import('./src/utils/rules')['appRules']>
