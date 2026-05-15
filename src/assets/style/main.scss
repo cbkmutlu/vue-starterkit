@@ -1,28 +1,44 @@
-@use "./settings";
-@use "vuetify";
-@use "./base/mixins" as *;
-@import url("tailwind.css");
+// @use "./settings";
+// @use "vuetify";
+@use "./mixins" as *;
+// @import url("tailwind.css");
 
-@layer vuetify.utilities {
+@layer vuetify-final {
    .rounded-0 {
-      border-radius: 0 !important;
+      border-radius: 0;
+   }
+   .rounded-sm {
+      border-radius: 2px;
+   }
+   .rounded {
+      border-radius: 4px;
+   }
+   .rounded-lg {
+      border-radius: 8px;
+   }
+   .rounded-xl {
+      border-radius: 24px;
+   }
+   .rounded-pill {
+      border-radius: 9999px;
+   }
+   .rounded-circle {
+      border-radius: 50%;
+   }
+   .rounded-shaped {
+      border-radius: 24px 0;
    }
 
-   @for $i from 1 through 24 {
-      .elevation-#{$i} {
-         @include elevation($i);
-      }
-   }
-}
-
-@layer vuetify.colors {
    .bg-transparent {
-      background-color: transparent !important;
-      color: currentColor !important;
+      background-color: transparent;
+      color: currentColor;
    }
-}
 
-@layer overrides {
+   .tabler-icon {
+      width: 1em;
+      height: 1em;
+   }
+
    $scroll: rgba(var(--v-theme-on-surface), 0.3);
    $background: rgba(var(--v-theme-on-surface), 0);
    * {
@@ -47,10 +63,79 @@
       height: 100%;
    }
 
+   // vue-draggable
    html.grabbing * {
       cursor: grab !important;
    }
+   .sortable-fallback {
+      opacity: 1 !important;
+   }
+   .sortable-chosen {
+      border-radius: 4px;
+      border-bottom-color: transparent;
+      @include elevation(2);
+   }
 
+   .motion-row {
+      &-enter-from,
+      &-leave-to {
+         opacity: 0;
+      }
+
+      &-enter-to,
+      &-leave-from {
+         opacity: 1;
+      }
+
+      &-enter-active,
+      &-leave-active {
+         transition: all 195ms cubic-bezier(0.4, 0, 0.6, 1);
+      }
+   }
+
+   .motion-fade {
+      @include transition-default();
+
+      &-enter-from,
+      &-leave-to {
+         opacity: 0;
+      }
+
+      &-enter-to,
+      &-leave-from {
+         opacity: 1;
+      }
+
+      &-enter-active,
+      &-leave-active {
+         transition-property: opacity !important;
+      }
+   }
+
+   .motion-slidex {
+      @include transition-default();
+
+      &-enter-from,
+      &-leave-to {
+         opacity: 0;
+         transform: translateX(-15px);
+      }
+
+      &-enter-active,
+      &-leave-active {
+         transition-property: transform, opacity !important;
+      }
+   }
+
+   // elevation
+   @for $i from 1 through 24 {
+      .elevation-#{$i} {
+         @include elevation($i);
+      }
+   }
+}
+
+@layer vuetify-overrides {
    // vApp
    .v-application.v-theme--light {
       background-color: #fdfeff;
@@ -72,37 +157,6 @@
          background-color: rgba(var(--v-theme-surface-variant), var(--v-disabled-opacity));
       }
    }
-
-   .v-date-picker {
-      .v-date-picker-controls {
-         padding: 8px 8px 4px;
-      }
-
-      .v-date-picker-month__days {
-         row-gap: 4px;
-      }
-   }
-
-   .v-icon--size-x-small {
-      font-size: 16px;
-   }
-   .v-icon--size-small {
-      font-size: 18px;
-   }
-   .v-icon--size-default {
-      font-size: 22px;
-   }
-   .v-icon--size-large {
-      font-size: 26px;
-   }
-   .tabler-icon {
-      width: 1em;
-      height: 1em;
-   }
-
-   // .v-picker.v-sheet {
-   //    border-radius: 0;
-   // }
 
    // vSnackbar
    .v-snackbar--variant-tonal,
@@ -246,24 +300,6 @@
          overflow: hidden;
          border-bottom-right-radius: var(--radius-sm);
          border-bottom-left-radius: var(--radius-sm);
-
-         .v-data-table-footer__info {
-            min-width: 300px;
-         }
-
-         .v-data-table-footer__items-per-page > .v-select {
-            width: 120px !important;
-         }
-
-         .v-data-table-footer__pagination {
-            .v-pagination__item,
-            .v-pagination__first,
-            .v-pagination__prev,
-            .v-pagination__next,
-            .v-pagination__last {
-               margin: 0 0.3rem;
-            }
-         }
       }
 
       &.v-table--hover td:has(.v-skeleton-loader)::after {
@@ -299,67 +335,6 @@
             background-color: rgb(var(--v-theme-surface));
             border-top: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
          }
-      }
-   }
-
-   .sortable-fallback {
-      opacity: 1 !important;
-   }
-
-   .sortable-chosen {
-      border-radius: 4px;
-      border-bottom-color: transparent;
-      @include elevation(2);
-   }
-
-   .motion-row {
-      &-enter-from,
-      &-leave-to {
-         opacity: 0;
-      }
-
-      &-enter-to,
-      &-leave-from {
-         opacity: 1;
-      }
-
-      &-enter-active,
-      &-leave-active {
-         transition: all 195ms cubic-bezier(0.4, 0, 0.6, 1);
-      }
-   }
-
-   .motion-fade {
-      @include transition-default();
-
-      &-enter-from,
-      &-leave-to {
-         opacity: 0;
-      }
-
-      &-enter-to,
-      &-leave-from {
-         opacity: 1;
-      }
-
-      &-enter-active,
-      &-leave-active {
-         transition-property: opacity !important;
-      }
-   }
-
-   .motion-slidex {
-      @include transition-default();
-
-      &-enter-from,
-      &-leave-to {
-         opacity: 0;
-         transform: translateX(-15px);
-      }
-
-      &-enter-active,
-      &-leave-active {
-         transition-property: transform, opacity !important;
       }
    }
 }

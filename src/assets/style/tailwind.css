@@ -9,10 +9,10 @@ plugin
 https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities
 */
 
-@layer vuetify, tailwind, overrides;
 @import "tailwindcss/theme.css" layer(tailwind.theme);
+/* @import "tailwindcss/preflight.css" layer(tailwind.reset); */
 @import "tailwindcss/utilities.css" layer(tailwind.utilities);
-@config "./tailwind.js";
+@config "../../../tailwind.config.js";
 
 @theme {
    --animation-duration-0: 0s;
@@ -99,14 +99,12 @@ https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities
 
 /* [&_.v-navigation-drawer\_\_content]:flex [&_.v-navigation-drawer\_\_content]:flex-col */
 @custom-variant drawer-content (& .v-navigation-drawer__content);
-
 @custom-variant button-default (& .v-btn--size-default);
-
 @custom-variant button-month (& .v-date-picker-controls__month-btn);
-
 @custom-variant year-content (& .v-date-picker-years__content);
-
 @custom-variant card-content (& .v-card-item__content);
+@custom-variant overlay-content (& .v-overlay__content);
+@custom-variant field-input (& .v-field__input);
 
 /* list-spacer:w-3 */
 /* @custom-variant list-spacer (& ~ .v-list-item__spacer); */
